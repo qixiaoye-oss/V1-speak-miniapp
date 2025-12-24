@@ -81,7 +81,7 @@
   max-width: 100%;
 }
 
-.tag__multi view {
+.tag view {
   line-height: 1;
 }
 

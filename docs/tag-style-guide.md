@@ -165,7 +165,7 @@ page {
 | font-size | 12px |
 | gap (multi) | 5px |
 | intervals height | 12px |
-| multi view line-height | 1 |
+| tag view line-height | 1 |
 
 ---
 
@@ -181,8 +181,8 @@ page {
 ## 更新日志
 
 ### v1.1.0 (2025-12-24)
-- 修复 multi 变体子元素高度不一致问题
-- 为 `.tag__multi view` 添加 `line-height: 1`，确保所有形式的 tag 高度统一
+- 修复 tag 内子元素高度不一致问题
+- 为 `.tag view` 添加 `line-height: 1`，确保所有 tag 内的子 view 高度统一
 
 ### v1.0.0 (2025-12-21)
 - 初始版本
