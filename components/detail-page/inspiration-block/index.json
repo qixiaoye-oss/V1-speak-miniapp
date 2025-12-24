@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "styleIsolation": "apply-shared",
+  "usingComponents": {
+    "answer-cell": "../answer-cell/index",
+    "header": "../header/index",
+    "sentence": "../sentence/index",
+    "footer": "../footer/index"
+  }
+}

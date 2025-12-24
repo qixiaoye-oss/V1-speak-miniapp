@@ -1,0 +1,14 @@
+<view class="version-tabs" wx:if="{{list.length > 1}}">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="version-tabs__item {{current === index ? 'version-tabs__item--active' : ''}}"
+    style="{{current === index ? 'background:' + activeColor + ';' : ''}}"
+    hover-class="tap-active"
+    bind:tap="onTap"
+    data-index="{{index}}"
+  >
+    <view>{{item.title}}</view>
+    <image class="version-tabs__preferred" wx:if="{{item.isPreferred}}" src="/images/v2/correct_bt.png"></image>
+  </view>
+</view>

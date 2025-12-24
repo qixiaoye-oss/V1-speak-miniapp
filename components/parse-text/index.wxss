@@ -1,0 +1,21 @@
+.analysis_underline_cell {
+  border-bottom: 1px solid var(--border-color-grey);
+}
+
+.analysis_tag_cell {
+  display: inline-block;
+  border: 1px solid var(--solid-border-color);
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.analysis_tag_cell text {
+  display: inline-block;
+  padding: 2px 10px;
+  line-height: 1.4;
+}
+
+.text-left {
+  position: relative;
+  border-right: 1px solid var(--solid-border-color);
+}

@@ -1,0 +1,49 @@
+<view class="sentence-body">
+  <view class="sentence__first" wx:if="{{content.isFirst == 1}}" style="{{content.backgroundColor ? 'background:' + content.backgroundColor : ''}}">
+    <image class="sentence__first-img" wx:if="{{content.iconUrl}}" src="{{content.iconUrl}}" />
+    <text class="sentence__first-text" style="{{content.textColor ? 'color:' + content.textColor : ''}}">{{content.tags}}</text>
+  </view>
+  <block wx:else>
+    <view wx:if="{{!content.secondary}}" class="sentence__content">
+      <view wx:if="{{content.isFlushLeft == 0}}" style="width:{{tagWidth}}px;flex-shrink: 0;">
+        <image wx:if="{{content.iconUrl}}" src="{{content.iconUrl}}" class="sentence__content-img"></image>
+        <block wx:else>
+          <text wx:if="{{content.tags}}" class="sentence__content-tag">{{content.tags}}</text>
+          <view wx:else class="sentence__content-no-tag"></view>
+        </block>
+      </view>
+      <view style="flex-grow: 1;flex-shrink:1;">
+        <view class="{{content.userSentence ?'sentence__content-user':''}}">
+          <block wx:for="{{content.contents}}" wx:for-item="con" wx:key="con">
+            <text wx:if="{{con.type === 2}}" class="analysis_bg_cell">{{con.content}}</text>
+            <text wx:elif="{{con.type === 3 || content.updateSentence}}" class="analysis_underline_cell">{{con.content}}</text>
+            <text wx:elif="{{con.type === 4}}" class="analysis_tag_cell">
+              <text class="text-left">{{con.textLeft}}</text><text>{{con.textRight}}</text>
+            </text>
+            <text wx:else>{{con.content}}</text>
+          </block>
+        </view>
+        <view class="sentence__content-translate" wx:if="{{content.translate}}">{{content.translate}}</view>
+        <image wx:if="{{content.imageUrl}}" class="sentence__img" mode="widthFix" src="{{content.imageUrl}}"></image>
+      </view>
+    </view>
+    <view wx:else class="sentence__content sentence__content-secondary">
+      <view wx:if="{{content.isFlushLeft == 0}}" style="width:{{tagWidth}}px">
+        <view class="sentence__content-no-tag"></view>
+      </view>
+      <view style="flex: 1;">
+        <view class="{{content.userSentence ?'green_text':''}}">
+          <block wx:for="{{content.contents}}" wx:for-item="con" wx:key="con">
+            <text wx:if="{{con.type === 2}}" class="analysis_bg_cell">{{con.content}}</text>
+            <text wx:elif="{{con.type === 3 || content.updateSentence}}" class="analysis_underline_cell">{{con.content}}</text>
+            <text wx:elif="{{con.type === 4}}" class="analysis_tag_cell">
+              <text class="text-left">{{con.textLeft}}</text><text>{{con.textRight}}</text>
+            </text>
+            <text wx:else>{{con.content}}</text>
+          </block>
+        </view>
+        <image wx:if="{{content.imageUrl}}" class="sentence__img" mode="widthFix" src="{{content.imageUrl}}"></image>
+      </view>
+    </view>
+  </block>
+</view>

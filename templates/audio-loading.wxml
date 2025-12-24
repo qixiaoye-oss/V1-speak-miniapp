@@ -1,0 +1,19 @@
+<!--
+  音频加载饼状进度模板
+
+  使用方法：
+  1. 在页面 wxml 中引入: <import src="/templates/audio-loading.wxml"/>
+  2. 使用模板: <template is="audioLoading" data="{{audioDownProgress, loadingText: '音频加载中...', themeColor: '#00A6ED'}}"/>
+
+  参数说明：
+  - audioDownProgress: 进度值 0-100，100时隐藏蒙版 (Number, 必填)
+  - loadingText: 加载提示文字 (String, 可选，默认"音频加载中...")
+  - themeColor: 进度条颜色 (String, 可选，默认"#00A6ED")
+-->
+
+<template name="audioLoading">
+  <view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+    <view class="pie-progress" style="background: conic-gradient({{themeColor || '#00A6ED'}} 0deg, {{themeColor || '#00A6ED'}} {{audioDownProgress * 3.6}}deg, #e0e0e0 {{audioDownProgress * 3.6}}deg, #e0e0e0 360deg);"></view>
+    <view class="audio-loading-text">{{loadingText || '音频加载中...'}}</view>
+  </view>
+</template>

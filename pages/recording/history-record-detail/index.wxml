@@ -1,0 +1,22 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<view class="layout_grid" style="gap: 15px;">
+  <view class="f12 recording_tip radius10 layout_flex f_ac_js" wx:if="{{detail.status != 2}}">
+    <image src="/images/prompt.png" class="img20" style="margin-right: 10px;"></image>
+    <view wx:if="{{detail.status == 1}}">录音转写中，请稍后查看。</view>
+    <view wx:if="{{detail.status == 3}}">录音重新上传中，请稍后查看。</view>
+    <view wx:if="{{detail.status == 4}}">录音转写失败，请重新录制音频。</view>
+  </view>
+  <view class="recording_cell radius10 layout_flex f_ac">
+    <image class="img20" wx:if="{{nowPlayStatus == 'stop'}}" src="/images/icon/play.png" bind:tap="playRecording" data-index="{{index}}"></image>
+    <image class="img20" wx:else src="/images/icon/pause.png" bind:tap="stopAudio"></image>
+    <view class="progress">
+      <view class="progress_item" style="width: {{progress + '%'}};"></view>
+    </view>
+  </view>
+  <view class="recording_cell f14 radius10" wx:if="{{detail.list}}">
+    <text wx:for="{{detail.list}}" wx:key="item" bind:tap="playWord" data-index="{{index}}" class="word {{index==showPlayIndex?'word_sel':''}}">{{item.w}}</text>
+  </view>
+  <view class="f12 recording_tip radius10">批改请转发本页面给老师。</view>
+</view>

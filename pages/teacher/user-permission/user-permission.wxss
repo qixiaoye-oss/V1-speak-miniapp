@@ -1,0 +1,54 @@
+page {
+  padding: 0;
+}
+
+.search_class {
+  background-color: var(--old-main-color);
+}
+
+.weui-search-bar__cancel-btn {
+  color: #ffffff;
+}
+
+.form_user_name_cell {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #999;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.authorization_container {
+  padding-top: 5px;
+}
+
+.table_title_cell {
+  margin-bottom: 10px;
+}
+
+.table_cell {
+  width: 33%;
+  text-align: center;
+}
+
+.table_cell:nth-child(2) {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.table_content_cell {
+  margin-bottom: 10px;
+}
+
+.table_title {
+  font-size: 14px;
+  color: #999;
+}
+
+.form_fun_cell {
+  margin-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form_container {
+  padding: 0 10px;
+}

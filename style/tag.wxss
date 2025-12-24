@@ -1,0 +1,147 @@
+/* 通用标签样式 */
+/* 用于列表页、卡片等多处场景的标签组件样式 */
+
+.tag {
+  box-sizing: border-box;
+  padding: 5px;
+  line-height: 1;
+  border-radius: 3px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+/* ========== 非 multi 变体 ========== */
+
+/* 透明底 + 白字 */
+.tag--transparent {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ffffff;
+}
+
+/* 白底 */
+.tag--opaque {
+  border: 1px solid transparent;
+  background: #ffffff;
+}
+
+/* 红色实底 */
+.tag--red {
+  border: 1px solid transparent;
+  color: #ffffff;
+  background: var(--main-red-color);
+}
+
+/* 橙色实底 */
+.tag--orange {
+  border: 1px solid transparent;
+  color: #ffffff;
+  background: var(--main-orange-color);
+}
+
+/* 绿色实底 */
+.tag--green {
+  border: 1px solid transparent;
+  color: #ffffff;
+  background: var(--main-green-color);
+}
+
+/* ========== 动态颜色变体 ========== */
+
+/* 动态颜色 - 描边（透明底 + 边框 + 文字同色） */
+.tag--dynamic-outline {
+  background: transparent;
+  border: 1px solid var(--tag-color);
+  color: var(--tag-color);
+}
+
+/* 动态颜色 - 实底（背景色 + 白字） */
+.tag--dynamic-solid {
+  border: 1px solid transparent;
+  background: var(--tag-color);
+  color: #ffffff;
+}
+
+/* 动态颜色 - 半透明底（15%透明背景 + 文字同色） */
+.tag--dynamic-translucent {
+  border: 1px solid transparent;
+  background: var(--tag-color-bg, rgba(0, 0, 0, 0.15));
+  color: var(--tag-color);
+}
+
+/* ========== multi 变体（半透明底） ========== */
+
+.tag__multi {
+  gap: 5px;
+  max-width: 100%;
+}
+
+.tag__multi--red {
+  border: 1px solid transparent;
+  background: rgba(249, 47, 96, 0.15);
+  color: var(--main-red-color);
+}
+
+.tag__multi--green {
+  border: 1px solid transparent;
+  background: rgba(0, 210, 106, 0.15);
+  color: var(--main-green-color);
+}
+
+.tag__multi--orange {
+  border: 1px solid transparent;
+  background: rgba(255, 176, 45, 0.15);
+  color: var(--main-orange-color);
+}
+
+.tag__multi--gray {
+  border: 1px solid var(--main-gray-color);
+  background: #ffffff;
+  color: var(--main-gray-color);
+}
+
+.tag__multi--blue {
+  border: 1px solid transparent;
+  background: var(--main-blue-color-bg);
+  color: var(--main-blue-color);
+}
+
+/* ========== 分隔线 ========== */
+
+.tag__intervals {
+  width: 1px;
+  height: 12px;
+}
+
+.tag__multi--red .tag__intervals {
+  background: var(--main-red-color);
+}
+
+.tag__multi--green .tag__intervals {
+  background: var(--main-green-color);
+}
+
+.tag__multi--orange .tag__intervals {
+  background: var(--main-orange-color);
+}
+
+.tag__multi--gray .tag__intervals {
+  background: var(--main-gray-color);
+}
+
+.tag__multi view:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========== 工具类 ========== */
+
+.tag--right {
+  margin-left: auto;
+}

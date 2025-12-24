@@ -1,0 +1,18 @@
+/* tap-action 组件样式 */
+
+/* 组件宿主元素 - 默认块级显示，宽度由上下文决定 */
+:host {
+  display: block;
+}
+
+/* 点击动效 - 组件核心功能 */
+.tap-active {
+  opacity: 0.7;
+  transform: scale(0.98);
+  transition: all 0.1s ease-out;
+}
+
+/* 卡片模式 - 内容撑满宿主 */
+.tap-card {
+  width: 100%;
+}

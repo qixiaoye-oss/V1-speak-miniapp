@@ -1,0 +1,8 @@
+<block wx:for="{{contents}}" wx:for-item="con" wx:key="con">
+  <text wx:if="{{con.type === 2}}" class="analysis_bg_cell">{{con.content}}</text>
+  <text wx:elif="{{con.type === 3}}" class="analysis_underline_cell">{{con.content}}</text>
+  <text wx:elif="{{con.type === 4}}" class="analysis_tag_cell">
+    <text class="text-left">{{con.textLeft}}</text><text>{{con.textRight}}</text>
+  </text>
+  <text wx:else class="">{{con.content}}</text>
+</block>

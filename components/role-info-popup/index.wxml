@@ -1,0 +1,24 @@
+<view class='mask' wx:if='{{show}}'>
+  <view class='modal-content'>
+    <slot></slot>
+    <view class="title">{{title}}</view>
+    <view class="info_cell">
+      <view wx:for="{{roles}}" wx:key="item">
+        <text>{{item.name}}：</text>
+        <text>{{item.effectiveDate}}</text>
+        <text>-</text>
+        <text>{{item.expiryDate}}</text>
+      </view>
+      <view wx:for="{{tags}}" wx:key="item">
+        <text>{{item.name}}：</text>
+        <text>{{item.effectiveDate}}</text>
+        <text>-</text>
+        <text>{{item.expiryDate}}</text>
+      </view>
+    </view>
+    <view class='modal-btn-wrapper'>
+      <view class='cancel-btn' bindtap='cancel' wx:if="{{showCancel}}" style="color:{{cancelColor}}">{{cancelText}}</view>
+      <view class='confirm-btn' bindtap='confirm' style="color:{{confirmColor}}">{{confirmText}}</view>
+    </view>
+  </view>
+</view>

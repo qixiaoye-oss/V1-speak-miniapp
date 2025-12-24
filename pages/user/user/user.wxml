@@ -1,0 +1,18 @@
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+
+<!-- 骨架屏 -->
+<skeleton type="user" loading="{{loading}}" rows="{{4}}" />
+
+<view class="user-page" wx:if="{{!loading}}">
+  <view class="user-info">
+    <image class="user__avatar" src="{{user.headUrl || '/images/wechat.png'}}" mode="cover" />
+    <view class="user__nickname">
+      <view>{{user.nickName || '微信用户'}}</view>
+      <view class="user__no">（{{user.no}}）</view>
+    </view>
+  </view>
+  <view class="menu-item menu-item--access" hover-class="tap-active" bind:tap="toUpdateUserInfo">修改用户信息</view>
+  <view class="menu-item">版本 <text class="menu-item__value">{{version || '2.8.5'}}</text></view>
+</view>
+<role-info-popup show="{{showPopup}}" roles="{{role}}" tags="{{tags}}"></role-info-popup>

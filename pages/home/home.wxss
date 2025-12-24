@@ -1,0 +1,7 @@
+/* 首页样式 - 与参考项目对齐 */
+
+/* 查看所有按钮中的图标 */
+.home-view-all image {
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,39 @@
+page {
+  padding: 0;
+}
+
+.search_class {
+  background-color: var(--old-main-color);
+}
+
+.weui-search-bar__cancel-btn {
+  color: #ffffff;
+}
+
+.form_user_name_cell {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #999;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form_fun_cell {
+  margin-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.role_list_cell {
+  padding: 19px 0 10rpx;
+}
+
+.role_cell {
+  margin: 5px 0;
+}
+
+.role_text_cell {
+  margin-left: 20rpx;
+}
+
+.form_container {
+  padding: 0 10px;
+}

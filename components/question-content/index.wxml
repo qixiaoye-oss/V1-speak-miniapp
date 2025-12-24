@@ -1,0 +1,12 @@
+<view class="question-content" bind:tap="onTap" style="background: {{backgroundColor}}; border-color: {{borderColor}};">
+  <view class="question-content__text">
+    <view>{{content}}</view>
+    <view class="question-content__additional" wx:if="{{additionalContent}}">
+      <text>{{additionalContent}}</text>
+    </view>
+    <view class="question-content__supplementary" wx:if="{{supplementaryContent}}">
+      <text class="question-content__supplementary-icon" style="border-color: {{borderColor}};">补</text>
+      <text>{{supplementaryContent}}</text>
+    </view>
+  </view>
+</view>

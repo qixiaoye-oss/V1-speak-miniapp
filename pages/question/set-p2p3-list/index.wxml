@@ -1,0 +1,67 @@
+<import src="/templates/page-loading.wxml" />
+<import src="/templates/load-error.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template is="loadError" data="{{loadError}}" />
+
+<!-- 骨架屏 -->
+<skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
+
+<view class="series" wx:if="{{!loading && seriesList}}">
+  <view class="series__item {{seriesIndex === index?'series__active':''}}" wx:for="{{seriesList}}" wx:key="index" hover-class="tap-active" bind:tap="changeLabel" data-index="{{index}}">
+    <view style="background: {{item.backgroundColor}};">
+      <image src="{{item.iconUrl}}"></image>
+      <text>{{ item.title }}</text>
+    </view>
+  </view>
+</view>
+<view class="chapter-container" wx:if="{{!loading}}">
+  <view class="chapter-group" wx:for="{{list}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="group" wx:if="{{!group.hidden}}">
+    <view class="chapter-group__header--layout">
+      <view class="chapter-group__header" style="background:{{group.backgroundColor}};">
+        <image class="chapter-group__icon" wx:if="{{group.iconUrl}}" src="{{group.iconUrl}}" />
+        <text class="chapter-group__title">{{group.title}}</text>
+      </view>
+    </view>
+    <view class="chapter-cell">
+      <view class="chapter" wx:for="{{group.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}" wx:if="{{!chapter.hidden}}">
+        <view class="chapter__header">
+          <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
+            <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+            <view class="chapter__title-text">{{chapter.title}}</view>
+          </view>
+          <view class="chapter__tag">
+            <view class="tag tag--red" wx:if="{{chapter.description}}">{{chapter.description}}</view>
+            <view class="tag tag--orange" wx:if="{{chapter.isChargeable == 1}}">权限</view>
+            <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
+          </view>
+        </view>
+        <view class="chapter__intervals"></view>
+        <view class="chapter__footer">
+          <view class="sub-item__progress">
+            <view class="tag tag__multi tag__multi--gray" wx:if="{{chapter.p2State == 0}}">
+              <view>P2未打卡/录音</view>
+            </view>
+            <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.p2State == 1}}">
+              <view>P2已打卡/录音</view>
+            </view>
+            <view class="tag tag__multi tag__multi--gray" wx:if="{{chapter.p3SignInTotal == 0}}">
+              <view>P3打卡/录音</view>
+              <view class="tag__intervals"></view>
+              <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>
+            </view>
+            <view class="tag tag__multi tag__multi--orange" wx:if="{{chapter.p3SignInTotal > 0 && chapter.p3SignInTotal < chapter.p3Total}}">
+              <view>P3打卡/录音</view>
+              <view class="tag__intervals"></view>
+              <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>
+            </view>
+            <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.p3SignInTotal == chapter.p3Total}}">
+              <view>P3打卡/录音</view>
+              <view class="tag__intervals"></view>
+              <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

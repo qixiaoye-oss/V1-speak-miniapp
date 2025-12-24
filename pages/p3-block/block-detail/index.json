@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "header": "/components/detail-page/header/index",
+    "footer": "/components/detail-page/footer/index",
+    "sentence": "/components/detail-page/sentence/index",
+    "custom-popup": "/components/custom-popup/custom-popup"
+  }
+}

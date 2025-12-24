@@ -1,0 +1,73 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<!-- 录音进度条 -->
+<view class="layout_flex progress_cell">
+  <view class="progress_item {{status === 1 ? 'progress_100' : 'grey_b2'}}"></view>
+</view>
+
+<!-- 录音状态 -->
+<view class="layout_flex f_ac f_jb f14 {{status === 1 ? 'recorder_cell_play' : status === 0.5 ? 'recorder_cell_play' : 'recorder_cell grey_c6 grey_b1'}}">
+  <view>{{status === 1 ? '录音中' : status === 0.5 ? '听题中' : '未开始'}}</view>
+  <view>已录制{{file.duration}}s</view>
+</view>
+
+<!-- 题目内容 - 仅 P2 显示 -->
+<question-content
+  wx:if="{{recordType === 2}}"
+  content="{{detail.content}}"
+  additionalContent="{{detail.additionalContent}}"
+  supplementaryContent="{{detail.supplementaryContent}}"
+  backgroundColor="{{background}}"
+  borderColor="{{color}}"
+/>
+
+<!-- 录音文件播放 -->
+<view class="cell layout_flex f_ac f_jb fwb f14 radius9" wx:if="{{file.url}}">
+  <view>{{file.time}}</view>
+  <view class="layout_flex">
+    <view class="audio_duration" style="margin-right: 10px;">{{file.duration}}秒</view>
+    <image class="img20" wx:if="{{audioStatus == 'stop'}}" src="/images/icon/play.png" bind:tap="playRecordedAudio"></image>
+    <image class="img20" wx:else src="/images/icon/pause.png" bind:tap="stopAudio"></image>
+  </view>
+</view>
+
+<!-- 底部按钮 -->
+<view class="btn-page-bottom">
+  <!-- hint_banner 提示信息 -->
+  <view class="btn-group-hint-banner" data-icon="pin" wx:if="{{recordType === 2}}">P2不读题，自行准备1分钟后开始录音。</view>
+  <view class="btn-group-hint-banner" data-icon="pin" wx:else>点击录音后，先听题，再回答。</view>
+  <view class="btn-group-single">
+    <view class="btn-pos-left">
+      <tap-action icon="save" bind:tap="cancel">
+        <view>放弃</view>
+      </tap-action>
+    </view>
+    <view class="btn-pos-right">
+      <block wx:if="{{status === 0}}">
+        <tap-action icon="stop" bind:tap="checkRecordPermission">
+          <view>点击开始答题/录音</view>
+          <image src="/images/v2/stop_bt.png"></image>
+        </tap-action>
+      </block>
+      <block wx:if="{{status === 0.5}}">
+        <tap-action icon="stop" disabled="{{true}}">
+          <view>请听题{{dots}}</view>
+          <image src="/images/v2/stop_bt.png"></image>
+        </tap-action>
+      </block>
+      <block wx:if="{{status === 1}}">
+        <tap-action icon="stop" bind:tap="stopRecording">
+          <view>请回答{{dots}}/{{file.duration}}s/点击结束</view>
+          <image src="/images/v2/stop_bt.png"></image>
+        </tap-action>
+      </block>
+      <block wx:if="{{status === 2}}">
+        <tap-action icon="down" bind:tap="confirm">
+          <view>提交保存</view>
+          <image src="/images/v2/down_bt.png"></image>
+        </tap-action>
+      </block>
+    </view>
+  </view>
+</view>

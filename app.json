@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/science/list/index",
+    "pages/science/detail/index",
+    "pages/question/set-p1-list/index",
+    "pages/question/question-p1-list/index",
+    "pages/question/question-p1-detail/index",
+    "pages/question/set-p2p3-list/index",
+    "pages/question/question-p2-detail/index",
+    "pages/question/question-p3-list/index",
+    "pages/question/question-p3-detail/index",
+    "pages/question/ai-correction/index",
+    "pages/question/ai-correction-detail/index",
+    "pages/p2-block/set-list/index",
+    "pages/p2-block/block-group/index",
+    "pages/p2-block/block-detail/index",
+    "pages/p3-block/set-list/index",
+    "pages/p3-block/block-group/index",
+    "pages/p3-block/block-detail/index",
+    "pages/p3-block/link-question/index",
+    "pages/recording/single-record/index",
+    "pages/recording/p1-multi-record/index",
+    "pages/recording/p1-multi-record-list/index",
+    "pages/recording/p1p2p3-record-list/index",
+    "pages/recording/history-record-detail/index",
+    "pages/user/user/user",
+    "pages/user/login/login",
+    "pages/teacher/widget/widget",
+    "pages/teacher/user-permission/user-permission",
+    "pages/teacher/user-role/user-role"
+  ],
+  "window": {
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFF",
+    "navigationBarTitleText": "开口就能说",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": false,
+    "pageOrientation": "auto"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "口语",
+        "iconPath": "images/v2/speaking_bt.png",
+        "selectedIconPath": "images/v2/speaking_active_bt.png"
+      },
+      {
+        "pagePath": "pages/user/user/user",
+        "text": "我的",
+        "iconPath": "images/v2/me_bt.png",
+        "selectedIconPath": "images/v2/me_active_bt.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "resizable": true,
+  "usingComponents": {
+    "tap-action": "/components/tap-action/index"
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "useExtendedLib": {
+    "weui": true
+  },
+  "permission": {
+    "scope.record": {
+      "desc": "获取录音权限用于音频上传功能"
+    }
+  }
+}

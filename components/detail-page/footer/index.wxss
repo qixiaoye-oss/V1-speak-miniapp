@@ -1,0 +1,53 @@
+@import '/style/button-group.wxss';
+@import '/style/skeleton.wxss';
+
+/* play 模式样式 */
+.answer-cell__footer {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* image 模式样式（灵感块图片） */
+.answer-cell__footer-image {
+  padding: 15px;
+}
+
+.footer-image__wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 150px;
+  margin-bottom: 10px;
+}
+
+.footer-image__wrapper:last-of-type {
+  margin-bottom: 0;
+}
+
+/* 骨架屏定位覆盖 */
+.footer-image__skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.footer-image__item {
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.footer-image__item--loaded {
+  opacity: 1;
+}
+
+.footer-image__copyright {
+  margin-top: 10px;
+  margin-left: 40%;
+  padding-right: 0;
+  font-size: 12px;
+  color: var(--main-gray-color);
+  text-align: right;
+}

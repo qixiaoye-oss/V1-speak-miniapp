@@ -1,0 +1,50 @@
+.progress_container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.progress_cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.progress_item {
+  flex: 1;
+  height: 6px;
+  box-sizing: border-box;
+}
+
+.progress_0 {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.progress__ {
+  background: #F92F6033;
+}
+
+.progress_100 {
+  background: var(--main-red-color);
+}
+
+.progress_info_cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  font-size: 12px;
+}
+
+.state_none {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.state_play {
+  background: #F92F6033;
+  color: var(--main-red-color);
+}

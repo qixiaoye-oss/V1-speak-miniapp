@@ -1,0 +1,10 @@
+@import "/style/recording.wxss";
+
+/* P1P2P3录音列表页面特有样式 */
+.content_cell {
+  margin-top: 0;
+}
+
+.recording_cell {
+  margin-top: 15px;
+}

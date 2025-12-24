@@ -1,0 +1,15 @@
+<form bindsubmit="formSubmit">
+  <view class="user-page">
+    <view class="user-info">
+      <button class="user__avatar-button" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image class="user__avatar" src="{{user.headUrl || '/images/wechat.png'}}" mode="cover" />
+      </button>
+      <input name='headUrl' value="{{user.headUrl}}" hidden="true" />
+      <input name='nickName' type="nickname" class="user__nickname" placeholder="请输入昵称" value="{{user.nickName}}" />
+      <view class="remind">修改之前，请先完善用户信息</view>
+    </view>
+  </view>
+  <view class="save-botton">
+    <button size="default" formType="submit" class="save">保存</button>
+  </view>
+</form>

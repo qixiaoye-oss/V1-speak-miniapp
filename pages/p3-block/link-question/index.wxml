@@ -1,0 +1,34 @@
+<import src="/templates/page-loading.wxml"/>
+<import src="/templates/load-error.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+<template is="loadError" data="{{loadError}}"/>
+
+<view class="chapter-cell">
+  <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toQuestionPage" data-id="{{chapter.id}}" data-set-id="{{chapter.setId}}">
+    <view class="chapter__header">
+      <view class="chapter__header-title" style="background: {{titleBackgroundColor}};">
+        <image class="chapter__title-icon" wx:if="{{iconUrl}}" src="{{iconUrl}}" />
+        <view class="chapter__title-text">{{chapter.question}}</view>
+      </view>
+    </view>
+    <view class="chapter__intervals"></view>
+    <view class="chapter__footer">
+      <image class="chapter__footer-icon" src="/images/v2/clock_in_bt.png" />
+      <block wx:if="{{chapter.signInTotal === 0}}">
+        <view class="tag tag__multi tag__multi--gray">
+          <view>录音</view>
+          <view class="tag__intervals"></view>
+          <view>未完成</view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="tag tag__multi tag__multi--green">
+          <view>录音</view>
+          <view class="tag__intervals"></view>
+          <view>已完成</view>
+        </view>
+      </block>
+      <view wx:if="{{chapter.common}}" class="chapter__meter chapter__meter-count">通用</view>
+    </view>
+  </view>
+</view>

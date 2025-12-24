@@ -1,0 +1,4 @@
+<view class="menu">
+  <navigator class="menu-item menu-item--access" hover-class="none" url="../user_permission/user_permission">学员标签管理</navigator>
+  <navigator class="menu-item menu-item--access" hover-class="none" url="../user_role/user_role">学员角色管理</navigator>
+</view>

@@ -1,0 +1,133 @@
+/**
+ * 录音模块公共样式
+ * 用于 pages/recording 下的所有页面
+ */
+
+/* ========== 录音进度条样式 ========== */
+.progress_cell {
+  width: 100%;
+  gap: 5px;
+}
+
+.progress_item {
+  height: 6px;
+  flex: 1;
+}
+
+.progress_100 {
+  background: var(--main-red-color);
+}
+
+/* ========== 录音单元格样式 ========== */
+.recorder_cell {
+  padding: 10px;
+}
+
+.recorder_cell_play {
+  background: #F92F6033;
+  color: var(--main-red-color);
+  padding: 10px;
+}
+
+/* ========== 题目内容样式 ========== */
+.content_cell {
+  border-radius: 9px;
+  margin-block: 15px;
+  padding: 20px 20px;
+  border: 0px;
+  background: var(--background-color-1);
+}
+
+.question_content {
+  font-weight: bold;
+  line-height: 1.4;
+  position: relative;
+}
+
+.additional_content {
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+.supplementary_content {
+  margin-left: 30px;
+  margin-top: 10px;
+  line-height: 1.4;
+  position: relative;
+}
+
+.content_tag {
+  color: var(--old-main-color);
+  border: 1px solid var(--solid-border-color);
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  left: -30px;
+  margin-top: 2px;
+}
+
+/* ========== 句子单元格样式 ========== */
+.sentence_cell {
+  border: 1px solid var(--solid-border-color);
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.sel_ {
+  border-color: var(--solid-border-color);
+}
+
+/* ========== 录音列表项样式 ========== */
+.recording_cell {
+  padding: 15px 20px;
+  border: 1px solid var(--solid-border-color);
+  border-radius: 9px;
+}
+
+.audio_duration {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* ========== 提示信息样式 ========== */
+.recording_tip {
+  border: 1px solid #F9C176;
+  padding: 10px;
+  background: #FEF0DF;
+}
+
+/* ========== 播放进度条样式 ========== */
+.progress {
+  flex: 1;
+  height: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--background-color-2);
+  box-sizing: border-box;
+  overflow: hidden;
+  margin-left: 20px;
+}
+
+.progress .progress_item {
+  height: 6px;
+  background-color: var(--old-main-color);
+  flex: none;
+}
+
+/* ========== 单词高亮样式 ========== */
+.word {
+  margin-right: 6px;
+  display: inline-block;
+}
+
+.word_sel {
+  background-color: var(--background-color-1);
+  border-radius: 4px;
+}
+
+/* ========== 通用样式 ========== */
+.text_right {
+  text-align: right;
+}
+
+.cell {
+  padding: 19px;
+}

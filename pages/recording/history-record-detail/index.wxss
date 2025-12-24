@@ -1,0 +1,6 @@
+@import "/style/recording.wxss";
+
+/* 录音详情页面特有样式 */
+.recording_cell {
+  border-color: var(--old-main-color);
+}

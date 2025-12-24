@@ -1,0 +1,16 @@
+<!-- 灵感块组件 -->
+<answer-cell wx:if="{{content}}" hideBody="{{!expanded}}">
+  <header
+    slot="header"
+    title="{{content}}"
+    titleBackground="{{backgroundColor}}"
+    inspiration
+    expanded="{{expanded}}"
+    bind:toggle="onToggle"
+    data-index="{{index}}">
+  </header>
+  <view class="answer-cell__content" wx:for="{{list}}" wx:key="*this" wx:for-item="paragraph" wx:for-index="paragraphIndex">
+    <sentence content="{{paragraph}}" tagWidth="{{tagWidth}}"></sentence>
+  </view>
+  <footer slot="footer" type="image" images="{{images}}"></footer>
+</answer-cell>

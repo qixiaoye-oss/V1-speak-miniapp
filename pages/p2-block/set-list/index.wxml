@@ -1,0 +1,44 @@
+<import src="/templates/page-loading.wxml"/>
+<import src="/templates/load-error.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+<template is="loadError" data="{{loadError}}"/>
+
+<view class="chapter-cell">
+  <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}">
+    <view class="chapter__header">
+      <view class="chapter__header-title" style="background: {{chapter.titleBackgroundColor}};">
+        <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+        <view class="chapter__title-text">{{chapter.title}}</view>
+      </view>
+      <view class="tag tag--orange" wx:if="{{chapter.isChargeable == 1}}">权限</view>
+      <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
+    </view>
+    <view class="chapter__intervals"></view>
+    <view class="chapter__footer">
+      <image class="chapter__footer-icon" src="/images/v2/clock_in_bt.png" />
+      <block wx:if="{{chapter.grading === 1}}">
+        <view class="tag tag__multi tag__multi--green">
+          <view>评分</view>
+          <view class="tag__intervals"></view>
+          <view>已完成</view>
+        </view>
+      </block>
+      <block wx:else>
+        <block wx:if="{{chapter.recordTotal === 0}}">
+          <view class="tag tag__multi tag__multi--gray">
+            <view>评分</view>
+            <view class="tag__intervals"></view>
+            <view>未完成</view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="tag tag__multi tag__multi--green">
+            <view>评分</view>
+            <view class="tag__intervals"></view>
+            <view>已完成</view>
+          </view>
+        </block>
+      </block>
+    </view>
+  </view>
+</view>

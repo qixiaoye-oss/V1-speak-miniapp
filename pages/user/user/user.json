@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "role-info-popup": "/components/role-info-popup/index",
+    "skeleton": "/components/skeleton/skeleton"
+  }
+}

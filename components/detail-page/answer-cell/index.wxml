@@ -1,0 +1,20 @@
+<view class="answer-cell">
+  <!-- Header 区域 -->
+  <slot name="header"></slot>
+
+  <!-- 顶部分隔线 -->
+  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody}}"></view>
+
+  <!-- 内容区域 -->
+  <view class="answer-cell__body" wx:if="{{!hideBody}}">
+    <slot></slot>
+  </view>
+
+  <!-- 底部分隔线 -->
+  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody}}"></view>
+
+  <!-- Footer 区域 -->
+  <block wx:if="{{!hideBody}}">
+    <slot name="footer"></slot>
+  </block>
+</view>

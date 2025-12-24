@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "parse-text": "/components/parse-text/index"
+  }
+}

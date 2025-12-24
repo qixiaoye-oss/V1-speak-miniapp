@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "tap-action": "/components/tap-action/index",
+    "skeleton": "/components/skeleton/skeleton"
+  }
+}

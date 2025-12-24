@@ -1,0 +1,407 @@
+/* grid布局 */
+.layout_grid {
+  display: grid;
+}
+
+.grid_rap_10 {
+  grid-row-gap: 10px;
+  grid-column-gap: 10px;
+}
+
+.grid_col2 {
+  grid-column-start: span 2;
+}
+
+/* flex布局 */
+.layout_flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.layout_flex_col {
+  display: flex;
+  flex-direction: column;
+}
+
+.f_cen2 {
+  align-items: center;
+  justify-content: center;
+}
+
+.f_ac_je {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.f_ac_js {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.f_as_jc {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.f_ac {
+  align-items: center;
+}
+
+.f_as {
+  align-items: flex-start;
+}
+
+.f_ae {
+  align-items: flex-end;
+}
+
+.f_jb {
+  justify-content: space-between;
+}
+
+.f_wrap {
+  flex-wrap: wrap;
+}
+
+.f_gap_10 {
+  gap: 10px;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+/* 文本省略 */
+.text_omission {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* 字体大小 */
+.f8 {
+  font-size: 8px;
+}
+
+.f9 {
+  font-size: 9px;
+}
+
+.f10 {
+  font-size: 10px;
+}
+
+.f12 {
+  font-size: 12px;
+}
+
+.f14 {
+  font-size: 14px;
+}
+
+.f15 {
+  font-size: 15px;
+}
+
+.f16 {
+  font-size: 16px;
+}
+
+.f17 {
+  font-size: 17px;
+}
+
+
+.f18 {
+  font-size: 18px;
+}
+
+.f22 {
+  font-size: 22px;
+}
+
+.f23 {
+  font-size: 23px;
+}
+
+.f25 {
+  font-size: 25px;
+}
+
+.f26 {
+  font-size: 26px;
+}
+
+.f27 {
+  font-size: 27px;
+}
+
+.f34 {
+  font-size: 34px;
+}
+
+.fwb {
+  font-weight: bold;
+}
+
+.lh14 {
+  line-height: 1.4;
+}
+
+.lh17 {
+  line-height: 1.7;
+}
+
+.lh18 {
+  line-height: 1.8;
+}
+
+.lh19 {
+  line-height: 1.9;
+}
+
+.lh20 {
+  line-height: 2;
+}
+
+.font_color_red {
+  color: #D9001B;
+}
+
+.font_color_grey {
+  color: #A8A8A3;
+}
+
+/* padding和margin */
+.pi10 {
+  padding-inline: 10px;
+}
+
+.pi20 {
+  padding-inline: 20px;
+}
+
+.pi30 {
+  padding-inline: 30px;
+}
+
+.pb10 {
+  padding-block: 10px;
+}
+
+.pb15 {
+  padding-block: 15px;
+}
+
+.pb16 {
+  padding-block: 16px;
+}
+
+.pb20 {
+  padding-block: 20px;
+}
+
+.mi10 {
+  margin-inline: 10px;
+}
+
+.mi20 {
+  margin-inline: 20px;
+}
+
+.mb5 {
+  margin-block: 5px;
+}
+
+.mb10 {
+  margin-block: 10px;
+}
+
+.mb20 {
+  margin-block: 20px;
+}
+
+/* imgSize */
+.img10 {
+  width: 10px;
+  height: 10px;
+}
+
+.img15 {
+  width: 15px;
+  height: 15px;
+}
+
+.img20 {
+  width: 20px;
+  height: 20px;
+}
+
+.img25 {
+  width: 25px;
+  height: 25px;
+}
+
+.img26 {
+  width: 26px;
+  height: 26px;
+}
+
+.img28 {
+  width: 28px;
+  height: 28px;
+}
+
+.img30 {
+  width: 30px;
+  height: 30px;
+}
+
+.img40 {
+  width: 40px;
+  height: 40px;
+}
+
+.img50 {
+  width: 50px;
+  height: 50px;
+}
+
+.img60 {
+  width: 60px;
+  height: 60px;
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
+}
+
+/* imgSize */
+.radius10 {
+  border-radius: 10px
+}
+
+.radius9 {
+  border-radius: 10px
+}
+
+.radius8 {
+  border-radius: 8px
+}
+
+.radius6 {
+  border-radius: 6px
+}
+
+.radius4 {
+  border-radius: 4px
+}
+
+.radius3 {
+  border-radius: 4px
+}
+
+.radius2 {
+  border-radius: 2px
+}
+
+/* 特殊字体大小 */
+.cen_9em {
+  font-size: 16px;
+  transform: scale(0.9);
+  transform-origin: center center;
+}
+
+.bottom_spacing {
+  height: 83px;
+}
+
+.test_bor {
+  border: 1px solid red;
+}
+
+/* 灰色 */
+.grey_c0 {
+  color: rgba(0, 0, 0, 0);
+}
+
+.grey_c1 {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+.grey_c2 {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.grey_c3 {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.grey_c4 {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.grey_c5 {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.grey_c6 {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.grey_c7 {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.grey_c8 {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.grey_c9 {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.grey_b1 {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.grey_b2 {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.grey_b3 {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.grey_b4 {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.grey_b5 {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.grey_b6 {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.grey_b7 {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.grey_b8 {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.grey_b9 {
+  background: rgba(0, 0, 0, 0.9);
+}

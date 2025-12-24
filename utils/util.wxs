@@ -1,0 +1,103 @@
+var formatDate = function (timestamp, option, def) {
+  if (timestamp === null || timestamp === '' || timestamp == undefined) return def
+  timestamp = timestamp.replace(getRegExp('-', 'g'), '/')
+  var date = getDate(timestamp)
+  var year = date.getFullYear()
+  var month = function () {
+    var mon = date.getMonth() + 1
+    return mon < 10 ? '0' + mon : mon
+  }
+  var day = function () {
+    return date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+  }
+  var hour = function () {
+    return date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  }
+  var minute = function () {
+    return date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  }
+  var second = function () {
+    return date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  }
+  //获取 年月日
+  if (option === 'yyyy-MM-dd') return " " + year + "-" + month() + "-" + day()
+  //获取年月
+  if (option === 'yyyy-MM') return " " + year + "-" + month()
+  //获取年
+  if (option === 'yyyy') return " " + year
+  //获取月
+  if (option === 'MM') return " " + month()
+  //获取日
+  if (option === 'dd') return " " + day()
+  //获取时分秒
+  if (option === 'HH-mm-ss') return " " + hour() + ":" + minute() + ":" + second()
+  //获取时分
+  if (option === 'HH-mm') return " " + hour() + ":" + minute()
+  //获取分秒
+  if (option === 'mm-ss') return minute() + ":" + second()
+  //获取分
+  if (option === 'mm') return minute()
+  //获取秒
+  if (option == 'ss') return second()
+  //默认时分秒年月日
+  return year + '-' + month() + '-' + day() + ' ' + hour() + ':' + minute() + ":" + second()
+}
+
+/** value1 值  value2 存储值(一般1️以逗号拼接存数据库的值) */
+var isCheck = function (value1, value2) {
+  var flag = false
+  if (value1 === '' || value1 === undefined || value2 === '' || value2 === undefined) {
+    return flag
+  }
+  var arr = value2.split(',')
+  for (var i = 0; i < arr.length; i++) {
+    if (value1 === arr[i]) {
+      flag = true
+      break
+    }
+  }
+  return flag
+}
+
+var formatSecond = function formatSecond(second) {
+  if (second === null || second === '' || second == undefined) return ""
+  second = parseInt(second)
+  var min = Math.floor(second / 60)
+  var sec = (second - min * 60)
+  return (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec)
+}
+
+function formatNull(value1, value2) {
+  return isEmpty(value1) ? value2 : value1
+}
+
+function formatNumber(value1) {
+  if (value1 < 10) {
+    return '0' + value1
+  } else {
+    return value1
+  }
+}
+
+function isEmpty(str) {
+  if (str === undefined || str === null || str === '' || str === 'null') { //空
+    return true
+  }
+}
+
+function accuracyStyle(value1, value2) {
+  if (isEmpty(value1)) {
+    return true
+  }
+  return Number(value1) > Number(value2)
+}
+
+module.exports = {
+  formatDate: formatDate,
+  isCheck: isCheck,
+  formatSecond: formatSecond,
+  formatNull: formatNull,
+  formatNumber: formatNumber,
+  isEmpty: isEmpty,
+  accuracyStyle: accuracyStyle
+}

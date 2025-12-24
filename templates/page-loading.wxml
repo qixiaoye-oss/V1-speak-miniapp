@@ -1,0 +1,17 @@
+<!--
+  页面加载进度条模板
+
+  使用方法：
+  1. 在页面 wxml 中引入: <import src="/templates/page-loading.wxml"/>
+  2. 使用模板: <template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+  参数说明：
+  - loading: 是否显示进度条 (Boolean)
+  - loadProgress: 进度值 0-100 (Number)
+-->
+
+<template name="pageLoading">
+  <view class="page-loading-bar" wx:if="{{loading}}">
+    <view class="page-loading-bar__inner" style="width: {{loadProgress}}%;"></view>
+  </view>
+</template>

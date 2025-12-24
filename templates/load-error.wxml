@@ -1,0 +1,18 @@
+<!--
+  加载失败重试模板
+
+  使用方法：
+  1. 在页面 wxml 中引入: <import src="/templates/load-error.wxml"/>
+  2. 使用模板: <template is="loadError" data="{{loadError}}"/>
+  3. 在页面 JS 中实现 retryLoad 方法
+
+  参数说明：
+  - loadError: 是否显示错误状态 (Boolean)
+-->
+
+<template name="loadError">
+  <view class="load-error" wx:if="{{loadError}}">
+    <view class="load-error__text">加载失败</view>
+    <view class="load-error__btn" bindtap="retryLoad">点击重试</view>
+  </view>
+</template>

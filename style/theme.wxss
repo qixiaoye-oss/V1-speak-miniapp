@@ -1,0 +1,8 @@
+/**
+ * 主题样式文件
+ *
+ * 注意：按钮组相关样式已迁移至 button-group.wxss
+ * @see style/button-group.wxss
+ */
+
+/* 此文件保留用于未来其他主题样式扩展 */

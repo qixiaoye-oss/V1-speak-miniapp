@@ -1,0 +1,21 @@
+<!-- play 模式：播放/停止按钮 -->
+<view class="answer-cell__footer" wx:if="{{type === 'play'}}">
+  <view class="btn-action" data-icon="{{playing ? 'stop' : 'play'}}" hover-class="tap-active" bind:tap="onPlayTap">
+    <view>{{playing ? '停止' : '播放'}}</view>
+    <image wx:if="{{!playing}}" src="/images/v2/play_bt.png"></image>
+    <image wx:if="{{playing}}" src="/images/v2/stop_bt.png"></image>
+  </view>
+</view>
+
+<!-- image 模式：图片列表（用于灵感块） -->
+<view class="answer-cell__footer-image" wx:if="{{type === 'image' && images.length > 0}}">
+  <view class="footer-image__wrapper" wx:for="{{images}}" wx:key="*this" wx:for-index="imgIndex">
+    <!-- 骨架屏占位 -->
+    <view class="footer-image__skeleton skeleton-image skeleton--animate" wx:if="{{!imageLoadedMap[imgIndex]}}">
+      <view class="skeleton-image__block"></view>
+    </view>
+    <!-- 实际图片 -->
+    <image class="footer-image__item {{imageLoadedMap[imgIndex] ? 'footer-image__item--loaded' : ''}}" src="{{item}}" mode="widthFix" data-index="{{imgIndex}}" bindload="onImageLoad" binderror="onImageError"></image>
+  </view>
+  <view class="footer-image__copyright">素材来自网络，仅用于学习，如有侵权请联系删除。</view>
+</view>

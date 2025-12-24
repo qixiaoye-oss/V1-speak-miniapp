@@ -1,0 +1,14 @@
+@import "/style/recording.wxss";
+
+/* 页面内容区域 - 为底部固定按钮组留出空间 */
+page {
+  box-sizing: border-box;
+  /* 单层按钮组总高度(含hint): 67px + 39.6px + 20px + 15px = 141.6px (已包含gap) */
+  padding-bottom: var(--button-group-total-height-single-with-hint);
+}
+
+/* question-content 组件间距（与 content_cell 保持一致） */
+question-content {
+  display: block;
+  margin-block: 15px;
+}

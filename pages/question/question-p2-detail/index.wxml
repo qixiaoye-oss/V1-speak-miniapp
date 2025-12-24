@@ -1,0 +1,78 @@
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+
+<!-- 骨架屏 -->
+<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+
+<block wx:if="{{!loading && detail}}">
+  <view class="page-content" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : ''}}">
+    <question-content content="{{detail.content}}" additionalContent="{{detail.additionalContent}}" supplementaryContent="{{detail.supplementaryContent}}" backgroundColor="{{backgroundColor}}" borderColor="{{color}}" bind:tap="playMainAudio" />
+    <view class="series" wx:if="{{seriesList.length > 0}}">
+      <view class="series__item {{seriesIndex == index ?'series__active':''}}" hover-class="tap-active" bind:tap="checkSeries" wx:for="{{seriesList}}" wx:key="item" data-index="{{index}}">
+        <view style="background: {{item.backgroundColor}};">
+          <image wx:if="{{item.iconUrl}}" src="{{item.iconUrl}}" />
+          <text>{{item.title}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="link-block" hover-class="tap-active" bind:tap="gotoStoryBlock" wx:for="{{story}}" wx:key="item" data-set-id="{{item.id}}">
+      <view class="link-block__title">
+        <view class="link-block__title-content" style="background: {{item.backgroundColor}};">
+          <image class="link-block__title-img" wx:if="{{item.iconUrl}}" src="{{item.iconUrl}}" />
+          <view class="link-block__title-text">{{item.title}}</view>
+        </view>
+      </view>
+      <view class="link-block__tag">查看所有相关题目</view>
+    </view>
+    <version-tabs list="{{list}}" current="{{versionIndex}}" activeColor="{{backgroundColor}}" bind:change="checkVersion" />
+    <block wx:for="{{list}}" wx:key="answer" wx:for-item="answer" wx:for-index="answerIdx" wx:if="{{versionIndex == answerIdx}}">
+      <!-- 置顶开关（多版本时显示） -->
+      <top-switch
+        isTop="{{answer.isPreferred}}"
+        visible="{{list.length > 1}}"
+        bind:switch="onTopSwitch"
+        data-index="{{answerIdx}}">
+      </top-switch>
+      <!-- 灵感块（排列在最前面） -->
+      <inspiration-block
+        content="{{answer.inspirationContent}}"
+        list="{{answer.inspirationList}}"
+        images="{{answer.inspirationImgs}}"
+        backgroundColor="{{backgroundColor}}"
+        expanded="{{answer.inspirationExpanded}}"
+        index="{{answerIdx}}"
+        tagWidth="{{tagWidth}}"
+        bind:toggle="onInspirationToggle">
+      </inspiration-block>
+      <!-- 答案块 -->
+      <answer-cell wx:for="{{answer.list}}" wx:key="block" wx:for-item="block" wx:for-index="blockIndex">
+        <header slot="header" title="{{block.content}}" titleBackground="{{backgroundColor}}"></header>
+        <view class="answer-cell__content" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" wx:for="{{block.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" data-answer-index="{{blockIndex}}" data-sentence-index="{{sentenceIndex}}" bind:tap="playSentence">
+          <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
+        </view>
+        <footer slot="footer" playing="{{block.isPlaying}}" hasAudio="{{block.audioTotal == block.sentenceTotal}}" bind:play="onFooterPlay" data-index="{{blockIndex}}"></footer>
+      </answer-cell>
+    </block>
+    <view class="" wx:if="{{detail.similarList.length > 0}}">
+      <view class="similar_cell" wx:for="{{detail.similarList}}" wx:key="item">
+        <view class="similar_tag_cell ">
+          <text wx:if="{{(index + 1) < 10}}">相似题0{{index + 1}}</text>
+          <text wx:else>相似题{{index + 1}}</text>
+        </view>
+        <view class="question_content">{{item.content}}</view>
+        <view class="question_illustrate mt10" wx:if="{{item.illustrate}}">{{item.illustrate}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-page-bottom">
+    <view class="btn-group-hint-banner" data-icon="controller">点击答案句子/题目句，可以单句播放</view>
+    <view class="btn-group-single">
+      <tap-action icon="controller" bind:tap="recordingOrClocking">
+        <view>打卡/录音</view>
+        <image src="/images/v2/controller_bt.png"></image>
+        <view class="btn-corner-mark">{{recordingCount || 0}}</view>
+      </tap-action>
+    </view>
+  </view>
+</block>
+<custom-popup show="{{showPopup}}" bind:cancel="popupCancel" bind:confirm="popupConfirm" selected="{{level}}"></custom-popup>

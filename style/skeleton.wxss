@@ -1,0 +1,389 @@
+/**
+ * 骨架屏全局样式
+ * 包含闪光动画和各类型骨架的布局样式
+ * 尺寸单位：px（与项目其他样式保持一致）
+ *
+ * CSS 变量说明：
+ * --skeleton-bg: 骨架块背景色（默认 #f0f0f0）
+ * --skeleton-highlight: 闪光高亮色（默认 #e8e8e8）
+ * --skeleton-radius: 圆角大小（默认 6px）
+ * --skeleton-card-bg: 卡片/容器背景色（默认 #fff）
+ * --skeleton-border-color: 边框颜色（默认 #eee）
+ * --skeleton-item-gap: 列表项间距（默认 15px）
+ */
+
+/* ============================================================
+   闪光动画
+   ============================================================ */
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* 动画开启时的样式 - 通过父级 .skeleton--animate 控制 */
+.skeleton--animate .skeleton-list__avatar,
+.skeleton--animate .skeleton-list__title,
+.skeleton--animate .skeleton-list__desc,
+.skeleton--animate .skeleton-list__tag,
+.skeleton--animate .skeleton-card__icon,
+.skeleton--animate .skeleton-card__title,
+.skeleton--animate .skeleton-card__tag,
+.skeleton--animate .skeleton-detail__header,
+.skeleton--animate .skeleton-detail__line,
+.skeleton--animate .skeleton-sentence__index,
+.skeleton--animate .skeleton-sentence__label,
+.skeleton--animate .skeleton-sentence__line,
+.skeleton--animate .skeleton-sentence__btn,
+.skeleton--animate .skeleton-user__avatar,
+.skeleton--animate .skeleton-user__name,
+.skeleton--animate .skeleton-user__id,
+.skeleton--animate .skeleton-user__menu-item,
+.skeleton--animate .skeleton-image__block {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-bg, #f0f0f0) 25%,
+    var(--skeleton-highlight, #e8e8e8) 50%,
+    var(--skeleton-bg, #f0f0f0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   基础元素样式
+   ============================================================ */
+
+.skeleton-list__avatar,
+.skeleton-list__title,
+.skeleton-list__desc,
+.skeleton-list__tag,
+.skeleton-card__icon,
+.skeleton-card__title,
+.skeleton-card__tag,
+.skeleton-detail__header,
+.skeleton-detail__line,
+.skeleton-sentence__index,
+.skeleton-sentence__label,
+.skeleton-sentence__line,
+.skeleton-sentence__btn,
+.skeleton-user__avatar,
+.skeleton-user__name,
+.skeleton-user__id,
+.skeleton-user__menu-item,
+.skeleton-image__block {
+  background-color: var(--skeleton-bg, #f0f0f0);
+}
+
+/* ============================================================
+   可选标题
+   ============================================================ */
+
+.skeleton__title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  padding: 15px 0;
+}
+
+/* ============================================================
+   列表类型 (type="list")
+   适用页面：album_list, notice/list, wrong_list
+   ============================================================ */
+
+.skeleton-list {
+  padding: 0;
+}
+
+.skeleton-list__item {
+  display: flex;
+  align-items: center;
+  padding: 15px 10px;
+  margin-bottom: var(--skeleton-item-gap, 15px);
+  background: var(--skeleton-card-bg, #fff);
+  border-radius: var(--skeleton-radius, 9px);
+  border: 1px solid var(--skeleton-border-color, #eee);
+}
+
+.skeleton-list__avatar {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  border-radius: var(--skeleton-radius, 6px);
+  flex-shrink: 0;
+}
+
+.skeleton-list__avatar.skeleton-avatar--circle {
+  border-radius: 50%;
+}
+
+.skeleton-list__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.skeleton-list__title {
+  width: 60%;
+  height: 16px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-bottom: 8px;
+}
+
+.skeleton-list__desc {
+  width: 40%;
+  height: 14px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-list__tag {
+  width: 50px;
+  height: 22px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   卡片类型 (type="card")
+   适用页面：home_page
+   ============================================================ */
+
+.skeleton-card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  gap: 15px;
+}
+
+.skeleton-card__item {
+  width: calc(50% - 7.5px);
+  padding: 15px;
+  background: var(--skeleton-card-bg, #fff);
+  border-radius: var(--skeleton-radius, 6px);
+  border: 1px solid var(--skeleton-border-color, #eee);
+  box-sizing: border-box;
+}
+
+.skeleton-card__icon {
+  width: 25px;
+  height: 25px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-bottom: 10px;
+}
+
+.skeleton-card__title {
+  width: 80%;
+  height: 18px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-bottom: 10px;
+}
+
+.skeleton-card__footer {
+  display: flex;
+  gap: 5px;
+}
+
+.skeleton-card__tag {
+  width: 40px;
+  height: 22px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+/* ============================================================
+   详情类型 (type="detail")
+   适用页面：sentence_detail, notice/detail
+   ============================================================ */
+
+.skeleton-detail {
+  padding: 0;
+}
+
+.skeleton-detail__section {
+  padding: 15px;
+  margin-bottom: 15px;
+  background: var(--skeleton-card-bg, #fff);
+  border-radius: var(--skeleton-radius, 9px);
+  border: 1px solid var(--skeleton-border-color, #eee);
+}
+
+.skeleton-detail__header {
+  width: 60px;
+  height: 18px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-bottom: 15px;
+}
+
+.skeleton-detail__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-detail__line {
+  height: 16px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-detail__line--long {
+  width: 100%;
+}
+
+.skeleton-detail__line--medium {
+  width: 75%;
+}
+
+.skeleton-detail__line--short {
+  width: 50%;
+}
+
+/* ============================================================
+   句子类型 (type="sentence")
+   适用页面：sentence_list, word_list
+   ============================================================ */
+
+.skeleton-sentence {
+  padding: 0;
+}
+
+.skeleton-sentence__item {
+  padding: 15px;
+  margin-bottom: var(--skeleton-item-gap, 15px);
+  background: var(--skeleton-card-bg, #fff);
+  border-radius: var(--skeleton-radius, 9px);
+  border: 1px solid var(--skeleton-border-color, #eee);
+}
+
+.skeleton-sentence__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.skeleton-sentence__index {
+  width: 40px;
+  height: 14px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-sentence__label {
+  width: 50px;
+  height: 16px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-sentence__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.skeleton-sentence__line {
+  height: 16px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-sentence__line--long {
+  width: 100%;
+}
+
+.skeleton-sentence__line--medium {
+  width: 65%;
+}
+
+.skeleton-sentence__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.skeleton-sentence__btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+/* ============================================================
+   用户类型 (type="user")
+   适用页面：user
+   ============================================================ */
+
+.skeleton-user {
+  padding: 0;
+}
+
+.skeleton-user__header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: var(--skeleton-card-bg, #fff);
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-user__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.skeleton-user__info {
+  flex: 1;
+}
+
+.skeleton-user__name {
+  width: 90px;
+  height: 16px;
+  border-radius: var(--skeleton-radius, 6px);
+  margin-bottom: 8px;
+}
+
+.skeleton-user__id {
+  width: 60px;
+  height: 14px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-user__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.skeleton-user__menu-item {
+  height: 50px;
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-user__menu-item:first-child {
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+.skeleton-user__menu-item:last-child {
+  border-radius: var(--skeleton-radius, 6px);
+}
+
+/* ============================================================
+   图片类型 (type="image")
+   适用场景：灵感块图片、懒加载图片占位
+   ============================================================ */
+
+.skeleton-image {
+  position: relative;
+  width: 100%;
+  min-height: 150px;
+}
+
+.skeleton-image__block {
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  border-radius: var(--skeleton-radius, 6px);
+}

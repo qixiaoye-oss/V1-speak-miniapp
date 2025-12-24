@@ -1,0 +1,204 @@
+/* 
+  字体比对
+  rp 54       22px
+  rp 48       18px
+  rp 42       16px
+  rp 36       14px
+  rp 28       12px
+  rp 24       10px
+  rp 18       8px
+*/
+
+/* @import 'style/weui.wxss'; */
+@import "style/layout.wxss";
+@import "style/button-group.wxss";
+@import "style/theme.wxss";
+@import "style/default-styles.wxss";
+@import "style/tag.wxss";
+@import "style/page-loading.wxss";
+@import "style/skeleton.wxss";
+
+page {
+  background-color: #ffffff;
+  padding: 20px;
+  font-size: 16px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  /* 历史版本主题颜色 */
+  --old-main-color: rgba(2, 125, 180, 1);
+  --border-color-grey: rgba(0, 0, 0, 0.2);
+  --background-color-1: rgba(2, 125, 180, 0.1);
+  --background-color-2: rgba(2, 125, 180, 0.2);
+  /* 新样式---所有边框颜色 */
+  --solid-border-color: rgba(0, 0, 0, 0.3);
+  --dashed-border-color: rgba(0, 0, 0, 0.3);
+  /* 用户页-主题色 */
+  --theme-color: rgba(249, 47, 96, 1);
+  --theme-bcakground-color: rgba(249, 47, 96, 0.15);
+  /* 统一主色定义 */
+  --main-gray-color: rgba(0, 0, 0, 0.3);
+  --main-green-color: #00D26A;
+  --main-blue-color: #00A6ED;
+  --main-red-color: #F92F60;
+  --main-orange-color: #FFB02E;
+  /* 主色半透明背景（15%不透明度） */
+  --main-blue-color-bg: rgba(0, 166, 237, 0.15);
+  --main-green-color-bg: rgba(0, 210, 106, 0.15);
+  --main-red-color-bg: rgba(249, 47, 96, 0.15);
+  --main-orange-color-bg: rgba(255, 176, 46, 0.15);
+}
+
+view {
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+.base-font-color {
+  color: var(--old-main-color);
+}
+
+.cell {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--old-main-color);
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell:last-child {
+  margin-bottom: 0;
+}
+
+.cell_lable_mini {
+  padding: 0 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* 按钮======= */
+button {
+  height: 48px;
+  padding: 0px !important;
+  font-size: 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--theme-color);
+  border-radius: 9px;
+}
+
+button[type="primary"] {
+  color: #000000 !important;
+  font-weight: normal !important;
+  background-color: var(--theme-bcakground-color) !important;
+}
+
+button[type="default"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-weight: normal !important;
+  width: 100% !important;
+}
+
+button[disabled][type="default"] {
+  color: rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+button[size="mini"] {
+  width: 46px !important;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button[size="mini-n"] {
+  width: 36px !important;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+wx-slider .wx-slider-handle-wrapper {
+  height: 6px;
+}
+
+slider .wx-slider-handle-wrapper {
+  height: 10px;
+}
+
+/* 带练录音练习页样式 */
+.recording__group-title {
+  border: 1px solid var(--solid-border-color);
+  text-align: center;
+  font-size: 14px;
+  border-radius: 9px;
+  margin-block: 15px;
+  padding-block: 10px;
+}
+
+.recording__countdown {
+  padding: 4px 10px;
+  line-height: 1.4;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: rgba(255, 130, 45, 1);
+  border: 2px solid rgba(255, 130, 45, 1);
+  box-sizing: border-box;
+}
+
+.recording__switch {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.recording__switch-text {
+  border: 1px solid var(--solid-border-color);
+  color: var(--solid-border-color);
+  padding: 5px 10px;
+  line-height: 1.4;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.recording__switch-text--sel {
+  background: var(--main-orange-color);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+/*swtich整体大小及背景色*/
+.wx-switch-input {
+  /* border-color: rgba(255, 176, 45, 1) !important; */
+  position: relative;
+  right: -3px;
+}
+
+/* 通用标签 */
+/* .tag {
+  padding-inline: 8px;
+  height: 22px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background: #ffffff;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+} */

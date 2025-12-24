@@ -1,0 +1,46 @@
+/**
+ * question-content 组件样式
+ * 题目内容展示组件的统一样式
+ */
+
+.question-content {
+  border-radius: 9px;
+  border-width: 1px;
+  border-style: solid;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  gap: 10px;
+}
+
+.question-content__text {
+  font-weight: 600;
+  line-height: 1.4;
+  color: #000000;
+}
+
+/* 附加内容（P2 特有） */
+.question-content__additional {
+  margin-top: 10px;
+  font-weight: normal;
+}
+
+/* 补充内容（带"补"标签） */
+.question-content__supplementary {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.question-content__supplementary-icon {
+  display: inline-block;
+  border: 1px solid rgba(98, 126, 151, 1);
+  font-size: 9px;
+  padding: 4px;
+  border-radius: 3px;
+  line-height: 1;
+  margin-right: 6px;
+}

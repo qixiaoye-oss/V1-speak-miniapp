@@ -1,0 +1,9 @@
+<!-- 置顶开关组件（独立 block） -->
+<view class="top-switch-block" wx:if="{{visible}}">
+  <view class="top-switch__content">
+    <view class="top-switch__text {{isTop ? 'top-switch__text--on' : ''}}">
+      {{isTop ? '已置顶' : '未置顶'}}
+    </view>
+    <switch checked="{{isTop}}" bindchange="onSwitchChange" color="#00D26A"></switch>
+  </view>
+</view>

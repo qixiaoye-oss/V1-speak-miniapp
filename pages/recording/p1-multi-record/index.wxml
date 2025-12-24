@@ -1,0 +1,65 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<block wx:if="{{list.length > 0}}">
+  <view class="layout_flex progress_cell">
+    <block wx:for="{{newList}}" wx:key="item">
+      <view class="grey_b2 progress_item" wx:if="{{!item.finish}}"></view>
+      <view class="progress_item progress_100" wx:else></view>
+    </block>
+  </view>
+  <view class="layout_flex f_ac f_jb f14 recorder_cell_play" wx:if="{{status === 1}}">
+    <view>录音中</view>
+    <view>已录制{{recordingTime}}s</view>
+  </view>
+  <view class="layout_flex f_ac f_jb f14 recorder_cell grey_c6 grey_b1" wx:else>
+    <view>未开始</view>
+    <view>已录制{{recordingTime}}s</view>
+  </view>
+  <view class="layout_flex_col" style="margin-top: 15px; gap: 15px;">
+    <view class="sentence_cell radius10 base-font-color f16 fwb {{status === 1 && index == nowPlayAudioIndex ? 'sel_':''}}" wx:for="{{newList}}" wx:key="item">Q{{index+1}}</view>
+  </view>
+  <view class="recording_cell layout_flex f_ac f_jb fwb f14 radius9" wx:if="{{file.url}}" style="margin-top: 15px;">
+    <view>{{file.time}}</view>
+    <view class="layout_flex f_ac">
+      <view class="audio_duration" style="margin-right: 10px;">{{file.duration}}秒</view>
+      <image class="img20" wx:if="{{audioStatus == 'stop'}}" src="/images/icon/play.png" bind:tap="playRecordedAudio"></image>
+      <image class="img20" wx:else src="/images/icon/pause.png" bind:tap="stopAudio"></image>
+    </view>
+  </view>
+  <view class="btn-page-bottom">
+    <view class="btn-group-single">
+      <view class="btn-pos-left">
+        <tap-action icon="save" bind:tap="cancel">
+          <view>放弃</view>
+        </tap-action>
+      </view>
+      <view class="btn-pos-right">
+        <block wx:if="{{status === 0}}">
+          <tap-action icon="stop" bind:tap="checkRecordPermission">
+            <view>点击开始答题/录音</view>
+            <image src="/images/v2/stop_bt.png"></image>
+          </tap-action>
+        </block>
+        <block wx:if="{{status === 1 && (nowPlayAudioIndex < (list.length - 1))}}">
+          <tap-action icon="go" bind:tap="nextQuestion" disabled="{{audioStatus === 'play'}}">
+            <view>请回答.../点击下一题</view>
+            <image src="/images/v2/go_bt.png"></image>
+          </tap-action>
+        </block>
+        <block wx:if="{{status === 1 && (nowPlayAudioIndex == (list.length - 1))}}">
+          <tap-action icon="stop" bind:tap="stopRecording" disabled="{{audioStatus === 'play'}}">
+            <view>请回答.../点击结束</view>
+            <image src="/images/v2/stop_bt.png"></image>
+          </tap-action>
+        </block>
+        <block wx:if="{{status === 2}}">
+          <tap-action icon="down" bind:tap="confirm">
+            <view>提交保存</view>
+            <image src="/images/v2/down_bt.png"></image>
+          </tap-action>
+        </block>
+      </view>
+    </view>
+  </view>
+</block>

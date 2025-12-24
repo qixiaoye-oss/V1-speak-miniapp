@@ -1,0 +1,77 @@
+@import '/style/tag.wxss';
+@import '/style/button-group.wxss';
+
+.detail-block__header {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-header__left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.detail-header__left_left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.detail-header__left-title-icon {
+  min-width: 20px;
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.detail-header__left-icon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  min-height: 20px;
+}
+
+.detail-header__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.detail-header__right-grading {
+  padding: 2px 10px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.detail-header__right-recording {
+  color: rgba(2, 125, 180, 1);
+  font-size: 15px;
+}
+
+.probe {
+  padding: 2px 8px;
+  line-height: 1.4;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* 灵感块展开/收起按钮旋转动画 */
+.expand-toggle-btn {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.expand-toggle-btn--expanded {
+  transform: rotate(0deg);
+}

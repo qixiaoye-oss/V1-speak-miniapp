@@ -1,0 +1,26 @@
+.search_class {
+  background-color: var(--theme-bcakground-color);
+}
+
+.searchbar-result {
+  margin-top: 0;
+  font-size: 0.8235294117647058rem;
+  height: 60vh;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.searchbar-result::before {
+  display: none;
+}
+
+.p10 {
+  padding: 10px 0;
+}
+
+.prompt {
+  text-align: left;
+  color: #999;
+  font-size: 13px;
+  padding: 5px 0rpx;
+}

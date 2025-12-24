@@ -1,0 +1,75 @@
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+
+<!-- 骨架屏 -->
+<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+
+<block wx:if="{{!loading && detail}}">
+  <view class="page-content" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : ''}}">
+    <question-content content="{{detail.content}}" supplementaryContent="{{detail.supplementaryContent}}" backgroundColor="{{backgroundColor}}" borderColor="{{textColor}}" bind:tap="playMainAudio" />
+    <version-tabs list="{{list}}" current="{{versionIndex}}" activeColor="{{backgroundColor}}" bind:change="checkVersion" />
+    <block wx:for="{{list}}" wx:key="answer" wx:for-item="answer" wx:for-index="answerIndex" wx:if="{{versionIndex == answerIndex}}">
+      <!-- 置顶开关（多版本时显示） -->
+      <top-switch
+        isTop="{{answer.isPreferred}}"
+        visible="{{list.length > 1}}"
+        bind:switch="onTopSwitch"
+        data-index="{{answerIndex}}">
+      </top-switch>
+      <!-- 灵感块（排列在最前面） -->
+      <inspiration-block
+        content="{{answer.inspirationContent}}"
+        list="{{answer.inspirationList}}"
+        images="{{answer.inspirationImgs}}"
+        backgroundColor="{{backgroundColor}}"
+        expanded="{{answer.inspirationExpanded}}"
+        index="{{answerIndex}}"
+        tagWidth="{{tagWidth}}"
+        bind:toggle="onInspirationToggle">
+      </inspiration-block>
+      <!-- 答案块 -->
+      <answer-cell>
+        <header slot="header" title="{{answer.content}}" titleBackground="{{backgroundColor}}"></header>
+        <view class="paragraph" wx:for="{{answer.list}}" wx:key="paragraph" wx:for-item="paragraph" wx:for-index="paragraphIndex">
+          <block wx:if="{{paragraph.title}}">
+            <view class="paragraph__title">
+              <view class="paragraph__title-text">{{paragraph.title}}</view>
+            </view>
+            <view class="paragraph__content">
+              <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
+                <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
+              </view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
+              <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
+            </view>
+          </block>
+        </view>
+        <footer slot="footer" playing="{{answer.isPlaying}}" hasAudio="{{answer.audioTotal == answer.sentenceTotal}}" bind:play="onFooterPlay" data-index="{{answerIndex}}"></footer>
+      </answer-cell>
+    </block>
+    <view class="" wx:if="{{detail.similarList.length > 0}}">
+      <view class="similar_cell" wx:for="{{detail.similarList}}" wx:key="item">
+        <view class="similar_tag_cell ">
+          <text wx:if="{{(index + 1) < 10}}">相似题0{{index + 1}}</text>
+          <text wx:else>相似题{{index + 1}}</text>
+        </view>
+        <view class="question_content">{{item.content}}</view>
+        <view class="question_illustrate mt10" wx:if="{{item.illustrate}}">{{item.illustrate}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-page-bottom">
+    <view class="btn-group-hint-banner" data-icon="controller">点击答案句子/题目句，可以单句播放</view>
+    <view class="btn-group-single">
+      <tap-action icon="controller" bind:tap="recordingOrClocking">
+        <view>打卡/录音</view>
+        <image src="/images/v2/controller_bt.png"></image>
+        <view class="btn-corner-mark">{{recordingCount || 0}}</view>
+      </tap-action>
+    </view>
+  </view>
+</block>
+<custom-popup show="{{showPopup}}" bind:cancel="popupCancel" bind:confirm="popupConfirm" selected="{{level}}"></custom-popup>

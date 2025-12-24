@@ -1,0 +1,9 @@
+<view
+  class="{{type === 'button' ? 'btn-action' : 'tap-card'}} {{disabled ? 'btn--dis' : ''}}"
+  data-icon="{{type === 'button' ? icon : ''}}"
+  hover-class="{{disabled ? '' : 'tap-active'}}"
+  hover-stay-time="100"
+  catchtap="onTap"
+>
+  <slot></slot>
+</view>

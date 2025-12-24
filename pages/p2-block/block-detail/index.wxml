@@ -1,0 +1,29 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<view wx:if="{{detail}}" class="page-content">
+  <view class="block-body">
+    <header hasAudio="{{detail.audioTotal == detail.sentenceTotal}}" title="{{detail.title}}" iconUrl="{{detail.iconUrl}}" titleBackground="{{detail.backgroundColor}}"></header>
+    <view class="block-body__intervals"></view>
+    <view class="block-body__content">
+      <view class="paragraph" wx:for="{{list}}" wx:key="paragraphIndex" wx:for-item="paragraph" wx:for-index="paragraphIndex">
+        <view class="paragraph__title">{{paragraph.title}}</view>
+        <view class="paragraph__content">
+          <view class="paragraph__content-sentence" style="{{sentence.playStatus === 'playing' ? 'background:'+detail.backgroundColor:''}}" wx:for="{{paragraph.list}}" wx:key="sentenceIndex" wx:for-item="sentence" wx:for-index="sentenceIndex" bind:tap="playSentence" data-paragraph-index="{{paragraphIndex}}" data-sentence-index="{{sentenceIndex}}">
+            <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="block-body__intervals"></view>
+    <footer grading="{{detail.grading}}" recordTotal="{{detail.recordTotal}}" hasAudio="{{detail.audioTotal == detail.sentenceTotal}}" bind:click="recordAndRate"></footer>
+  </view>
+  <view class="btn-page-bottom" wx:if="{{list.length > 0}}">
+    <view class="btn-group-single">
+      <tap-action icon="save" bind:tap="goBack">
+        <view>返回</view>
+        <image src="/images/v2/save_bt.png"></image>
+      </tap-action>
+    </view>
+  </view>
+</view>

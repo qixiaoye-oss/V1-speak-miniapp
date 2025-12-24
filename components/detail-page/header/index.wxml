@@ -1,0 +1,18 @@
+<view class="detail-block__header">
+  <view class="detail-header__left">
+    <view class="detail-header__left_left" style="background: {{titleBackground}};">
+      <image class="detail-header__left-title-icon" wx:if="{{iconUrl}}" src="{{iconUrl}}" />
+      <view class="detail-header__left-title" wx:if="{{title}}">{{title}}</view>
+    </view>
+    <view class="tag tag__multi--blue" wx:if="{{inspiration}}">灵感来源</view>
+  </view>
+  <view class="detail-header__right" wx:if="{{probe}}">
+    <view class="probe">追问</view>
+  </view>
+  <!-- 灵感块展开/收起按钮（inspiration 时自动显示） -->
+  <view class="detail-header__right" wx:if="{{inspiration}}">
+    <view class="btn-action-icon expand-toggle-btn {{expanded ? 'expand-toggle-btn--expanded' : ''}}" data-icon="submit" bindtap="toggleExpand">
+      <image src="/images/v2/submit_bt.png"></image>
+    </view>
+  </view>
+</view>

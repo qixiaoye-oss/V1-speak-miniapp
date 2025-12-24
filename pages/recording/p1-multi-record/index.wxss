@@ -1,0 +1,8 @@
+@import "/style/recording.wxss";
+
+/* 页面内容区域 - 为底部固定按钮组留出空间 */
+page {
+  box-sizing: border-box;
+  /* 单层按钮组总高度: 67px + 20px + 15px = 102px (已包含gap) */
+  padding-bottom: var(--button-group-total-height-single);
+}

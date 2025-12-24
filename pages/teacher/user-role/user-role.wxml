@@ -1,0 +1,21 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<search-user bind:input='bindinput' list="{{userList}}" bind:selectResult="selectResult" bind:hide="hide"></search-user>
+<view class="form_container">
+  <form bindsubmit="submit" bindreset="reset" report-submit="true" hidden="{{inputShowed}}">
+    <input hidden="true" name="userId" value="{{userId}}"></input>
+    <view class="form_user_name_cell">{{userName || '暂无昵称'}} -- 关联角色</view>
+    <checkbox-group name="roleResource" class="role_list_cell">
+      <label wx:for="{{roleList}}" wx:key="item">
+        <view class="role_cell">
+          <checkbox value="{{item.id}}" checked="{{item.checked}}" color="#695BBA" />
+          <text class="role_text_cell">{{item.name}}</text>
+        </view>
+      </label>
+    </checkbox-group>
+    <view class="flex_row_bet form_fun_cell">
+      <button type="primary" size="default" formType="submit" class="mb10">保存</button>
+    </view>
+  </form>
+</view>

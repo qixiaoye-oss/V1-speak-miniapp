@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "question-content": "/components/question-content/index"
+  }
+}

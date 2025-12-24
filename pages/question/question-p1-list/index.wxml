@@ -1,0 +1,44 @@
+<import src="/templates/page-loading.wxml" />
+<import src="/templates/load-error.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template is="loadError" data="{{loadError}}" />
+
+<view class="mastered">
+  <view class="mastered__title">是否搞定</view>
+  <view class="mastered__switch">
+    <view class="mastered__switch-text mastered__switch-text--sel" wx:if="{{hasMastered}}">搞定</view>
+    <view class="mastered__switch-text" wx:if="{{!hasMastered}}">未搞定</view>
+    <switch class="wx-switch-input" checked="{{hasMastered}}" bindchange="switchChange" color="rgba(0,210,106, 1)"></switch>
+  </view>
+</view>
+<view class="chapter-cell">
+  <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toChildPage" data-id="{{chapter.id}}">
+    <view class="chapter__header">
+      <view class="chapter__header-title" style="background: {{backgroundColorHex}};">
+        <image class="chapter__title-icon" wx:if="{{iconUrl}}" src="{{iconUrl}}" />
+        <view class="chapter__title-text">{{chapter.content}}</view>
+      </view>
+    </view>
+    <view class="chapter__intervals"></view>
+    <view class="chapter__footer">
+      <view class="chapter__footer--content">
+        <view class="tag tag__multi tag__multi--gray" wx:if="{{chapter.signInStatus == 0}}">
+          <view>未打卡</view>
+        </view>
+        <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.signInStatus == 1}}">
+          <view>已打卡</view>
+        </view>
+        <view class="tag tag__multi tag__multi--gray" wx:if="{{chapter.recordCount == 0}}">
+          <view>录音</view>
+          <view class="tag__intervals"></view>
+          <view>0</view>
+        </view>
+        <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.recordCount > 0}}">
+          <view>录音</view>
+          <view class="tag__intervals"></view>
+          <view>{{chapter.recordCount}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

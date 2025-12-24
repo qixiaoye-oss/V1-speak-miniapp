@@ -1,0 +1,28 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<view class="tip f14">提示：评分在少数情况下会出现误判，这与录音质量相关，如果发现误判（自己朗读准确），请忽略。</view>
+<view class="answer_container">
+  <block wx:for="{{list}}" wx:key="item">
+    <view wx:if="{{item.AccuracyScore === 0}}" class="recording-score" style="color:rgb(14,174,174);background: rgba(14,174,174, 0.2);">
+      <text>{{item.Syllable}}</text>
+      <text class="score-intervals" style="background:rgb(14,174,174);"></text>
+      <text>{{item.AccuracyScore}}</text>
+    </view>
+    <view wx:elif="{{item.AccuracyScore <= 45}}" class="recording-score" style="color:rgb(221,25,49);background: rgba(221,25,49, 0.2);">
+      <text>{{item.Syllable}}</text>
+      <text class="score-intervals" style="background:rgb(221,25,49);"></text>
+      <text>{{item.AccuracyScore}}</text>
+    </view>
+    <view wx:elif="{{item.AccuracyScore <= 90}}" class="recording-score" style="color:rgb(246,167,63);background: rgba(246,167,63, 0.2);">
+      <text>{{item.Syllable}}</text>
+      <text class="score-intervals" style="background:rgb(246,167,63);"></text>
+      <text>{{item.AccuracyScore}}</text>
+    </view>
+    <view wx:else class="recording-score" style="color:rgb(14,174,174);background: rgba(14,174,174, 0.2);">
+      <text>{{item.Syllable}}</text>
+      <text class="score-intervals" style="background:rgb(14,174,174);"></text>
+      <text>{{item.AccuracyScore}}</text>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,19 @@
+<view class="progress_container">
+  <view class="progress_cell">
+    <block wx:for="{{list}}" wx:key="item">
+      <view class="progress_item progress_0 " wx:if="{{item.finishCount == 0}}"></view>
+      <view class="progress_item progress_100" wx:elif="{{item.finishCount == item.totalCount}}"></view>
+      <view class="progress_item progress__" wx:else>
+        <view class="progress_100" style="height:100%;width:{{((item.finishCount / item.totalCount) * 100) + '%'}}"></view>
+      </view>
+    </block>
+  </view>
+  <view class="progress_info_cell state_play" wx:if="{{recording}}">
+    <view>录音中</view>
+    <view>已录制{{time}}s</view>
+  </view>
+  <view class="progress_info_cell state_none" wx:else>
+    <view>未开始</view>
+    <view>已录制{{time}}s</view>
+  </view>
+</view>

@@ -1,0 +1,25 @@
+/**
+ * answer-cell 组件样式
+ * 答案单元容器的统一样式
+ */
+
+.answer-cell {
+  border: 1px solid var(--solid-border-color);
+  border-radius: 9px;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-top: 15px;
+}
+
+.answer-cell__divider {
+  width: 100%;
+  height: 1px;
+  background: var(--solid-border-color);
+}
+
+.answer-cell__body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

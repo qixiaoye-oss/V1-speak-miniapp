@@ -1,0 +1,9 @@
+<import src="/templates/page-loading.wxml"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
+
+<!-- 骨架屏 -->
+<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+
+<view wx:if="{{!loading}}" style="padding: 15px;border: 1px solid var(--dashed-border-color);border-radius: 9px;">
+  <rich-text nodes="{{content}}"></rich-text>
+</view>

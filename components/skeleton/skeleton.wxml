@@ -1,0 +1,73 @@
+<view class="skeleton {{animate ? 'skeleton--animate' : ''}} {{customClass}} custom-class" wx:if="{{loading}}">
+
+  <!-- 可选标题 -->
+  <view class="skeleton__title" wx:if="{{title}}">{{title}}</view>
+
+  <!-- list 类型: 通用列表 -->
+  <view class="skeleton-list" wx:if="{{type === 'list'}}">
+    <view class="skeleton-list__item" wx:for="{{rowsArray}}" wx:key="*this">
+      <view class="skeleton-list__avatar {{avatarShape === 'circle' ? 'skeleton-avatar--circle' : ''}}" wx:if="{{avatar}}"></view>
+      <view class="skeleton-list__content">
+        <view class="skeleton-list__title"></view>
+        <view class="skeleton-list__desc"></view>
+      </view>
+      <view class="skeleton-list__tag"></view>
+    </view>
+  </view>
+
+  <!-- card 类型: 卡片网格 -->
+  <view class="skeleton-card" wx:elif="{{type === 'card'}}">
+    <view class="skeleton-card__item" wx:for="{{rowsArray}}" wx:key="*this">
+      <view class="skeleton-card__icon"></view>
+      <view class="skeleton-card__title"></view>
+      <view class="skeleton-card__footer">
+        <view class="skeleton-card__tag"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- detail 类型: 详情内容 -->
+  <view class="skeleton-detail" wx:elif="{{type === 'detail'}}">
+    <view class="skeleton-detail__section" wx:for="{{rowsArray}}" wx:key="*this">
+      <view class="skeleton-detail__header"></view>
+      <view class="skeleton-detail__content">
+        <view class="skeleton-detail__line skeleton-detail__line--long"></view>
+        <view class="skeleton-detail__line skeleton-detail__line--medium"></view>
+        <view class="skeleton-detail__line skeleton-detail__line--short"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- sentence 类型: 句子列表 -->
+  <view class="skeleton-sentence" wx:elif="{{type === 'sentence'}}">
+    <view class="skeleton-sentence__item" wx:for="{{rowsArray}}" wx:key="*this">
+      <view class="skeleton-sentence__header">
+        <view class="skeleton-sentence__index"></view>
+        <view class="skeleton-sentence__label"></view>
+      </view>
+      <view class="skeleton-sentence__content">
+        <view class="skeleton-sentence__line skeleton-sentence__line--long"></view>
+        <view class="skeleton-sentence__line skeleton-sentence__line--medium"></view>
+      </view>
+      <view class="skeleton-sentence__actions" wx:if="{{showActions}}">
+        <view class="skeleton-sentence__btn"></view>
+        <view class="skeleton-sentence__btn"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- user 类型: 用户信息 -->
+  <view class="skeleton-user" wx:elif="{{type === 'user'}}">
+    <view class="skeleton-user__header">
+      <view class="skeleton-user__avatar"></view>
+      <view class="skeleton-user__info">
+        <view class="skeleton-user__name"></view>
+        <view class="skeleton-user__id"></view>
+      </view>
+    </view>
+    <view class="skeleton-user__menu">
+      <view class="skeleton-user__menu-item" wx:for="{{rowsArray}}" wx:key="*this"></view>
+    </view>
+  </view>
+
+</view>

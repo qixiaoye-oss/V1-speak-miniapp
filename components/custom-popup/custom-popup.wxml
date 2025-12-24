@@ -1,0 +1,15 @@
+<view class='mask' wx:if='{{show}}'>
+  <view class='modal-content'>
+    <slot></slot>
+    <view class="title">{{title}}</view>
+    <view class="time">{{time}}</view>
+    <!-- <view>本篇范文难度（5星最难）打分</view>
+    <view class="card_start">
+      <image class="start_img" wx:for="{{5}}" wx:key="index" data-name="selected" data-item="{{item}}" src="{{item-selected+1>0?'/images/comp/start.png':'/images/comp/start-sel.png'}}" bindtap="startChange"></image>
+    </view> -->
+    <view class='modal-btn-wrapper'>
+      <view class='cancel-btn' bindtap='cancel' wx:if="{{showCancel}}" style="color:{{cancelColor}}">{{cancelText}}</view>
+      <view class='confirm-btn' bindtap='confirm' style="color:{{confirmColor}}">{{confirmText}}</view>
+    </view>
+  </view>
+</view>
