@@ -22,22 +22,6 @@
   margin-left: auto;
 }
 
-.mastered__switch-text {
-  border: 1px solid var(--solid-border-color);
-  color: var(--solid-border-color);
-  padding: 5px 10px;
-  line-height: 1.4;
-  font-size: 12px;
-  text-align: center;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
-
-.mastered__switch-text--sel {
-  background: rgba(0, 210, 106, 1);
-  border-color: transparent;
-  color: #ffffff;
-}
 
 /*swtich整体大小及背景色*/
 
