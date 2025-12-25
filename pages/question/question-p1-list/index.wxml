@@ -6,8 +6,8 @@
 <view class="mastered">
   <view class="mastered__title">是否搞定</view>
   <view class="mastered__switch">
-    <view class="mastered__switch-text mastered__switch-text--sel" wx:if="{{hasMastered}}">搞定</view>
-    <view class="mastered__switch-text" wx:if="{{!hasMastered}}">未搞定</view>
+    <view class="tag tag--green" wx:if="{{hasMastered}}">搞定</view>
+    <view class="tag tag__multi--gray" wx:if="{{!hasMastered}}">未搞定</view>
     <switch class="wx-switch-input" checked="{{hasMastered}}" bindchange="switchChange" color="rgba(0,210,106, 1)"></switch>
   </view>
 </view>
