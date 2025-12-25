@@ -83,52 +83,6 @@ view {
   box-sizing: border-box;
 }
 
-/* 按钮======= */
-button {
-  height: 48px;
-  padding: 0px !important;
-  font-size: 16px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--theme-color);
-  border-radius: 9px;
-}
-
-button[type="primary"] {
-  color: #000000 !important;
-  font-weight: normal !important;
-  background-color: var(--theme-bcakground-color) !important;
-}
-
-button[type="default"] {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  font-weight: normal !important;
-  width: 100% !important;
-}
-
-button[disabled][type="default"] {
-  color: rgba(0, 0, 0, 0.3) !important;
-  border-color: rgba(0, 0, 0, 0.3) !important;
-}
-
-button[size="mini"] {
-  width: 46px !important;
-  min-width: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button[size="mini-n"] {
-  width: 36px !important;
-  min-width: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 wx-slider .wx-slider-handle-wrapper {
   height: 6px;
 }

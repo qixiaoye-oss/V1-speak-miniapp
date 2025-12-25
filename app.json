@@ -26,9 +26,7 @@
     "pages/recording/history-record-detail/index",
     "pages/user/user/user",
     "pages/user/login/login",
-    "pages/teacher/widget/widget",
-    "pages/teacher/user-permission/user-permission",
-    "pages/teacher/user-role/user-role"
+    "pages/teacher/widget/widget"
   ],
   "window": {
     "backgroundColor": "#ffffff",
