@@ -34,8 +34,8 @@ page {
   --solid-border-color: rgba(0, 0, 0, 0.3);
   --dashed-border-color: rgba(0, 0, 0, 0.3);
   /* 用户页-主题色 */
-  --theme-color: rgba(249, 47, 96, 1);
-  --theme-bcakground-color: rgba(249, 47, 96, 0.15);
+  --theme-color: rgba(0, 166, 237, 1);
+  --theme-bcakground-color: rgba(0, 166, 237, 0.15);
   /* 统一主色定义 */
   --main-gray-color: rgba(0, 0, 0, 0.3);
   --main-green-color: #00D26A;
