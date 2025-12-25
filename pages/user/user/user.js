@@ -29,12 +29,6 @@ Page({
   toUpdateUserInfo() {
     this.navigateTo('/pages/user/login/login')
   },
-  // 查看权限有效期
-  showRole() {
-    this.setData({
-      showPopup: true
-    })
-  },
   // 用户权限管理
   toUpdateAuth() {
     this.navigateTo('/pages/teacher/widget/widget')
