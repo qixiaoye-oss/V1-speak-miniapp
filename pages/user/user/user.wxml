@@ -13,6 +13,10 @@
     </view>
   </view>
   <view class="menu-item menu-item--access" hover-class="tap-active" bind:tap="toUpdateUserInfo">修改用户信息</view>
-  <view class="menu-item">版本 <text class="menu-item__value">{{version || '2.8.5'}}</text></view>
+  <view class="menu-item" hover-class="tap-active" bind:tap="showRole">权限 <text class="menu-item__value">{{permission_duration || '游客'}}</text></view>
+  <block wx:if="{{user.isManager == 1}}">
+    <view class="menu-item menu-item--access" hover-class="tap-active" bind:tap="toUpdateAuth">用户权限管理</view>
+  </block>
+  <view class="menu-item">版本 <text class="menu-item__value">{{version || '1.0.2'}}</text></view>
 </view>
-<role-info-popup show="{{showPopup}}" roles="{{role}}" tags="{{tags}}"></role-info-popup>
+<role-info-popup wx:if="{{!loading}}" show="{{showPopup}}" roles="{{role}}" tags="{{tags}}"></role-info-popup>

@@ -3,7 +3,7 @@
   border-radius: 9px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   padding: 15px;
   box-sizing: border-box;
 }
@@ -50,7 +50,7 @@
 }
 
 .menu-item__value {
-  color: var(--theme-color);
+  color: var(--main-blue-color);
 }
 
 .menu-item--access {
