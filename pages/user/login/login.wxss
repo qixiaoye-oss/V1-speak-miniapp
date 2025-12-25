@@ -57,14 +57,10 @@
 
 /* 重置按钮组内button的默认样式 */
 .btn-group-single .btn-action {
-  height: auto;
   border: none;
   padding: 5px;
   margin: 0;
   line-height: inherit;
-  font-size: 15px;
-  font-weight: normal;
-  background: transparent;
 }
 
 .btn-group-single .btn-action::after {
