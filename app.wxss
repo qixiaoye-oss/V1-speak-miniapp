@@ -9,19 +9,20 @@
   rp 18       8px
 */
 
-/* @import 'style/weui.wxss'; */
+@import "style/weui.wxss";
 @import "style/layout.wxss";
-@import "style/button-group.wxss";
 @import "style/theme.wxss";
-@import "style/default-styles.wxss";
+@import "style/button-group.wxss";
 @import "style/tag.wxss";
+@import "style/default-styles.wxss";
 @import "style/page-loading.wxss";
 @import "style/skeleton.wxss";
 
 page {
   background-color: #ffffff;
   padding: 20px;
-  font-size: 16px;
+  line-height: 1.4;
+  font-size: 15px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -51,7 +52,6 @@ page {
 
 view {
   box-sizing: border-box;
-  line-height: 1.4;
 }
 
 .base-font-color {
