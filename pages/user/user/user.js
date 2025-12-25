@@ -29,10 +29,6 @@ Page({
   toUpdateUserInfo() {
     this.navigateTo('/pages/user/login/login')
   },
-  // 用户权限管理
-  toUpdateAuth() {
-    this.navigateTo('/pages/teacher/widget/widget')
-  },
   // 获取用户信息
   getUserInfo() {
     const _this = this
