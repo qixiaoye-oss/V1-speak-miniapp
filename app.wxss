@@ -9,19 +9,20 @@
   rp 18       8px
 */
 
-/* @import 'style/weui.wxss'; */
+@import "style/weui.wxss";
 @import "style/layout.wxss";
-@import "style/button-group.wxss";
 @import "style/theme.wxss";
-@import "style/default-styles.wxss";
+@import "style/button-group.wxss";
 @import "style/tag.wxss";
+@import "style/default-styles.wxss";
 @import "style/page-loading.wxss";
 @import "style/skeleton.wxss";
 
 page {
   background-color: #ffffff;
   padding: 20px;
-  font-size: 16px;
+  line-height: 1.4;
+  font-size: 15px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -34,8 +35,8 @@ page {
   --solid-border-color: rgba(0, 0, 0, 0.3);
   --dashed-border-color: rgba(0, 0, 0, 0.3);
   /* 用户页-主题色 */
-  --theme-color: rgba(249, 47, 96, 1);
-  --theme-bcakground-color: rgba(249, 47, 96, 0.15);
+  --theme-color: rgba(0, 166, 237, 1);
+  --theme-bcakground-color: rgba(0, 166, 237, 0.15);
   /* 统一主色定义 */
   --main-gray-color: rgba(0, 0, 0, 0.3);
   --main-green-color: #00D26A;
@@ -51,7 +52,6 @@ page {
 
 view {
   box-sizing: border-box;
-  line-height: 1.4;
 }
 
 .base-font-color {
@@ -81,52 +81,6 @@ view {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-}
-
-/* 按钮======= */
-button {
-  height: 48px;
-  padding: 0px !important;
-  font-size: 16px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--theme-color);
-  border-radius: 9px;
-}
-
-button[type="primary"] {
-  color: #000000 !important;
-  font-weight: normal !important;
-  background-color: var(--theme-bcakground-color) !important;
-}
-
-button[type="default"] {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  font-weight: normal !important;
-  width: 100% !important;
-}
-
-button[disabled][type="default"] {
-  color: rgba(0, 0, 0, 0.3) !important;
-  border-color: rgba(0, 0, 0, 0.3) !important;
-}
-
-button[size="mini"] {
-  width: 46px !important;
-  min-width: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button[size="mini-n"] {
-  width: 36px !important;
-  min-width: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 wx-slider .wx-slider-handle-wrapper {

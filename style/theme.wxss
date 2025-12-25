@@ -1,8 +1,65 @@
-/**
- * 主题样式文件
- *
- * 注意：按钮组相关样式已迁移至 button-group.wxss
- * @see style/button-group.wxss
- */
+page {
+  /* 按钮边框样式1 */
+  --btn-border-theme-1: 1px solid var(--solid-border-color);
+  /* 按钮边框样式2 */
+  --btn-border-theme-2: 2px solid var(--solid-border-color);
+  /* 按钮边框样式-无边框 */
+  --btn-border-theme: 2px solid transparent;
+  /* 按钮边框宽 */
+  --btn-border-width: 1px;
+  /* 按钮边框宽 */
+  --btn-border-width-2: 2px;
+  /* 按钮边框颜色 */
+  --btn-border-color: var(--solid-border-color);
+  --btn-no-border-color: transparent;
+  /* 按钮字体大小 */
+  --btn-font-size: 15px;
+  /* 按钮字体行距 */
+  --btn-line-height: 1;
+}
 
-/* 此文件保留用于未来其他主题样式扩展 */
+/* ==================== 以下是变体样式（仅本项目使用） ==================== */
+/* 注意：标准按钮组样式已统一迁移至 style/button-group.wxss */
+
+/* 主要按钮 */
+.btn-action-primary {}
+
+/* 次要按钮 */
+.btn-action-secondary {}
+
+/* 按钮组模式 3：一行三段式水平布局（左 / 中 / 右，带间隔线） */
+.btn-group-layout-tripartite {}
+
+/* 按钮组模式 3：左 */
+.btn-group-layout-tripartite__left {}
+
+/* 按钮组模式 3：中 */
+.btn-group-layout-tripartite__center {}
+
+/* 按钮组模式 3：右） */
+.btn-group-layout-tripartite__right {}
+
+/* 按钮组模式 3：间隔线） */
+.btn-group-layout-tripartite__divider {
+  color: var(--main-orange-color);
+}
+
+/* 变体：标签按钮（带边框） */
+.btn--label-n {
+  /* #F8312F */
+  height: 35px;
+  border: 1px solid #F8312F;
+  color: #F8312F;
+}
+
+/* 变体：录音按钮角标 */
+.btn--recording-corner-mark {
+  color: #212121;
+  border-color: rgba(33, 33, 33, 1);
+}
+
+/* 变体：练习按钮角标 */
+.btn--practice-corner-mark {
+  color: #433B6B;
+  border-color: rgba(67, 59, 107, 1);
+}

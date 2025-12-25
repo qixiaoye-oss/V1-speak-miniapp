@@ -3,7 +3,7 @@
   border-radius: 9px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   padding: 15px;
   box-sizing: border-box;
 }
@@ -50,32 +50,5 @@
 }
 
 .menu-item__value {
-  color: var(--theme-color);
-}
-
-.menu-item--access {
-  position: relative;
-}
-
-.menu-item--access:after {
-  content: " ";
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  border-width: 2px 2px 0 0;
-  border-color: rgba(0, 0, 0, 0.4);
-  border-style: solid;
-  -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-  position: absolute;
-  top: 20px;
-  right: 15px;
-}
-
-.version {
-  margin-top: 15px;
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  color: #cccccc;
+  color: var(--main-blue-color);
 }

@@ -1,15 +1,20 @@
-<form bindsubmit="formSubmit">
+<form bindsubmit="formSubmit" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : 'var(--button-group-total-height-single)'}}">
   <view class="user-page">
     <view class="user-info">
-      <button class="user__avatar-button" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <button class="user__avatar-button" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" hover-class="tap-active">
         <image class="user__avatar" src="{{user.headUrl || '/images/wechat.png'}}" mode="cover" />
       </button>
       <input name='headUrl' value="{{user.headUrl}}" hidden="true" />
       <input name='nickName' type="nickname" class="user__nickname" placeholder="请输入昵称" value="{{user.nickName}}" />
-      <view class="remind">修改之前，请先完善用户信息</view>
+      <view class="remind">点击头像或昵称修改</view>
     </view>
   </view>
-  <view class="save-botton">
-    <button size="default" formType="submit" class="save">保存</button>
+  <view class="btn-page-bottom">
+    <view class="btn-group-single">
+      <button formType="submit" class="btn-action" data-icon="save" hover-class="tap-active">
+        <view>保存</view>
+        <image src="/images/v2/save_bt.png"></image>
+      </button>
+    </view>
   </view>
 </form>

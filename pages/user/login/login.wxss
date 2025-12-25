@@ -1,9 +1,10 @@
+/* 页面内容区域 - 动态 padding-bottom 由 buttonGroupHeight behavior 计算 */
 .user-page {
   background: var(--theme-bcakground-color);
   border-radius: 9px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   padding: 15px;
   box-sizing: border-box;
 }
@@ -26,10 +27,14 @@
   height: 81px;
   border-radius: 50%;
   border-color: transparent;
+  padding: 0;
+}
+
+.user__avatar-button::after {
+  border: none;
 }
 
 .user__avatar {
-  flex-shrink: 0;
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -42,7 +47,7 @@
   width: 130px;
   line-height: 1.4;
   font-size: 16px;
-  border-radius: 3px;
+  border-radius: 6px;
 }
 
 .remind {
@@ -50,19 +55,14 @@
   color: rgba(0, 0, 0, 0.4);
 }
 
-.save-botton {
-  position: fixed;
-  bottom: 60px;
-  left: 0;
-  width: 750rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* 重置按钮组内button的默认样式 */
+.btn-group-single .btn-action {
+  border: none;
+  padding: 5px;
+  margin: 0;
+  line-height: inherit;
 }
 
-.save {
-  border: 1px solid var(--theme-color);
-  background: var(--theme-bcakground-color);
-  font-size: 16px;
-  font-weight: normal;
+.btn-group-single .btn-action::after {
+  border: none;
 }

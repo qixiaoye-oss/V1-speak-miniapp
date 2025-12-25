@@ -1,5 +1,9 @@
 const api = getApp().api
+const pageGuard = require('../../../behaviors/pageGuard')
+const buttonGroupHeight = require('../../../behaviors/button-group-height')
+
 Page({
+  behaviors: [pageGuard.behavior, buttonGroupHeight],
   data: {
     checked: false
   },
@@ -9,9 +13,7 @@ Page({
     })
   },
   onChooseAvatar(e) {
-    const {
-      avatarUrl
-    } = e.detail
+    const { avatarUrl } = e.detail
     const _this = this
     api.uploadFileToOSS(avatarUrl, 'user/avatar/', this).then(res => {
       _this.setData({
@@ -20,13 +22,9 @@ Page({
     })
   },
   formSubmit(e) {
-    const {
-      nickName,
-      headUrl
-    } = e.detail.value
+    const { nickName, headUrl } = e.detail.value
     this.uploadHead(headUrl, nickName)
   },
-  //上传头像
   uploadHead(headUrl, nickName) {
     if (api.isEmpty(headUrl)) {
       api.toast('请选择用户头像')
@@ -36,8 +34,7 @@ Page({
       api.toast('请填写用户昵称')
       return
     }
-    const _this = this
-    _this.updateUser(headUrl, nickName);
+    this.updateUser(headUrl, nickName);
   },
   updateUser(headUrl, nickName) {
     api.request(this, '/user/v1/user/update', {
