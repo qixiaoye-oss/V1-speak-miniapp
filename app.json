@@ -56,12 +56,10 @@
       }
     ]
   },
-  "style": "v2",
   "resizable": true,
   "usingComponents": {
     "tap-action": "/components/tap-action/index"
   },
-  "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "useExtendedLib": {
