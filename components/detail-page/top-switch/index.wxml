@@ -1,7 +1,10 @@
 <!-- 置顶开关组件（独立 block） -->
 <view class="top-switch-block" wx:if="{{visible}}">
-  <view class="top-switch__content">
-    <view class="top-switch__text {{isTop ? 'top-switch__text--on' : ''}}">
+  <!-- 左侧提示文字 -->
+  <view class="top-switch__hint">喜欢这个的答案？</view>
+  <!-- 右侧：tag标签 + switch开关 -->
+  <view class="top-switch__right">
+    <view class="tag {{isTop ? 'tag__multi--green' : 'tag__multi--gray'}}">
       {{isTop ? '已置顶' : '未置顶'}}
     </view>
     <switch checked="{{isTop}}" bindchange="onSwitchChange" color="#00D26A"></switch>

@@ -6,20 +6,18 @@
   border-radius: 9px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
-.top-switch__content {
+/* 左侧提示文字 */
+.top-switch__hint {
+  font-size: 14px;
+  color: #000000;
+}
+
+/* 右侧容器：tag + switch */
+.top-switch__right {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.top-switch__text {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.3);
-}
-
-.top-switch__text--on {
-  color: var(--main-green-color);
 }
