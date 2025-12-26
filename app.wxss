@@ -16,6 +16,8 @@
 @import "style/tag.wxss";
 @import "style/default-styles.wxss";
 @import "style/page-loading.wxss";
+@import "style/audio-loading.wxss";
+@import "style/load-error.wxss";
 @import "style/skeleton.wxss";
 
 page {
