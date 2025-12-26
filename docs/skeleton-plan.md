@@ -1,65 +1,126 @@
-# 骨架屏实现方案
+# 骨架屏策划方案
 
-> 版本: 2.3
-> 参考项目: [1216-ielts-listening-jijing-miniapp](https://github.com/qixiaoye-oss/1216-ielts-listening-jijing-miniapp)
+> 本文档说明骨架屏组件的设计、实现和使用指南。
 
-## 一、概述
+## 1. 项目现状分析
 
-骨架屏（Skeleton Screen）是一种在页面数据加载期间显示的占位符UI，能有效减少用户感知的等待时间，提升用户体验。
+### 1.1 当前加载机制
+当前项目使用进度条 + 骨架屏的加载机制：
+- 进度条模板：`/templates/page-loading.wxml`
+- 骨架屏组件：`/components/skeleton/skeleton`
+- 实现方式：顶部进度条动画 + 内容区骨架屏
 
-### 参考项目骨架屏架构
+### 1.2 页面结构分类
 
+| 页面类型 | 页面路径 | 布局特点 |
+|---------|----------|---------|
+| **首页** | `pages/home/home` | 卡片网格 + 分组列表 |
+| **题目列表** | `pages/question/set-p1-list` | 带图标的条目列表 |
+| **题目详情** | `pages/question/question-p1-detail` | 详情内容布局 |
+| **科普列表** | `pages/science/list` | 条目列表 |
+| **科普详情** | `pages/science/detail` | 文章详情布局 |
+| **用户页** | `pages/user/user` | 头像信息 + 菜单列表 |
+
+## 2. 骨架屏类型设计
+
+基于页面布局分析，设计以下 **5 种骨架屏类型**：
+
+### 2.1 `list` - 通用列表型
+**适用页面**：题目列表、科普列表等
+**布局结构**：
 ```
-1216-ielts-listening-jijing-miniapp/
-├── style/
-│   └── skeleton.wxss          # 全局骨架屏样式
-└── components/
-    └── skeleton/              # skeleton组件
-        ├── skeleton.js
-        ├── skeleton.json
-        ├── skeleton.wxml
-        └── skeleton.wxss
+┌─────────────────────────────────┐
+│ [■■■] ████████████████  [tag] │
+├─────────────────────────────────┤
+│ [■■■] ████████████████  [tag] │
+├─────────────────────────────────┤
+│ [■■■] ████████████████  [tag] │
+└─────────────────────────────────┘
+```
+**属性配置**：
+- `avatar: true` - 显示左侧图标占位
+- `rows: 5` - 默认5行
+
+### 2.2 `card` - 卡片网格型
+**适用页面**：首页
+**布局结构**：
+```
+┌──────────┐  ┌──────────┐
+│  ████    │  │  ████    │
+│ ████████ │  │ ████████ │
+│  [tag]   │  │  [tag]   │
+└──────────┘  └──────────┘
+┌──────────┐  ┌──────────┐
+│  ████    │  │  ████    │
+│ ████████ │  │ ████████ │
+│  [tag]   │  │  [tag]   │
+└──────────┘  └──────────┘
+```
+**属性配置**：
+- `rows: 6` - 默认6个卡片
+
+### 2.3 `detail` - 详情内容型
+**适用页面**：题目详情、科普详情
+**属性配置**：
+- `rows: 3` - 内容段落数
+
+### 2.4 `sentence` - 句子列表型
+**适用页面**：句子列表、单词列表
+**属性配置**：
+- `rows: 5` - 句子条目数
+- `showActions: true` - 显示操作按钮占位
+
+### 2.5 `user` - 用户信息型
+**适用页面**：用户中心
+**属性配置**：
+- `rows: 4` - 菜单项数量
+
+## 3. 组件设计规范
+
+### 3.1 文件结构
+```
+/components/skeleton/
+├── skeleton.wxml      # 组件模板
+├── skeleton.wxss      # 组件基础样式
+├── skeleton.js        # 组件逻辑
+└── skeleton.json      # 组件配置
+
+/style/
+└── skeleton.wxss      # 全局骨架屏样式（含动画）
 ```
 
-## 二、骨架屏类型
+### 3.2 组件属性定义
 
-参考项目提供了5种骨架屏类型，可完全复用到本项目：
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `loading` | Boolean | `true` | 控制骨架屏显示/隐藏 |
+| `type` | String | `'list'` | 骨架屏类型 |
+| `rows` | Number | `5` | 骨架行数（推荐3-8） |
+| `animate` | Boolean | `true` | 是否启用闪烁动画 |
+| `avatar` | Boolean | `false` | 是否显示头像占位 |
+| `avatarShape` | String | `'square'` | 头像形状 |
+| `showActions` | Boolean | `true` | 是否显示操作按钮占位 |
+| `title` | String | `''` | 骨架屏标题 |
+| `customClass` | String | `''` | 自定义类名 |
 
-| 类型 | 说明 | 适用页面（本项目） |
-|------|------|-------------------|
-| `card` | 卡片网格 | 首页 home |
-| `list` | 通用列表 | set-p1-list, set-p2p3-list, science/list |
-| `detail` | 详情内容 | question-p1-detail, question-p2-detail, question-p3-detail, science/detail |
-| `sentence` | 句子列表 | question-p1-list, question-p3-list |
-| `user` | 用户信息 | user/user |
+### 3.3 CSS 变量支持
 
-## 三、复用方案
-
-### 3.1 需要复制的文件
-
-从参考项目复制以下文件到当前项目：
-
-#### 1. 全局样式文件
-```
-style/skeleton.wxss
-```
-
-#### 2. skeleton组件（4个文件）
-```
-components/skeleton/skeleton.js
-components/skeleton/skeleton.json
-components/skeleton/skeleton.wxml
-components/skeleton/skeleton.wxss
-```
-
-### 3.2 配置修改
-
-#### 1. app.wxss 引入骨架屏样式
 ```css
-@import "style/skeleton.wxss";
+page {
+  --skeleton-bg: #f0f0f0;
+  --skeleton-highlight: #e8e8e8;
+  --skeleton-radius: 6px;
+  --skeleton-card-bg: #fff;
+  --skeleton-border-color: #eee;
+  --skeleton-item-gap: 15px;
+}
 ```
 
-#### 2. 页面 json 注册组件（在需要使用骨架屏的页面）
+## 4. 页面接入方案
+
+### 4.1 组件注册
+
+**页面 json 中注册**：
 ```json
 {
   "usingComponents": {
@@ -68,107 +129,73 @@ components/skeleton/skeleton.wxss
 }
 ```
 
-### 3.3 页面使用方式
+### 4.2 使用示例
 
-#### 基本用法
-```xml
-<!-- 骨架屏 -->
-<skeleton type="card" loading="{{loading}}" rows="{{6}}" />
-
-<!-- 实际内容（loading为false时显示） -->
-<view wx:if="{{!loading}}">
-  <!-- 页面内容 -->
-</view>
-```
-
-#### skeleton组件属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| loading | Boolean | true | 控制骨架屏显示/隐藏 |
-| type | String | 'list' | 骨架屏类型: list/card/detail/sentence/user |
-| rows | Number | 5 | 骨架行数 (推荐3-8) |
-| animate | Boolean | true | 是否启用闪烁动画 |
-| avatar | Boolean | false | 是否显示头像占位 (list类型) |
-| avatarShape | String | 'square' | 头像形状: square/circle |
-| showActions | Boolean | true | 是否显示操作按钮占位 (sentence类型) |
-| title | String | '' | 骨架屏标题（可选） |
-| customClass | String | '' | 自定义类名 |
-
-## 四、各页面骨架屏配置建议
-
-### 4.1 首页 (pages/home)
+**首页（卡片网格）**：
 ```xml
 <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
 ```
 
-### 4.2 列表页面
+**列表页**：
 ```xml
-<!-- set-p1-list, set-p2p3-list, science/list -->
 <skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
 ```
 
-### 4.3 详情页面
+**详情页**：
 ```xml
-<!-- question-p1-detail, question-p2-detail, question-p3-detail -->
 <skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
 ```
 
-### 4.4 句子/题目列表
+### 4.3 与进度条配合
+
 ```xml
-<!-- question-p1-list, question-p3-list -->
-<skeleton type="sentence" loading="{{loading}}" rows="{{4}}" showActions="{{true}}" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<skeleton type="list" loading="{{loading}}" rows="{{5}}" />
+<view wx:if="{{!loading}}">
+  <!-- 实际内容 -->
+</view>
 ```
 
-### 4.5 用户页面
-```xml
-<!-- user/user -->
-<skeleton type="user" loading="{{loading}}" rows="{{4}}" />
+## 5. 各页面配置参数
+
+| 页面 | type | rows | avatar |
+|------|------|------|--------|
+| home | card | 6 | - |
+| set-p1-list | list | 5 | true |
+| question-p1-list | list | 5 | - |
+| science/list | list | 5 | - |
+| user | user | 4 | - |
+| detail | detail | 3 | - |
+
+## 6. 注意事项
+
+### 6.1 性能建议
+- 大列表（rows > 8）建议禁用动画
+- 骨架屏行数建议 3-8 行
+- 动画使用 CSS 实现
+
+### 6.2 Flex/Grid 间距问题
+
+组件已启用 `virtualHost: true`，解决间距问题：
+
+```javascript
+Component({
+  options: {
+    virtualHost: true
+  }
+})
 ```
 
-## 五、CSS变量定制
+## 7. 跨项目复用
 
-骨架屏样式支持CSS变量定制，可在 `app.wxss` 或页面样式中覆盖：
-
-```css
-page {
-  --skeleton-bg: #f0f0f0;           /* 骨架块背景色 */
-  --skeleton-highlight: #e8e8e8;     /* 闪光高亮色 */
-  --skeleton-radius: 6px;            /* 圆角大小 */
-  --skeleton-card-bg: #fff;          /* 卡片/容器背景色 */
-  --skeleton-border-color: #eee;     /* 边框颜色 */
-  --skeleton-item-gap: 15px;         /* 列表项间距 */
-}
+需要复制的文件：
+```
+├── /components/skeleton/
+└── /style/skeleton.wxss
 ```
 
-## 六、实现步骤
+---
 
-### 第一阶段：基础文件复制
-1. [x] 创建 `style/skeleton.wxss`
-2. [x] 创建 `components/skeleton/` 组件目录
-3. [x] 在 `app.wxss` 中引入骨架屏样式
-
-### 第二阶段：页面集成
-4. [x] 首页 home 添加骨架屏
-5. [x] 列表页面添加骨架屏 (set-p1-list, set-p2p3-list, science/list)
-6. [x] 详情页面添加骨架屏 (question-p1-detail, question-p2-detail, question-p3-detail, science/detail)
-7. [x] 用户页面添加骨架屏 (user/user)
-
-### 第三阶段：优化调整
-8. [ ] 根据实际页面布局调整骨架屏参数
-9. [ ] 测试各页面加载效果
-
-## 七、与现有加载系统的关系
-
-当前项目已有 `pageLoading` behavior 提供进度条加载效果，骨架屏是对其的补充：
-
-- **进度条**：显示在顶部导航栏下方，展示整体加载进度
-- **骨架屏**：占据页面内容区域，模拟最终布局结构
-
-两者可以同时使用，提供更完整的加载体验。
-
-## 八、注意事项
-
-1. skeleton组件使用了 `virtualHost: true`，组件不生成额外DOM节点
-2. 组件的 `styleIsolation: "apply-shared"` 允许页面样式影响组件
-3. 骨架屏应在数据加载前显示，数据加载完成后隐藏（通过 `loading` 属性控制）
+*文档版本：v1.0*
+*创建日期：2025-12-26*
+*适用项目：V1-speak-miniapp*

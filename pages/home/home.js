@@ -15,7 +15,17 @@ Page({
     }
   },
   // ===========生命周期 Start===========
-  onShow() { },
+  onShow() {
+    // 计算响应式布局标志
+    const systemInfo = wx.getSystemInfoSync()
+    const windowWidth = systemInfo.windowWidth
+    // 判断是否为宽屏模式（如平板或横屏）
+    const isWideScreen = windowWidth >= 768
+    this.setData({
+      isWideScreen: isWideScreen,
+      windowWidth: windowWidth
+    })
+  },
   onShowLogin() {
     this.startLoading()
     this.hideLoadError()
