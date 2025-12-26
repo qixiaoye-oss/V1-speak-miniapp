@@ -1,4 +1,5 @@
 var api = require('/utils/api')
+const pageGuard = require('./behaviors/pageGuard.js')
 const CustomHook = require('spa-custom-hooks')
 let userData = {
   login: false
@@ -23,6 +24,7 @@ App({
     pageEventHandlers: new Map(), // key: 页面路由, value: { onRecorderStart, onRecorderStop, ... }
   },
   api: api,
+  pageGuard: pageGuard,
   onShow: function () {
     if (wx.canIUse('getUpdateManager')) {
       const updateManager = wx.getUpdateManager()
