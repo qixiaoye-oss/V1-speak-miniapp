@@ -57,9 +57,7 @@
     ]
   },
   "resizable": true,
-  "usingComponents": {
-    "tap-action": "/components/tap-action/index"
-  },
+  "usingComponents": {},
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "useExtendedLib": {
