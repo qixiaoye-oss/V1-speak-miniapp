@@ -3,6 +3,7 @@
 <template is="pageLoading" data="{{loading, loadProgress}}" />
 <template is="loadError" data="{{loadError}}" />
 
+<!-- 暂时隐藏 mastered 功能
 <view class="mastered">
   <view class="mastered__title">是否搞定</view>
   <view class="mastered__switch">
@@ -11,6 +12,7 @@
     <switch class="wx-switch-input" checked="{{hasMastered}}" bindchange="switchChange" color="rgba(0,210,106, 1)"></switch>
   </view>
 </view>
+-->
 <view class="chapter-cell">
   <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toChildPage" data-id="{{chapter.id}}">
     <view class="chapter__header">
