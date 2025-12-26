@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "tap-action": "/components/tap-action/index",
     "question-content": "/components/question-content/index"
   }
 }

@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "tap-action": "/components/tap-action/index",
     "header": "/components/detail-page/header/index",
     "footer": "/components/detail-page/footer/index",
     "sentence": "/components/detail-page/sentence/index",
