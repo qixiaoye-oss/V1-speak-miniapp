@@ -51,14 +51,6 @@
   background: var(--main-green-color);
 }
 
-/* ========== label 标签（面对面版/视频版） ========== */
-
-.tag--label {
-  border: 1px solid transparent;
-  background: var(--main-blue-color, #4A90D9);
-  color: #ffffff;
-}
-
 /* ========== 动态颜色变体 ========== */
 
 /* 动态颜色 - 描边（透明底 + 边框 + 文字同色） */
