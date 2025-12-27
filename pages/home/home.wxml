@@ -60,6 +60,7 @@
                   <view class="home-card__title">{{subject.title}}</view>
                 </view>
                 <view class="home-card__footer">
+                  <view class="tag tag--label" wx:if="{{subject.label}}">{{subject.label}}</view>
                   <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">{{subject.childTotal}}</view>
                   <view class="tag tag--dynamic-solid" style="--tag-color:{{group.colorRgb}}" wx:if="{{subject.description}}">{{subject.description}}</view>
                 </view>
