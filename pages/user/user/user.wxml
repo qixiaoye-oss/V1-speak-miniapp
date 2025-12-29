@@ -13,6 +13,7 @@
     </view>
   </view>
   <view class="menu-item" hover-class="tap-active" bind:tap="toUpdateUserInfo">修改用户信息</view>
+  <view class="menu-item" hover-class="tap-active" bind:tap="showAccentPicker">英音美音切换 <text class="menu-item__value">{{accentText}}</text></view>
   <view class="menu-item">权限 <text class="menu-item__value">{{permission_duration || '游客'}}</text></view>
   <view class="menu-item">版本 <text class="menu-item__value">{{version || '1.0.2'}}</text></view>
 </view>
