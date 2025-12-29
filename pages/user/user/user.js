@@ -5,7 +5,7 @@ const pageLoading = require('../../../behaviors/pageLoading')
 Page({
   behaviors: [pageGuard.behavior, pageLoading],
   data: {
-    version: '1.1.0',
+    version: '1.0.0',
     accent: 'uk', // 'uk' 或 'us'
     accentText: '英音',
   },
