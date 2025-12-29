@@ -4,10 +4,10 @@
 <template is="loadError" data="{{loadError}}"/>
 
 <question-content
-  wx:if="{{!loadError}}"
-  content="{{detail.content || detail.question}}"
-  additionalContent="{{detail.additionalContent}}"
-  supplementaryContent="{{detail.supplementaryContent}}"
+  wx:if="{{!loadError && detail}}"
+  content="{{detail.content || detail.question || ''}}"
+  additionalContent="{{detail.additionalContent || ''}}"
+  supplementaryContent="{{detail.supplementaryContent || ''}}"
   backgroundColor="{{background}}"
   borderColor="{{color}}"
 />

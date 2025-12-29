@@ -41,11 +41,12 @@ Page({
     const type = parseInt(options.type) || 2
     this.setData({
       type: type,
-      color: options.color,
-      background: options.background
+      color: options.color || '',
+      background: options.background || ''
     })
     this.initAudioListBehavior()
-    if (options.userId == this.data.user.id || this.data.user.isManager == 1) {
+    const user = this.data.user || {}
+    if (options.userId == user.id || user.isManager == 1) {
       this.fetchQuestionDetail(true)
       this.fetchRecordingList(false)
     } else {
