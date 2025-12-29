@@ -45,6 +45,7 @@ Page({
     this.stopAudio()
     this.resetSentenceAudioStatus()
     this._resetAllBlockPlayingStatus()
+    this._singlePlayState = null  // 清除单句播放状态
 
     // 获取该 block 的所有句子
     const sentences = []
@@ -77,6 +78,7 @@ Page({
   _stopBlockSentences(versionIndex, blockIndex) {
     this.stopAudio()
     this._playAllState = null
+    this._singlePlayState = null  // 清除单句播放状态
     this.resetSentenceAudioStatus()
     this.setData({
       [`list[${versionIndex}].list[${blockIndex}].isPlaying`]: false
@@ -100,6 +102,54 @@ Page({
 
     if (Object.keys(updates).length > 0) {
       this.setData(updates)
+    }
+  },
+  // 重写：单句播放（P2 的 isPlaying 在 block 级别）
+  playSentence(e) {
+    // 停止连续播放模式
+    this._playAllState = null
+    this._resetAllBlockPlayingStatus()
+
+    const { list } = this.data
+    const { answerIndex, sentenceIndex, groupIndex } = e.currentTarget.dataset
+
+    const sentence = list[answerIndex].list[groupIndex].list[sentenceIndex]
+    const path = `list[${answerIndex}].list[${groupIndex}].list[${sentenceIndex}].playStatus`
+    const isPlayingPath = `list[${answerIndex}].list[${groupIndex}].isPlaying`
+
+    // 检查是否点击了正在播放的同一句子（切换停止）
+    if (this._singlePlayState &&
+        this._singlePlayState.answerIndex === answerIndex &&
+        this._singlePlayState.sentenceIndex === sentenceIndex &&
+        this._singlePlayState.groupIndex === groupIndex) {
+      // 停止播放
+      this.stopAudio()
+      this.resetSentenceAudioStatus()
+      this._singlePlayState = null
+      this.setData({
+        [isPlayingPath]: false
+      })
+      return
+    }
+
+    if (sentence && sentence.audioUrl) {
+      this.stopAudio()
+      this.resetSentenceAudioStatus()
+
+      // 记录单句播放状态
+      this._singlePlayState = {
+        answerIndex: answerIndex,
+        sentenceIndex: sentenceIndex,
+        groupIndex: groupIndex,
+        path: path,
+        isPlayingPath: isPlayingPath
+      }
+
+      this.playAudio(sentence.audioUrl)
+      this.setData({
+        [path]: 'playing',
+        [isPlayingPath]: true  // P2 的 isPlaying 在 block 级别
+      })
     }
   },
   // 重写：播放指定索引的句子（覆盖 behavior 方法）
