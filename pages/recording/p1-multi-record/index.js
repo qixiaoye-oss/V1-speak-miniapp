@@ -177,7 +177,7 @@ Page({
       api.toast("没有录音需要保存");
       return
     }
-    api.uploadFileToOSS(this.data.file.url, 'recording/continuous', this).then(res => {
+    api.uploadFileToOSS(this.data.file.url, 'recording/continuous', '录音保存中...').then(res => {
       this.save(res)
     })
   },

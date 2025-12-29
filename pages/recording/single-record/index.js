@@ -323,7 +323,7 @@ Page({
     }
 
     const config = CONFIG[this.data.recordType]
-    api.uploadFileToOSS(this.data.file.url, config.uploadPath, this).then(res => {
+    api.uploadFileToOSS(this.data.file.url, config.uploadPath, '录音保存中...').then(res => {
       this.save(res)
     })
   },
