@@ -28,14 +28,107 @@ Page({
   },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
-  // 播放/停止答案所有句子
+  // 播放/停止指定 block 的所有句子
   onFooterPlay(e) {
-    const index = e.currentTarget.dataset.index
+    const { versionIndex, blockIndex } = e.currentTarget.dataset
+    const { list } = this.data
+    const block = list[versionIndex].list[blockIndex]
+
     if (e.detail.playing) {
-      this.playAllSentences(index)
+      this._playBlockSentences(versionIndex, blockIndex, block)
     } else {
-      this.stopAllSentences(index)
+      this._stopBlockSentences(versionIndex, blockIndex)
     }
+  },
+  // 播放单个 block 的所有句子
+  _playBlockSentences(versionIndex, blockIndex, block) {
+    this.stopAudio()
+    this.resetSentenceAudioStatus()
+    this._resetAllBlockPlayingStatus()
+
+    // 获取该 block 的所有句子
+    const sentences = []
+    block.list.forEach((sentence, idx) => {
+      if (sentence.audioUrl) {
+        sentences.push({
+          audioUrl: sentence.audioUrl,
+          path: `list[${versionIndex}].list[${blockIndex}].list[${idx}].playStatus`
+        })
+      }
+    })
+
+    if (sentences.length === 0) return
+
+    // 设置播放状态
+    this._playAllState = {
+      versionIndex,
+      blockIndex,
+      sentences,
+      currentIndex: 0
+    }
+
+    this.setData({
+      [`list[${versionIndex}].list[${blockIndex}].isPlaying`]: true
+    })
+
+    this._playSentenceByIndex(0)
+  },
+  // 停止 block 播放
+  _stopBlockSentences(versionIndex, blockIndex) {
+    this.stopAudio()
+    this._playAllState = null
+    this.resetSentenceAudioStatus()
+    this.setData({
+      [`list[${versionIndex}].list[${blockIndex}].isPlaying`]: false
+    })
+  },
+  // 重置所有 block 的播放状态
+  _resetAllBlockPlayingStatus() {
+    const { list } = this.data
+    if (!list) return
+
+    const updates = {}
+    list.forEach((version, vIdx) => {
+      if (version.list) {
+        version.list.forEach((block, bIdx) => {
+          if (block.isPlaying) {
+            updates[`list[${vIdx}].list[${bIdx}].isPlaying`] = false
+          }
+        })
+      }
+    })
+
+    if (Object.keys(updates).length > 0) {
+      this.setData(updates)
+    }
+  },
+  // 重写：播放指定索引的句子（覆盖 behavior 方法）
+  _playSentenceByIndex(index) {
+    if (!this._playAllState) return
+
+    const { sentences, versionIndex, blockIndex } = this._playAllState
+    if (index >= sentences.length) {
+      // 播放完毕
+      this._playAllState = null
+      this.setData({
+        audioPlayer: false,
+        [`list[${versionIndex}].list[${blockIndex}].isPlaying`]: false
+      })
+      this.resetSentenceAudioStatus()
+      return
+    }
+
+    const sentence = sentences[index]
+    this._playAllState.currentIndex = index
+
+    // 重置所有句子状态，然后高亮当前句子
+    this.resetSentenceAudioStatus()
+    this.setData({
+      [sentence.path]: 'playing'
+    })
+
+    // 播放音频
+    this.playAudio(sentence.audioUrl)
   },
   gotoStoryBlock(e) {
     let item = {

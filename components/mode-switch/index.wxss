@@ -1,0 +1,57 @@
+/* 显示模式切换按钮 */
+.mode-switch {
+  height: 56px;
+  width: 128px;
+  border: 2px solid var(--solid-border-color);
+  box-sizing: border-box;
+  border-radius: 9px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.mode-switch--full {
+  border-color: rgba(252, 213, 63, 1);
+}
+
+.mode-switch--simple {
+  border-color: rgba(247, 10, 141, 1);
+}
+
+.mode-switch__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-weight: bold;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mode-switch__content image {
+  width: 20px;
+  height: 20px;
+}
+
+/* 可见状态 - 居中显示 */
+.mode-switch__visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 隐藏状态 - 向上移出 */
+.mode-switch__hidden-up {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* 隐藏状态 - 在下方等待 */
+.mode-switch__hidden-down {
+  transform: translateY(100%);
+  opacity: 0;
+}

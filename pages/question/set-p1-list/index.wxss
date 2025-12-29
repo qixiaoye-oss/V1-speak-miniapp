@@ -1,39 +1,7 @@
-.series {
+/* 显示模式切换组件外边距 */
+mode-switch {
+  display: block;
   margin-bottom: 15px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.series__item {
-  height: 56px;
-  width: 128px;
-  border: 1px solid var(--solid-border-color);
-  box-sizing: border-box;
-  border-radius: 9px;
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-.series__item image {
-  width: 20px;
-  height: 20px;
-}
-
-.full__active {
-  border-color: rgba(252, 213, 63, 1);
-  border-width: 2px;
-  font-weight: bold;
-}
-
-.simple__active {
-  border-color: rgba(247, 10, 141, 1);
-  font-weight: bold;
-  border-width: 2px;
 }
 
 /* 正文样式 */

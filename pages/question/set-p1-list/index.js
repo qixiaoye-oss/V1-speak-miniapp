@@ -30,9 +30,9 @@ Page({
     }
     this.navigateTo(`/pages/question/question-p1-list/index?setId=${item.id}&hasMastered=${item.hasMastered}`)
   },
-  changeShowMode(e) {
+  onModeChange(e) {
     this.setData({
-      showMode: e.currentTarget.dataset.mode
+      showMode: e.detail.mode
     })
   },
   // ===========业务操作 End===========

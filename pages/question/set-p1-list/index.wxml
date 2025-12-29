@@ -6,16 +6,7 @@
 <!-- 骨架屏 -->
 <skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
 
-<view class="series" wx:if="{{!loading}}">
-  <view class="series__item {{showMode === 'full'?'full__active':''}}" hover-class="tap-active" bind:tap="changeShowMode" data-mode="full">
-    <image src="/images/v2/folder_bt.png"></image>
-    <text>列表显示</text>
-  </view>
-  <view class="series__item {{showMode === 'simple'?'simple__active':''}}" hover-class="tap-active" bind:tap="changeShowMode" data-mode="simple">
-    <image src="/images/v2/pin_bt.png"></image>
-    <text>标签显示</text>
-  </view>
-</view>
+<mode-switch wx:if="{{!loading}}" mode="{{showMode}}" bind:change="onModeChange" />
 <view class="chapter-container" wx:if="{{!loading}}">
   <view class="chapter-group" wx:for="{{list}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="group" wx:if="{{!group.hidden}}">
     <view class="chapter-group__header--layout">
