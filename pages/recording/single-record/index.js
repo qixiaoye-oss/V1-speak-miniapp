@@ -101,7 +101,7 @@ Page({
     this.initRecorder()
 
     wx.enableAlertBeforeUnload({
-      message: '未保存录音退出将丢失录音文件，是否退出？'
+      message: '录音未保存，退出将会丢失，是否退出？'
     })
   },
 
