@@ -85,7 +85,8 @@ Page({
     },
     audioStatus: 'stop',
     duration: 0,
-    dots: '.'  // 动态点，循环显示 . .. ...
+    dots: '.',  // 动态点，循环显示 . .. ...
+    recordingItem: null  // 用于 recording-cell 组件
   },
 
   onLoad(options) {
@@ -151,11 +152,18 @@ Page({
     manager.onStop((res) => {
       audio.src = res.tempFilePath
       const time = api.formatTime(new Date())
+      const duration = Math.round(res.duration / 1000)
       this.setData({
         duration: res.duration,
         'file.time': time,
         'file.url': res.tempFilePath,
-        status: 2
+        'file.duration': duration,
+        status: 2,
+        recordingItem: {
+          recordingTime: time,
+          duration: duration,
+          playStatus: 'stop'
+        }
       })
       clearInterval(timer)
     })
@@ -278,13 +286,29 @@ Page({
     if (audio && !audio.paused) {
       audio.stop()
     }
-    this.setData({ audioStatus: 'stop' })
+    this.setData({
+      audioStatus: 'stop',
+      'recordingItem.playStatus': 'stop'
+    })
   },
 
   playRecordedAudio() {
     audio.src = this.data.file.url
     audio.play()
-    this.setData({ audioStatus: 'play' })
+    this.setData({
+      audioStatus: 'play',
+      'recordingItem.playStatus': 'play'
+    })
+  },
+
+  // 录音单元格播放事件处理
+  onRecordingCellPlay(e) {
+    const { playing } = e.detail
+    if (playing) {
+      this.playRecordedAudio()
+    } else {
+      this.stopAudio()
+    }
   },
 
   // =========== 页面操作 ===========

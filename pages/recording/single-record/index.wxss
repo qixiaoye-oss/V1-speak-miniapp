@@ -12,3 +12,9 @@ question-content {
   display: block;
   margin-block: 15px;
 }
+
+/* 录音单元格间距 */
+recording-cell {
+  display: block;
+  margin-top: 15px;
+}

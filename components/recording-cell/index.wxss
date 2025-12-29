@@ -41,3 +41,8 @@
 .tap-active {
   opacity: 0.7;
 }
+
+/* 禁用状态 */
+.recording-cell__btn--disabled {
+  opacity: 0.3;
+}
