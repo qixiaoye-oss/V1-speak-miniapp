@@ -6,7 +6,8 @@
 <!-- 骨架屏 -->
 <skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
 
-<view class="series" wx:if="{{!loading && seriesList}}">
+<mode-switch wx:if="{{!loading}}" mode="{{showMode}}" bind:change="onModeChange" />
+<view class="series" wx:if="{{!loading && seriesList && seriesList.length > 0}}">
   <view class="series__item {{seriesIndex === index?'series__active':''}}" wx:for="{{seriesList}}" wx:key="index" hover-class="tap-active" bind:tap="changeLabel" data-index="{{index}}">
     <view style="background: {{item.backgroundColor}};">
       <image src="{{item.iconUrl}}"></image>
@@ -22,7 +23,8 @@
         <text class="chapter-group__title">{{group.title}}</text>
       </view>
     </view>
-    <view class="chapter-cell">
+    <!-- 列表显示模式 -->
+    <view class="chapter-cell" wx:if="{{showMode === 'full'}}">
       <view class="chapter" wx:for="{{group.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}" wx:if="{{!chapter.hidden}}">
         <view class="chapter__header">
           <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
@@ -60,6 +62,15 @@
               <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>
             </view>
           </view>
+        </view>
+      </view>
+    </view>
+    <!-- 标签显示模式 -->
+    <view class="chapter__list--simple" wx:if="{{showMode === 'simple'}}">
+      <view wx:for="{{group.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}" wx:if="{{!chapter.hidden}}">
+        <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
+          <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+          <view class="chapter__title-text">{{chapter.title}}</view>
         </view>
       </view>
     </view>

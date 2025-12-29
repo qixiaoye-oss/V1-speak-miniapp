@@ -6,7 +6,8 @@ const pageGuard = require('../../../behaviors/pageGuard')
 Page({
   behaviors: [pageGuard.behavior, pageLoading, loadError],
   data: {
-    seriesIndex: 0
+    seriesIndex: 0,
+    showMode: 'full'
   },
   // ===========生命周期 Start===========
   onLoad(options) { },
@@ -49,6 +50,11 @@ Page({
       seriesIndex: e.currentTarget.dataset.index
     })
     this.listData(false)
+  },
+  onModeChange(e) {
+    this.setData({
+      showMode: e.detail.mode
+    })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========

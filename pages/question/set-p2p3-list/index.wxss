@@ -1,3 +1,9 @@
+/* 显示模式切换组件外边距 */
+mode-switch {
+  display: block;
+  margin-bottom: 15px;
+}
+
 .series {
   margin-bottom: 15px;
   display: flex;
@@ -210,4 +216,11 @@
   line-height: 1.4;
   box-sizing: border-box;
   text-align: center;
+}
+
+/* 标签显示模式 */
+.chapter__list--simple {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }

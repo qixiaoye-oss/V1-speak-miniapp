@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "skeleton": "/components/skeleton/skeleton"
+    "skeleton": "/components/skeleton/skeleton",
+    "mode-switch": "/components/mode-switch/index"
   }
 }
