@@ -8,9 +8,9 @@ const audioListBehavior = require('../../../behaviors/audioListBehavior')
 const apiConfig = {
   1: {
     detail: '/v2/p1/detail',
-    list: '/v2/p1/single/user/record',
-    del: '/v2/p1/single/remove',
-    listParam: (options) => ({ questionId: options.id })
+    list: '/recording/list',
+    del: '/recording/del',
+    listParam: (options) => ({ ...options })
   },
   2: {
     detail: '/question/detailNoAnswer',
