@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "tap-action": "/components/tap-action/index"
+  }
+}

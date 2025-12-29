@@ -8,9 +8,9 @@ const audioListBehavior = require('../../../behaviors/audioListBehavior')
 const apiConfig = {
   1: {
     detail: '/v2/p1/detail',
-    list: '/v2/p1/single/user/record',
-    del: '/v2/p1/single/remove',
-    listParam: (options) => ({ questionId: options.id })
+    list: '/recording/list',
+    del: '/recording/del',
+    listParam: (options) => ({ ...options })
   },
   2: {
     detail: '/question/detailNoAnswer',
@@ -41,11 +41,12 @@ Page({
     const type = parseInt(options.type) || 2
     this.setData({
       type: type,
-      color: options.color,
-      background: options.background
+      color: options.color || '',
+      background: options.background || ''
     })
     this.initAudioListBehavior()
-    if (options.userId == this.data.user.id || this.data.user.isManager == 1) {
+    const user = this.data.user || {}
+    if (options.userId == user.id || user.isManager == 1) {
       this.fetchQuestionDetail(true)
       this.fetchRecordingList(false)
     } else {
@@ -59,8 +60,21 @@ Page({
   onShareAppMessage() {
     return api.share('考雅狂狂说', this)
   },
-  toDetail(e) {
-    this.navigateTo('../history-record-detail/index?id=' + e.currentTarget.dataset.id + '&mode=single')
+  // 录音单元格事件处理
+  onCellDetail(e) {
+    this.navigateTo('../history-record-detail/index?id=' + e.detail.id + '&mode=single')
+  },
+  onCellPlay(e) {
+    const { index, playing } = e.detail
+    if (playing) {
+      // 构造 playRecording 需要的事件对象
+      this.playRecording({ currentTarget: { dataset: { index } } })
+    } else {
+      this.stopAudio()
+    }
+  },
+  onCellSetting(e) {
+    this.audioBtn({ currentTarget: { dataset: { id: e.detail.id } } })
   },
   // ===========生命周期 End===========
   // ===========数据获取 Start===========

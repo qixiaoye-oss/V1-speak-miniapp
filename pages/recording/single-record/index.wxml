@@ -23,14 +23,13 @@
 />
 
 <!-- 录音文件播放 -->
-<view class="cell layout_flex f_ac f_jb fwb f14 radius9" wx:if="{{file.url}}">
-  <view>{{file.time}}</view>
-  <view class="layout_flex">
-    <view class="audio_duration" style="margin-right: 10px;">{{file.duration}}秒</view>
-    <image class="img20" wx:if="{{audioStatus == 'stop'}}" src="/images/icon/play.png" bind:tap="playRecordedAudio"></image>
-    <image class="img20" wx:else src="/images/icon/pause.png" bind:tap="stopAudio"></image>
-  </view>
-</view>
+<recording-cell
+  wx:if="{{file.url}}"
+  item="{{recordingItem}}"
+  index="{{0}}"
+  settingDisabled="{{true}}"
+  bind:play="onRecordingCellPlay"
+/>
 
 <!-- 底部按钮 -->
 <view class="btn-page-bottom">
@@ -39,33 +38,34 @@
   <view class="btn-group-hint-banner" data-icon="pin" wx:else>点击录音后，先听题，再回答。</view>
   <view class="btn-group-single">
     <view class="btn-pos-left">
-      <tap-action icon="save" bind:tap="cancel">
+      <tap-action type="button" icon="wrong" bind:tap="cancel">
         <view>放弃</view>
+        <image src="/images/v2/wrong_bt.png"></image>
       </tap-action>
     </view>
     <view class="btn-pos-right">
       <block wx:if="{{status === 0}}">
-        <tap-action icon="stop" bind:tap="checkRecordPermission">
+        <tap-action type="button" icon="stop" bind:tap="checkRecordPermission">
           <view>点击开始答题/录音</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 0.5}}">
-        <tap-action icon="stop" disabled="{{true}}">
+        <tap-action type="button" icon="stop" disabled="{{true}}">
           <view>请听题{{dots}}</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 1}}">
-        <tap-action icon="stop" bind:tap="stopRecording">
+        <tap-action type="button" icon="stop" bind:tap="stopRecording">
           <view>请回答{{dots}}/{{file.duration}}s/点击结束</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 2}}">
-        <tap-action icon="down" bind:tap="confirm">
+        <tap-action type="button" icon="submit" bind:tap="confirm">
           <view>提交保存</view>
-          <image src="/images/v2/down_bt.png"></image>
+          <image src="/images/v2/submit_bt.png"></image>
         </tap-action>
       </block>
     </view>

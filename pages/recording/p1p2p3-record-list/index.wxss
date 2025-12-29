@@ -5,6 +5,8 @@
   margin-top: 0;
 }
 
-.recording_cell {
+/* 录音单元格间距 */
+recording-cell {
+  display: block;
   margin-top: 15px;
 }

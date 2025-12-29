@@ -92,10 +92,11 @@ function request(that, url, data, hasToast, method) {
  * 上传文件至oss
  * @param {文件地址} filePath
  * @param {上传路径} uploadPath
+ * @param {加载提示文字} loadingText
  */
-function uploadFileToOSS(filePath, uploadPath) {
+function uploadFileToOSS(filePath, uploadPath, loadingText) {
   wx.showLoading({
-    title: '文件上传中...',
+    title: loadingText || '文件上传中...',
   })
   return new Promise((resolve, reject) => {
     // 发送请求获取签名信息

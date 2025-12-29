@@ -85,7 +85,8 @@ Page({
     },
     audioStatus: 'stop',
     duration: 0,
-    dots: '.'  // 动态点，循环显示 . .. ...
+    dots: '.',  // 动态点，循环显示 . .. ...
+    recordingItem: null  // 用于 recording-cell 组件
   },
 
   onLoad(options) {
@@ -100,7 +101,7 @@ Page({
     this.initRecorder()
 
     wx.enableAlertBeforeUnload({
-      message: '未保存录音退出将丢失录音文件，是否退出？'
+      message: '录音未保存，退出将会丢失，是否退出？'
     })
   },
 
@@ -151,11 +152,18 @@ Page({
     manager.onStop((res) => {
       audio.src = res.tempFilePath
       const time = api.formatTime(new Date())
+      const duration = Math.round(res.duration / 1000)
       this.setData({
         duration: res.duration,
         'file.time': time,
         'file.url': res.tempFilePath,
-        status: 2
+        'file.duration': duration,
+        status: 2,
+        recordingItem: {
+          recordingTime: time,
+          duration: duration,
+          playStatus: 'stop'
+        }
       })
       clearInterval(timer)
     })
@@ -278,13 +286,29 @@ Page({
     if (audio && !audio.paused) {
       audio.stop()
     }
-    this.setData({ audioStatus: 'stop' })
+    this.setData({
+      audioStatus: 'stop',
+      'recordingItem.playStatus': 'stop'
+    })
   },
 
   playRecordedAudio() {
     audio.src = this.data.file.url
     audio.play()
-    this.setData({ audioStatus: 'play' })
+    this.setData({
+      audioStatus: 'play',
+      'recordingItem.playStatus': 'play'
+    })
+  },
+
+  // 录音单元格播放事件处理
+  onRecordingCellPlay(e) {
+    const { playing } = e.detail
+    if (playing) {
+      this.playRecordedAudio()
+    } else {
+      this.stopAudio()
+    }
   },
 
   // =========== 页面操作 ===========
@@ -299,7 +323,7 @@ Page({
     }
 
     const config = CONFIG[this.data.recordType]
-    api.uploadFileToOSS(this.data.file.url, config.uploadPath, this).then(res => {
+    api.uploadFileToOSS(this.data.file.url, config.uploadPath, '录音保存中...').then(res => {
       this.save(res)
     })
   },

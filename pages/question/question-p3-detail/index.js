@@ -69,6 +69,9 @@ Page({
     this.navigateTo('/pages/recording/single-record/index' + api.parseParams(param))
   },
   toRecordList(param) {
+    const { backgroundColor, textColor } = this.data
+    param.color = textColor || ''
+    param.background = backgroundColor || ''
     this.navigateTo('/pages/recording/p1p2p3-record-list/index' + api.parseParams(param))
   },
   punching() {

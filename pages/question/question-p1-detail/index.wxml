@@ -35,13 +35,13 @@
             <view class="paragraph__title-text">{{paragraph.title}}</view>
           </view>
           <view class="paragraph__content">
-            <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
+            <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+detail.questionBackgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
               <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
             </view>
           </view>
         </block>
         <block wx:else>
-          <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
+          <view class="answer-cell__content" wx:for="{{paragraph.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" style="{{sentence.playStatus === 'playing' ? 'background:'+detail.questionBackgroundColor:''}}" data-answer-index="{{answerIndex}}" data-sentence-index="{{sentenceIndex}}" data-group-index="{{paragraphIndex}}" bind:tap="playSentence">
             <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
           </view>
         </block>

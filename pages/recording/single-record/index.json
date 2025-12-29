@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "tap-action": "/components/tap-action/index",
-    "question-content": "/components/question-content/index"
+    "question-content": "/components/question-content/index",
+    "recording-cell": "/components/recording-cell/index"
   }
 }

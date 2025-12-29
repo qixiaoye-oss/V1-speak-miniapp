@@ -36,6 +36,8 @@ module.exports = Behavior({
       this._sentenceAudio = wx.createInnerAudioContext()
       // 连续播放状态
       this._playAllState = null
+      // 单句播放状态
+      this._singlePlayState = null
 
       this._sentenceAudio.onPlay(() => {
         this.setData({
@@ -48,9 +50,18 @@ module.exports = Behavior({
         if (this._playAllState) {
           this._playNextSentence()
         } else {
-          this.setData({
-            audioPlayer: false
-          })
+          // 单句播放结束，重置状态
+          const singleState = this._singlePlayState
+          this._singlePlayState = null
+
+          const updates = { audioPlayer: false }
+          // 如果有单句播放状态，重置对应的 isPlaying
+          if (singleState) {
+            // 支持自定义 isPlayingPath (P2) 或默认路径 (P1/P3)
+            const isPlayingPath = singleState.isPlayingPath || `list[${singleState.answerIndex}].isPlaying`
+            updates[isPlayingPath] = false
+          }
+          this.setData(updates)
           this.resetSentenceAudioStatus()
         }
       })
@@ -71,6 +82,7 @@ module.exports = Behavior({
      */
     destroySentenceAudio() {
       this._playAllState = null
+      this._singlePlayState = null
       if (this._sentenceAudio) {
         this._sentenceAudio.destroy()
         this._sentenceAudio = null
@@ -110,6 +122,7 @@ module.exports = Behavior({
     playMainAudio() {
       this.stopAudio()
       this._playAllState = null
+      this._singlePlayState = null
       this.resetSentenceAudioStatus()
       this._resetAllPlayingStatus()
       const detail = this.data.detail
@@ -122,6 +135,7 @@ module.exports = Behavior({
      * 播放句子音频（单个）
      * 支持二级结构: list[answerIndex].list[sentenceIndex]
      * 支持三级结构: list[answerIndex].list[groupIndex].list[sentenceIndex]
+     * 支持点击同一句子切换停止
      * @param {Object} e - 事件对象
      */
     playSentence(e) {
@@ -146,12 +160,38 @@ module.exports = Behavior({
         path = `list[${answerIndex}].list[${sentenceIndex}].playStatus`
       }
 
+      // 检查是否点击了正在播放的同一句子（切换停止）
+      if (this._singlePlayState &&
+          this._singlePlayState.answerIndex === answerIndex &&
+          this._singlePlayState.sentenceIndex === sentenceIndex &&
+          this._singlePlayState.groupIndex === groupIndex) {
+        // 停止播放
+        this.stopAudio()
+        this.resetSentenceAudioStatus()
+        this._singlePlayState = null
+        // 重置当前答案的 isPlaying 状态
+        this.setData({
+          [`list[${answerIndex}].isPlaying`]: false
+        })
+        return
+      }
+
       if (sentence && sentence.audioUrl) {
         this.stopAudio()
         this.resetSentenceAudioStatus()
+
+        // 记录单句播放状态
+        this._singlePlayState = {
+          answerIndex: answerIndex,
+          sentenceIndex: sentenceIndex,
+          groupIndex: groupIndex,
+          path: path
+        }
+
         this.playAudio(sentence.audioUrl)
         this.setData({
-          [path]: 'playing'
+          [path]: 'playing',
+          [`list[${answerIndex}].isPlaying`]: true  // 同步 footer 状态
         })
       }
     },
@@ -164,10 +204,11 @@ module.exports = Behavior({
       const { list } = this.data
       if (!list || !list[answerIndex]) return
 
-      // 停止当前播放
+      // 停止当前播放，清除单句播放状态
       this.stopAudio()
       this.resetSentenceAudioStatus()
       this._resetAllPlayingStatus()
+      this._singlePlayState = null
 
       // 获取所有句子（扁平化）
       const sentences = this._flattenSentences(list[answerIndex], answerIndex)
@@ -196,6 +237,7 @@ module.exports = Behavior({
     stopAllSentences(answerIndex) {
       this.stopAudio()
       this._playAllState = null
+      this._singlePlayState = null
       this.resetSentenceAudioStatus()
 
       // 更新答案的播放状态
