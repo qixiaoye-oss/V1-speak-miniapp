@@ -54,9 +54,9 @@ Page({
   // 获取用户信息
   getUserInfo() {
     const _this = this
-    api.request(this, '/user/v1/user/info', {}, true).then(() => {
-      // 从用户信息中读取口音偏好
-      const pronunciation = _this.data.user?.pronunciation || 'uk'
+    api.request(this, '/user/v1/user/info', {}, true).then((data) => {
+      // 从返回数据中读取口音偏好
+      const pronunciation = data.user?.pronunciation || 'uk'
       _this.setData({
         accent: pronunciation,
         accentText: pronunciation === 'us' ? '美音' : '英音'
