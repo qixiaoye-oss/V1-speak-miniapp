@@ -1,38 +1,12 @@
 @import "/style/recording.wxss";
-@import "/style/button-group.wxss";
 
 /* P1P2P3录音列表页面特有样式 */
 .content_cell {
   margin-top: 0;
 }
 
-.recording_cell {
+/* 录音单元格间距 */
+recording-cell {
+  display: block;
   margin-top: 15px;
-  padding: 15px;
-}
-
-/* 录音单元格信息区域 */
-.recording_cell__info {
-  flex: 1;
-  min-width: 0;
-}
-
-.recording_cell__time {
-  font-size: 14px;
-  font-weight: bold;
-  color: #000;
-}
-
-.recording_cell__duration {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.6);
-  margin-top: 4px;
-}
-
-/* 录音单元格操作按钮区域 */
-.recording_cell__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: 15px;
 }

@@ -11,17 +11,13 @@
   backgroundColor="{{background}}"
   borderColor="{{color}}"
 />
-<view wx:for="{{list}}" wx:key="item" class="recording_cell layout_flex f_ac f_jb" wx:if="{{!loadError}}">
-  <view class="recording_cell__info" hover-class="tap-active" bind:tap="toDetail" data-id="{{item.id}}">
-    <view class="recording_cell__time">{{item.recordingTime}}</view>
-    <view class="recording_cell__duration">{{item.duration}}秒</view>
-  </view>
-  <view class="recording_cell__actions">
-    <tap-action type="button" icon="{{item.playStatus === 'play' ? 'stop' : 'play'}}" bind:tap="togglePlay" data-index="{{index}}">
-      <image src="/images/v2/{{item.playStatus === 'play' ? 'stop' : 'play'}}_bt.png"></image>
-    </tap-action>
-    <tap-action type="button" icon="setting" bind:tap="audioBtn" data-id="{{item.id}}">
-      <image src="/images/v2/setting_bt.png"></image>
-    </tap-action>
-  </view>
-</view>
+<recording-cell
+  wx:for="{{list}}"
+  wx:key="item"
+  wx:if="{{!loadError}}"
+  item="{{item}}"
+  index="{{index}}"
+  bind:detail="onCellDetail"
+  bind:play="onCellPlay"
+  bind:setting="onCellSetting"
+/>

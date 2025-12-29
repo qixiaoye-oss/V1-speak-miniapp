@@ -60,18 +60,21 @@ Page({
   onShareAppMessage() {
     return api.share('考雅狂狂说', this)
   },
-  toDetail(e) {
-    this.navigateTo('../history-record-detail/index?id=' + e.currentTarget.dataset.id + '&mode=single')
+  // 录音单元格事件处理
+  onCellDetail(e) {
+    this.navigateTo('../history-record-detail/index?id=' + e.detail.id + '&mode=single')
   },
-  // 切换播放/停止
-  togglePlay(e) {
-    const index = e.currentTarget.dataset.index
-    const item = this.data.list[index]
-    if (item.playStatus === 'play') {
-      this.stopAudio()
+  onCellPlay(e) {
+    const { index, playing } = e.detail
+    if (playing) {
+      // 构造 playRecording 需要的事件对象
+      this.playRecording({ currentTarget: { dataset: { index } } })
     } else {
-      this.playRecording(e)
+      this.stopAudio()
     }
+  },
+  onCellSetting(e) {
+    this.audioBtn({ currentTarget: { dataset: { id: e.detail.id } } })
   },
   // ===========生命周期 End===========
   // ===========数据获取 Start===========

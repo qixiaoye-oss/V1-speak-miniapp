@@ -1,0 +1,14 @@
+<view class="recording-cell">
+  <view class="recording-cell__info" hover-class="tap-active" bind:tap="onDetail">
+    <view class="recording-cell__time">{{item.recordingTime}}</view>
+    <view class="recording-cell__duration">{{item.duration}}秒</view>
+  </view>
+  <view class="recording-cell__actions">
+    <tap-action type="button" icon="{{item.playStatus === 'play' ? 'stop' : 'play'}}" bind:tap="onTogglePlay">
+      <image src="/images/v2/{{item.playStatus === 'play' ? 'stop' : 'play'}}_bt.png"></image>
+    </tap-action>
+    <tap-action type="button" icon="setting" bind:tap="onSetting">
+      <image src="/images/v2/setting_bt.png"></image>
+    </tap-action>
+  </view>
+</view>
