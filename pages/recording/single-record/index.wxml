@@ -38,32 +38,32 @@
   <view class="btn-group-hint-banner" data-icon="pin" wx:else>点击录音后，先听题，再回答。</view>
   <view class="btn-group-single">
     <view class="btn-pos-left">
-      <tap-action icon="wrong" bind:tap="cancel">
+      <tap-action type="button" icon="wrong" bind:tap="cancel">
         <view>放弃</view>
         <image src="/images/v2/wrong_bt.png"></image>
       </tap-action>
     </view>
     <view class="btn-pos-right">
       <block wx:if="{{status === 0}}">
-        <tap-action icon="stop" bind:tap="checkRecordPermission">
+        <tap-action type="button" icon="stop" bind:tap="checkRecordPermission">
           <view>点击开始答题/录音</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 0.5}}">
-        <tap-action icon="stop" disabled="{{true}}">
+        <tap-action type="button" icon="stop" disabled="{{true}}">
           <view>请听题{{dots}}</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 1}}">
-        <tap-action icon="stop" bind:tap="stopRecording">
+        <tap-action type="button" icon="stop" bind:tap="stopRecording">
           <view>请回答{{dots}}/{{file.duration}}s/点击结束</view>
           <image src="/images/v2/stop_bt.png"></image>
         </tap-action>
       </block>
       <block wx:if="{{status === 2}}">
-        <tap-action icon="submit" bind:tap="confirm">
+        <tap-action type="button" icon="submit" bind:tap="confirm">
           <view>提交保存</view>
           <image src="/images/v2/submit_bt.png"></image>
         </tap-action>

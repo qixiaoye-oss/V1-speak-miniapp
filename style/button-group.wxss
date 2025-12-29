@@ -458,7 +458,8 @@ page {
 /* 红色 #F8312F */
 [data-icon="flag"],
 [data-icon="medal"],
-[data-icon="pin"] {
+[data-icon="pin"],
+[data-icon="wrong"] {
   color: #F8312F;
   background-color: rgba(248, 49, 47, 0.15);
 }
