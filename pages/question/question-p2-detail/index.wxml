@@ -47,7 +47,7 @@
       <!-- 答案块 -->
       <answer-cell wx:for="{{answer.list}}" wx:key="block" wx:for-item="block" wx:for-index="blockIndex">
         <header slot="header" title="{{block.content}}" titleBackground="{{backgroundColor}}"></header>
-        <view class="answer-cell__content" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" wx:for="{{block.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" data-answer-index="{{blockIndex}}" data-sentence-index="{{sentenceIndex}}" bind:tap="playSentence">
+        <view class="answer-cell__content" style="{{sentence.playStatus === 'playing' ? 'background:'+backgroundColor:''}}" wx:for="{{block.list}}" wx:key="sentence" wx:for-item="sentence" wx:for-index="sentenceIndex" data-answer-index="{{answerIdx}}" data-group-index="{{blockIndex}}" data-sentence-index="{{sentenceIndex}}" bind:tap="playSentence">
           <sentence content="{{sentence}}" tagWidth="{{tagWidth}}"></sentence>
         </view>
         <footer slot="footer" playing="{{block.isPlaying}}" hasAudio="{{block.audioTotal == block.sentenceTotal}}" bind:play="onFooterPlay" data-version-index="{{answerIdx}}" data-block-index="{{blockIndex}}"></footer>
