@@ -71,7 +71,11 @@ Page({
     this.navigateTo('/pages/recording/single-record/index' + api.parseParams(param))
   },
   toRecordList(param) {
+    const { detail, user } = this.data
     param.type = 1
+    param.color = detail.questionBorderColor || ''
+    param.background = detail.questionBackgroundColor || ''
+    param.userId = user ? user.id : ''
     this.navigateTo('/pages/recording/p1p2p3-record-list/index' + api.parseParams(param))
   },
   // 打卡
