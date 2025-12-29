@@ -3,18 +3,14 @@
 <template is="pageLoading" data="{{loading, loadProgress}}"/>
 <template is="loadError" data="{{loadError}}"/>
 
-<view class="layout_flex_col content_cell" style="background:{{background}}" wx:if="{{!loadError}}">
-  <view class="question_content">
-    <text>{{detail.content || detail.question}}</text>
-  </view>
-  <view class="additional_content" wx:if="{{detail.additionalContent}}">
-    <text>{{detail.additionalContent}}</text>
-  </view>
-  <view class="supplementary_content" wx:if="{{detail.supplementaryContent}}">
-    <view class="f9 cell_lable_mini content_tag layout_flex f_cen2">补</view>
-    <text>{{detail.supplementaryContent}}</text>
-  </view>
-</view>
+<question-content
+  wx:if="{{!loadError}}"
+  content="{{detail.content || detail.question}}"
+  additionalContent="{{detail.additionalContent}}"
+  supplementaryContent="{{detail.supplementaryContent}}"
+  backgroundColor="{{background}}"
+  borderColor="{{color}}"
+/>
 <view wx:for="{{list}}" wx:key="item" class="recording_cell layout_flex f_ac f_jb fwb f14" wx:if="{{!loadError}}">
   <view hover-class="tap-active" bind:tap="toDetail" data-id="{{item.id}}">{{item.recordingTime}}</view>
   <view class="layout_flex f_ac">
