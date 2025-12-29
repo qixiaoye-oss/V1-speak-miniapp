@@ -38,8 +38,9 @@
   <view class="btn-group-hint-banner" data-icon="pin" wx:else>点击录音后，先听题，再回答。</view>
   <view class="btn-group-single">
     <view class="btn-pos-left">
-      <tap-action icon="save" bind:tap="cancel">
+      <tap-action icon="wrong" bind:tap="cancel">
         <view>放弃</view>
+        <image src="/images/v2/wrong_bt.png"></image>
       </tap-action>
     </view>
     <view class="btn-pos-right">
@@ -62,9 +63,9 @@
         </tap-action>
       </block>
       <block wx:if="{{status === 2}}">
-        <tap-action icon="down" bind:tap="confirm">
+        <tap-action icon="submit" bind:tap="confirm">
           <view>提交保存</view>
-          <image src="/images/v2/down_bt.png"></image>
+          <image src="/images/v2/submit_bt.png"></image>
         </tap-action>
       </block>
     </view>
