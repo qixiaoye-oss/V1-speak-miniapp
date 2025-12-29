@@ -1,0 +1,10 @@
+<view class="mode-switch {{mode === 'full' ? 'mode-switch--full' : 'mode-switch--simple'}}" bind:tap="onTap">
+  <view class="mode-switch__content {{mode === 'full' ? 'mode-switch__visible' : 'mode-switch__hidden-up'}}">
+    <image src="/images/v2/folder_bt.png"></image>
+    <text>列表显示</text>
+  </view>
+  <view class="mode-switch__content {{mode === 'simple' ? 'mode-switch__visible' : 'mode-switch__hidden-down'}}">
+    <image src="/images/v2/pin_bt.png"></image>
+    <text>标签显示</text>
+  </view>
+</view>
