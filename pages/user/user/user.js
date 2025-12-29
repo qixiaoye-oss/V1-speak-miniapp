@@ -6,7 +6,7 @@ Page({
   behaviors: [pageGuard.behavior, pageLoading],
   data: {
     version: '1.0.2',
-    accent: 'british', // 'british' 或 'american'
+    accent: 'uk', // 'uk' 或 'us'
     accentText: '英音',
   },
   onShow() {
@@ -37,13 +37,17 @@ Page({
     wx.showActionSheet({
       itemList: ['英音', '美音'],
       success(res) {
-        const accent = res.tapIndex === 0 ? 'british' : 'american'
+        const accent = res.tapIndex === 0 ? 'uk' : 'us'
         const accentText = res.tapIndex === 0 ? '英音' : '美音'
-        _this.setData({
-          accent,
-          accentText
+        // 调用 API 保存用户的口音偏好
+        api.request(_this, '/user/v1/user/update', {
+          pronunciation: accent
+        }, true, 'POST').then(() => {
+          _this.setData({
+            accent,
+            accentText
+          })
         })
-        // TODO: 调用后端 API 保存用户的口音偏好
       }
     })
   },
@@ -51,6 +55,12 @@ Page({
   getUserInfo() {
     const _this = this
     api.request(this, '/user/v1/user/info', {}, true).then(() => {
+      // 从用户信息中读取口音偏好
+      const pronunciation = _this.data.user?.pronunciation || 'uk'
+      _this.setData({
+        accent: pronunciation,
+        accentText: pronunciation === 'us' ? '美音' : '英音'
+      })
       _this.setDataReady()
       _this.finishLoading()
     }).catch(() => {
