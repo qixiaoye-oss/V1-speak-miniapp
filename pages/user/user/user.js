@@ -5,7 +5,7 @@ const pageLoading = require('../../../behaviors/pageLoading')
 Page({
   behaviors: [pageGuard.behavior, pageLoading],
   data: {
-    version: '1.0.2',
+    version: '1.0.0',
     accent: 'uk', // 'uk' 或 'us'
     accentText: '英音',
   },
@@ -17,10 +17,12 @@ Page({
         selected: 1
       })
     }
-    const miniProgram = wx.getAccountInfoSync();
-    this.setData({
-      version: miniProgram.miniProgram.version,
-    })
+    // 获取小程序版本信息
+    const accountInfo = wx.getAccountInfoSync()
+    const version = accountInfo.miniProgram.version
+    if (version) {
+      this.setData({ version })
+    }
   },
   onLoad() { },
   onShareAppMessage: function () {
