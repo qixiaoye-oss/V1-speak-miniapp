@@ -11,12 +11,17 @@
   backgroundColor="{{background}}"
   borderColor="{{color}}"
 />
-<view wx:for="{{list}}" wx:key="item" class="recording_cell layout_flex f_ac f_jb fwb f14" wx:if="{{!loadError}}">
-  <view hover-class="tap-active" bind:tap="toDetail" data-id="{{item.id}}">{{item.recordingTime}}</view>
-  <view class="layout_flex f_ac">
-    <view class="audio_duration">{{item.duration}}秒</view>
-    <image class="img20 mi10" wx:if="{{item.playStatus == 'stop'}}" src="/images/icon/play.png" bind:tap="playRecording" data-index="{{index}}"></image>
-    <image class="img20 mi10" wx:else src="/images/icon/pause.png" bind:tap="stopAudio"></image>
-    <image class="img20" src="/images/icon/more.png" bind:tap="audioBtn" data-id="{{item.id}}"></image>
+<view wx:for="{{list}}" wx:key="item" class="recording_cell layout_flex f_ac f_jb" wx:if="{{!loadError}}">
+  <view class="recording_cell__info" hover-class="tap-active" bind:tap="toDetail" data-id="{{item.id}}">
+    <view class="recording_cell__time">{{item.recordingTime}}</view>
+    <view class="recording_cell__duration">{{item.duration}}秒</view>
+  </view>
+  <view class="recording_cell__actions">
+    <tap-action type="button" icon="{{item.playStatus === 'play' ? 'stop' : 'play'}}" bind:tap="togglePlay" data-index="{{index}}">
+      <image src="/images/v2/{{item.playStatus === 'play' ? 'stop' : 'play'}}_bt.png"></image>
+    </tap-action>
+    <tap-action type="button" icon="setting" bind:tap="audioBtn" data-id="{{item.id}}">
+      <image src="/images/v2/setting_bt.png"></image>
+    </tap-action>
   </view>
 </view>

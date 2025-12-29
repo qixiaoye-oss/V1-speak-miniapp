@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "历史录音",
   "usingComponents": {
-    "question-content": "/components/question-content/index"
+    "question-content": "/components/question-content/index",
+    "tap-action": "/components/tap-action/index"
   }
 }

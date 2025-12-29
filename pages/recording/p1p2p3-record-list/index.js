@@ -63,6 +63,16 @@ Page({
   toDetail(e) {
     this.navigateTo('../history-record-detail/index?id=' + e.currentTarget.dataset.id + '&mode=single')
   },
+  // 切换播放/停止
+  togglePlay(e) {
+    const index = e.currentTarget.dataset.index
+    const item = this.data.list[index]
+    if (item.playStatus === 'play') {
+      this.stopAudio()
+    } else {
+      this.playRecording(e)
+    }
+  },
   // ===========生命周期 End===========
   // ===========数据获取 Start===========
   fetchQuestionDetail(isPull) {
