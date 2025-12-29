@@ -6,12 +6,12 @@
 <!-- 骨架屏 -->
 <skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
 
-<view class="series" wx:if="{{!loading}}">
-  <view class="series__item {{showMode === 'full'?'full__active':''}}" hover-class="tap-active" bind:tap="changeShowMode" data-mode="full">
+<view class="mode-switch {{showMode === 'full' ? 'mode-switch--full' : 'mode-switch--simple'}}" wx:if="{{!loading}}" bind:tap="toggleShowMode">
+  <view class="mode-switch__content mode-switch__full {{showMode === 'full' ? 'mode-switch__visible' : 'mode-switch__hidden-up'}}">
     <image src="/images/v2/folder_bt.png"></image>
     <text>列表显示</text>
   </view>
-  <view class="series__item {{showMode === 'simple'?'simple__active':''}}" hover-class="tap-active" bind:tap="changeShowMode" data-mode="simple">
+  <view class="mode-switch__content mode-switch__simple {{showMode === 'simple' ? 'mode-switch__visible' : 'mode-switch__hidden-down'}}">
     <image src="/images/v2/pin_bt.png"></image>
     <text>标签显示</text>
   </view>
