@@ -73,6 +73,7 @@ Page({
   toRecordList(param) {
     const { detail } = this.data
     param.type = 1
+    param.id = detail.id  // 使用 detail.id 而不是 queryParam.id
     param.color = detail.questionBorderColor || ''
     param.background = detail.questionBackgroundColor || ''
     this.navigateTo('/pages/recording/p1p2p3-record-list/index' + api.parseParams(param))
