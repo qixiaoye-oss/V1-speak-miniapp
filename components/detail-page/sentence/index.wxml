@@ -13,7 +13,7 @@
         </block>
       </view>
       <view style="flex-grow: 1;flex-shrink:1;">
-        <view class="{{content.userSentence ?'sentence__content-user':''}}">
+        <view class="{{content.userSentence ?'sentence__content-user':''}} {{inspiration ? 'main_text' : 'en_answer'}}">
           <block wx:for="{{content.contents}}" wx:for-item="con" wx:key="con">
             <text wx:if="{{con.type === 2}}" class="analysis_bg_cell">{{con.content}}</text>
             <text wx:elif="{{con.type === 3 || content.updateSentence}}" class="analysis_underline_cell">{{con.content}}</text>
@@ -23,7 +23,7 @@
             <text wx:else>{{con.content}}</text>
           </block>
         </view>
-        <view class="sentence__content-translate" wx:if="{{content.translate}}">{{content.translate}}</view>
+        <view class="{{inspiration ? 'supplementary_text' : 'cn_translate'}}" wx:if="{{content.translate}}">{{content.translate}}</view>
         <image wx:if="{{content.imageUrl}}" class="sentence__img" mode="widthFix" src="{{content.imageUrl}}"></image>
       </view>
     </view>
@@ -32,7 +32,7 @@
         <view class="sentence__content-no-tag"></view>
       </view>
       <view style="flex: 1;">
-        <view class="{{content.userSentence ?'green_text':''}}">
+        <view class="{{content.userSentence ?'green_text':''}} {{inspiration ? 'main_text' : 'en_answer'}}">
           <block wx:for="{{content.contents}}" wx:for-item="con" wx:key="con">
             <text wx:if="{{con.type === 2}}" class="analysis_bg_cell">{{con.content}}</text>
             <text wx:elif="{{con.type === 3 || content.updateSentence}}" class="analysis_underline_cell">{{con.content}}</text>
