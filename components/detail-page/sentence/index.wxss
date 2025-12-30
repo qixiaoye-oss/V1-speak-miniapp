@@ -135,7 +135,7 @@
 
 /* answer-cell 翻译（中文翻译） */
 .cn_translate {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: normal;
   line-height: 1.4;
   color: rgba(0, 0, 0, 0.6);
@@ -152,7 +152,7 @@
 
 /* inspiration-block 翻译（补充说明） */
 .supplementary_text {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: normal;
   line-height: 1.4;
   color: rgba(0, 0, 0, 0.6);
