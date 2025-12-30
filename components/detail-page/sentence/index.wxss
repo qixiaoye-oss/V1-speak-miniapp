@@ -127,20 +127,28 @@
 
 /* answer-cell 主体文字（英文答案） */
 .en_answer {
-  /* 后续可自定义样式 */
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 /* answer-cell 翻译（中文翻译） */
 .cn_translate {
-  /* 后续可自定义样式 */
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 10px;
 }
 
 /* inspiration-block 主体文字 */
 .main_text {
-  /* 后续可自定义样式 */
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 /* inspiration-block 翻译（补充说明） */
 .supplementary_text {
-  /* 后续可自定义样式 */
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 10px;
 }

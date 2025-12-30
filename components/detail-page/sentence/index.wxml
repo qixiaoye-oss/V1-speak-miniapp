@@ -23,7 +23,7 @@
             <text wx:else>{{con.content}}</text>
           </block>
         </view>
-        <view class="sentence__content-translate {{inspiration ? 'supplementary_text' : 'cn_translate'}}" wx:if="{{content.translate}}">{{content.translate}}</view>
+        <view class="{{inspiration ? 'supplementary_text' : 'cn_translate'}}" wx:if="{{content.translate}}">{{content.translate}}</view>
         <image wx:if="{{content.imageUrl}}" class="sentence__img" mode="widthFix" src="{{content.imageUrl}}"></image>
       </view>
     </view>
