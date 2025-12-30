@@ -36,10 +36,15 @@ Component({
     imageLoadedMap: {}
   },
   observers: {
-    // 图片列表变化时重置加载状态
-    'images': function(images) {
-      if (images && images.length > 0) {
+    // 图片列表变化时重置加载状态（仅当URL真正变化时）
+    'images': function(newImages) {
+      if (!newImages || newImages.length === 0) return
+      // 比较新旧图片URL，只有真正变化才重置
+      const oldUrls = (this._lastImages || []).join(',')
+      const newUrls = newImages.join(',')
+      if (oldUrls !== newUrls) {
         this.setData({ imageLoadedMap: {} })
+        this._lastImages = newImages.slice() // 保存副本
       }
     }
   },
