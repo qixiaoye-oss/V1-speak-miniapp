@@ -35,16 +35,16 @@
 .footer-image__item {
   width: 100%;
   height: auto;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;  /* 未加载时不占用空间 */
 }
 
 .footer-image__item--loaded {
+  display: block;  /* 加载完成后显示 */
   opacity: 1;
 }
 
 .footer-image__copyright {
-  margin-top: 10px;
+  margin-top: 5px;
   margin-left: 40%;
   padding-right: 0;
   font-size: 12px;

@@ -12,6 +12,11 @@ Page({
   },
   // ===========生命周期 Start===========
   onShow() {
+    // 如果是从图片预览返回，不重新加载页面
+    if (getApp()._fromImagePreview) {
+      getApp()._fromImagePreview = false
+      return
+    }
     this.startLoading()
     this.getData(true)
   },
@@ -118,6 +123,13 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
+  // 查找置顶版本的索引
+  findPreferredVersionIndex() {
+    const { list } = this.data
+    if (!list || list.length === 0) return 0
+    const preferredIndex = list.findIndex(item => item.isPreferred === true)
+    return preferredIndex >= 0 ? preferredIndex : 0
+  },
   getData(isPull) {
     const _this = this
     api.request(this, '/question/v2/detail', {
@@ -125,6 +137,11 @@ Page({
       ...this.data.queryParam
     }, isPull)
       .then(res => {
+        // 自动定位到置顶版本
+        const preferredIndex = this.findPreferredVersionIndex()
+        if (preferredIndex !== this.data.versionIndex) {
+          this.setData({ versionIndex: preferredIndex })
+        }
         this.setDataReady()
       })
       .catch(() => { pageGuard.goBack(this) })

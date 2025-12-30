@@ -2,16 +2,16 @@
   <!-- Header 区域 -->
   <slot name="header"></slot>
 
-  <!-- 顶部分隔线 -->
-  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody}}"></view>
+  <!-- 顶部分隔线：有body时显示，或无body但有footer时也显示 -->
+  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody && (hasBodyContent || hasFooterContent)}}"></view>
 
   <!-- 内容区域 -->
-  <view class="answer-cell__body" wx:if="{{!hideBody}}">
+  <view class="answer-cell__body" wx:if="{{!hideBody && hasBodyContent}}">
     <slot></slot>
   </view>
 
-  <!-- 底部分隔线 -->
-  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody}}"></view>
+  <!-- 底部分隔线：同时有body和footer时才显示 -->
+  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody && hasBodyContent && hasFooterContent}}"></view>
 
   <!-- Footer 区域 -->
   <block wx:if="{{!hideBody}}">

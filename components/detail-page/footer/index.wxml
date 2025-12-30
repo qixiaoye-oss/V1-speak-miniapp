@@ -15,7 +15,7 @@
       <view class="skeleton-image__block"></view>
     </view>
     <!-- 实际图片 -->
-    <image class="footer-image__item {{imageLoadedMap[imgIndex] ? 'footer-image__item--loaded' : ''}}" src="{{item}}" mode="widthFix" data-index="{{imgIndex}}" bindload="onImageLoad" binderror="onImageError"></image>
+    <image class="footer-image__item {{imageLoadedMap[imgIndex] ? 'footer-image__item--loaded' : ''}}" src="{{item}}" mode="widthFix" data-index="{{imgIndex}}" data-src="{{item}}" bindload="onImageLoad" binderror="onImageError" bind:tap="onImageTap"></image>
   </view>
   <view class="footer-image__copyright">素材来自网络，仅用于学习，如有侵权请联系删除。</view>
 </view>
