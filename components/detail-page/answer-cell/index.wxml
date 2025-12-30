@@ -10,8 +10,8 @@
     <slot></slot>
   </view>
 
-  <!-- 底部分隔线：仅在有body内容时显示 -->
-  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody && hasBodyContent}}"></view>
+  <!-- 底部分隔线：同时有body和footer时才显示 -->
+  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody && hasBodyContent && hasFooterContent}}"></view>
 
   <!-- Footer 区域 -->
   <block wx:if="{{!hideBody}}">
