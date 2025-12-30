@@ -9,8 +9,12 @@
     bind:toggle="onToggle"
     data-index="{{index}}">
   </header>
-  <view class="answer-cell__content" wx:for="{{list}}" wx:key="*this" wx:for-item="paragraph" wx:for-index="paragraphIndex">
-    <sentence content="{{paragraph}}" tagWidth="{{tagWidth}}"></sentence>
-  </view>
-  <footer slot="footer" type="image" images="{{images}}"></footer>
+  <!-- 句子部分：有内容时才显示 -->
+  <block wx:if="{{list && list.length > 0}}">
+    <view class="answer-cell__content" wx:for="{{list}}" wx:key="*this" wx:for-item="paragraph" wx:for-index="paragraphIndex">
+      <sentence content="{{paragraph}}" tagWidth="{{tagWidth}}"></sentence>
+    </view>
+  </block>
+  <!-- 图片部分：有内容时才显示 -->
+  <footer wx:if="{{images && images.length > 0}}" slot="footer" type="image" images="{{images}}"></footer>
 </answer-cell>
