@@ -94,20 +94,45 @@ Page({
   // 置顶开关切换
   onTopSwitch(e) {
     const index = e.currentTarget.dataset.index
-    const isPreferred = e.detail.value
-    // TODO: 调用API保存置顶状态
+    const { list } = this.data
+    // 互斥逻辑：只允许一个版本置顶
+    for (let i = 0; i < list.length; i++) {
+      list[i].isPreferred = i === index ? e.detail.value : false
+    }
     this.setData({
-      [`list[${index}].isPreferred`]: isPreferred
+      list: list
     })
+    this.updatePin(index)
+  },
+  // 保存P3答案置顶状态
+  updatePin(index) {
+    const { detail, list } = this.data
+    api.request(this, '/v2/question/p3/answer/preferred', {
+      questionId: detail.id,
+      answerId: list[index].id,
+      isPreferred: list[index].isPreferred
+    }, false, "GET")
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
+  // 查找置顶版本的索引
+  findPreferredVersionIndex() {
+    const { list } = this.data
+    if (!list || list.length === 0) return 0
+    const preferredIndex = list.findIndex(item => item.isPreferred === true)
+    return preferredIndex >= 0 ? preferredIndex : 0
+  },
   getData(isPull) {
     api.request(this, '/question/v2/detail', {
       setType: 3,
       ...this.data.queryParam
     }, isPull)
       .then(() => {
+        // 自动定位到置顶版本
+        const preferredIndex = this.findPreferredVersionIndex()
+        if (preferredIndex !== this.data.versionIndex) {
+          this.setData({ versionIndex: preferredIndex })
+        }
         this.setDataReady()
         // 数据就绪后重新计算按钮组高度（此时 hint_banner 已渲染）
         this.updateButtonGroupHeight()
