@@ -12,7 +12,7 @@
   <!-- 句子部分：有内容时才显示 -->
   <block wx:if="{{list && list.length > 0}}">
     <view class="answer-cell__content" wx:for="{{list}}" wx:key="*this" wx:for-item="paragraph" wx:for-index="paragraphIndex">
-      <sentence content="{{paragraph}}" tagWidth="{{tagWidth}}"></sentence>
+      <sentence content="{{paragraph}}" tagWidth="{{tagWidth}}" inspiration></sentence>
     </view>
   </block>
   <!-- 图片部分：有内容时才显示 -->

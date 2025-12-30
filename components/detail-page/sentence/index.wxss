@@ -120,3 +120,27 @@
 .green_text {
   color: #00aaaa !important;
 }
+
+/* ============================================================
+   answer-cell 与 inspiration-block 区分样式
+   ============================================================ */
+
+/* answer-cell 主体文字（英文答案） */
+.en_answer {
+  /* 后续可自定义样式 */
+}
+
+/* answer-cell 翻译（中文翻译） */
+.cn_translate {
+  /* 后续可自定义样式 */
+}
+
+/* inspiration-block 主体文字 */
+.main_text {
+  /* 后续可自定义样式 */
+}
+
+/* inspiration-block 翻译（补充说明） */
+.supplementary_text {
+  /* 后续可自定义样式 */
+}
