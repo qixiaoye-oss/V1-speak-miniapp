@@ -2,15 +2,15 @@
   <!-- Header 区域 -->
   <slot name="header"></slot>
 
-  <!-- 顶部分隔线 -->
-  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody && hasBodyContent}}"></view>
+  <!-- 顶部分隔线：有body时显示，或无body但有footer时也显示 -->
+  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody && (hasBodyContent || hasFooterContent)}}"></view>
 
   <!-- 内容区域 -->
   <view class="answer-cell__body" wx:if="{{!hideBody && hasBodyContent}}">
     <slot></slot>
   </view>
 
-  <!-- 底部分隔线 -->
+  <!-- 底部分隔线：仅在有body内容时显示 -->
   <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody && hasBodyContent}}"></view>
 
   <!-- Footer 区域 -->

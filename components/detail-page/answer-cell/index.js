@@ -35,6 +35,11 @@ Component({
     hasBodyContent: {
       type: Boolean,
       value: true
+    },
+    // 是否有footer内容（用于控制分隔线显示）
+    hasFooterContent: {
+      type: Boolean,
+      value: true
     }
   },
   data: {},
