@@ -13,6 +13,11 @@ Page({
   },
   // ===========生命周期 Start===========
   onShow() {
+    // 如果是从图片预览返回，不重新加载页面
+    if (getApp()._fromImagePreview) {
+      getApp()._fromImagePreview = false
+      return
+    }
     this.startLoading()
     this.getData(true)
   },
