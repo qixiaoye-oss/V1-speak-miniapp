@@ -3,15 +3,15 @@
   <slot name="header"></slot>
 
   <!-- 顶部分隔线 -->
-  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody}}"></view>
+  <view class="answer-cell__divider" wx:if="{{showTopDivider && !hideBody && hasBodyContent}}"></view>
 
   <!-- 内容区域 -->
-  <view class="answer-cell__body" wx:if="{{!hideBody}}">
+  <view class="answer-cell__body" wx:if="{{!hideBody && hasBodyContent}}">
     <slot></slot>
   </view>
 
   <!-- 底部分隔线 -->
-  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody}}"></view>
+  <view class="answer-cell__divider" wx:if="{{showBottomDivider && !hideBody && hasBodyContent}}"></view>
 
   <!-- Footer 区域 -->
   <block wx:if="{{!hideBody}}">

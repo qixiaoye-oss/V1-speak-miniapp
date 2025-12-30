@@ -1,5 +1,5 @@
 <!-- 灵感块组件 -->
-<answer-cell wx:if="{{content}}" hideBody="{{!expanded}}">
+<answer-cell wx:if="{{content}}" hideBody="{{!expanded}}" hasBodyContent="{{list && list.length > 0}}">
   <header
     slot="header"
     title="{{content}}"

@@ -30,6 +30,11 @@ Component({
     hideBody: {
       type: Boolean,
       value: false
+    },
+    // 是否有默认slot内容（无内容时隐藏body容器和分隔线）
+    hasBodyContent: {
+      type: Boolean,
+      value: true
     }
   },
   data: {},
