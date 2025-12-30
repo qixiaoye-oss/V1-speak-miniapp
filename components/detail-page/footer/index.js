@@ -60,6 +60,14 @@ Component({
       this.setData({
         [`imageLoadedMap[${index}]`]: true // 失败也标记为已加载，隐藏骨架屏
       })
+    },
+    // 点击图片放大预览
+    onImageTap(e) {
+      const current = e.currentTarget.dataset.src
+      wx.previewImage({
+        current: current,
+        urls: this.properties.images
+      })
     }
   }
 })
