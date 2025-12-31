@@ -9,7 +9,7 @@
 
 <!-- image 模式：图片列表（用于灵感块） -->
 <view class="answer-cell__footer-image" wx:if="{{type === 'image' && images.length > 0}}">
-  <view class="footer-image__wrapper" wx:for="{{images}}" wx:key="*this" wx:for-index="imgIndex">
+  <view class="footer-image__wrapper {{imageLoadedMap[imgIndex] ? 'footer-image__wrapper--loaded' : ''}}" wx:for="{{images}}" wx:key="*this" wx:for-index="imgIndex">
     <!-- 骨架屏占位 -->
     <view class="footer-image__skeleton skeleton-image skeleton--animate" wx:if="{{!imageLoadedMap[imgIndex]}}">
       <view class="skeleton-image__block"></view>

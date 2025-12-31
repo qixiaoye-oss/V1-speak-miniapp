@@ -21,6 +21,10 @@
   margin-bottom: 10px;
 }
 
+.footer-image__wrapper--loaded {
+  min-height: 0;
+}
+
 .footer-image__wrapper:last-of-type {
   margin-bottom: 0;
 }
