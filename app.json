@@ -60,9 +60,6 @@
   "usingComponents": {},
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
-  "useExtendedLib": {
-    "weui": true
-  },
   "permission": {
     "scope.record": {
       "desc": "获取录音权限用于音频上传功能"
