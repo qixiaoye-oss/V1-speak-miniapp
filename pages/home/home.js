@@ -57,7 +57,7 @@ Page({
       })
   },
   onShareAppMessage() {
-    return api.share('考雅狂狂说', this)
+    return api.share('考雅口语Open题库', this)
   },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========

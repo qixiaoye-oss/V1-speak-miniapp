@@ -57,9 +57,6 @@ Page({
   onUnload() {
     this.destroyAudioListBehavior()
   },
-  onShareAppMessage() {
-    return api.share('考雅狂狂说', this)
-  },
   // 录音单元格事件处理
   onCellDetail(e) {
     this.navigateTo('../history-record-detail/index?id=' + e.detail.id + '&mode=single')

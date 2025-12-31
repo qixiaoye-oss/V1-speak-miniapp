@@ -24,9 +24,6 @@ Page({
   onUnload() {
     this.destroyAudioListBehavior()
   },
-  onShareAppMessage() {
-    return api.share('考雅狂狂说', this)
-  },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
   toDetail(e) {

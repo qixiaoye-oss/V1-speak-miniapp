@@ -26,7 +26,7 @@ Page({
   },
   onLoad() { },
   onShareAppMessage: function () {
-    return api.share('用户中心', this)
+    return api.share('考雅口语Open题库', this)
   },
   // ==============功能点
   // 修改用户信息
