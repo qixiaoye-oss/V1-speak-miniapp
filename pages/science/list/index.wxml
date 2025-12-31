@@ -3,7 +3,7 @@
 <template is="pageLoading" data="{{loading, loadProgress}}"/>
 <template is="loadError" data="{{loadError}}" />
 <!-- 骨架屏 -->
-<skeleton type="list" loading="{{loading}}" rows="5" wx:if="{{!loadError}}" />
+<skeleton type="list" loading="{{loading}}" rows="3" wx:if="{{!loadError}}" />
 <view class="main-page" wx:if="{{!loading && list.length > 0}}">
   <view class="main-item" wx:for="{{list}}" wx:key="index">
     <view class="main-item__title" style="background: {{item.colorRgba}};">
