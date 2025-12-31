@@ -31,9 +31,9 @@
       </block>
     </view>
     <view class="home-view-all">
-      <tap-action type="button" icon="next" bind:tap="toPopularScienceListPage">
-        <view style="color: {{popularScience.colorRgb}};">查看所有</view>
-        <image src="/images/v2/go_bt.png"></image>
+      <tap-action icon="next" bind:tap="toPopularScienceListPage">
+        <view>查看所有</view>
+        <image src="/images/v2/next_bt.png"></image>
       </tap-action>
     </view>
   </view>
