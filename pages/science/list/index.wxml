@@ -11,7 +11,7 @@
       <view class="main-item__title--text">{{item.title}}</view>
     </view>
     <block wx:for="{{item.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapterIndex">
-      <tap-action type="card" bind:tap="toDetail" data-album-id="{{item.id}}" data-item="{{chapter}}" data-group-background="{{parent.backgroundColor}}">
+      <tap-action type="card" style="width: 100%;" bind:tap="toDetail" data-album-id="{{item.id}}" data-item="{{chapter}}" data-group-background="{{parent.backgroundColor}}">
         <view class="sub-item" style="border-color: {{chapter.color}};">
           <view class="sub-item__header">
             <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
