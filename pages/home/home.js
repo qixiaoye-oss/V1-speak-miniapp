@@ -61,40 +61,18 @@ Page({
   },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
-  // toChildPage(e) {
-  //   const item = e.currentTarget.dataset
-  //   // 根据不同类型进入不同页面
-  //   let url = '/pages/question/list_big/list_big'
-  //   if (item.type == 1) {
-  //     url = '/pages/question/set-p1-list/index'
-  //   }
-  //   if (item.type == 2) {
-  //     url = '/pages/question/set-p2p3-list/index'
-  //   }
-  //   if (item.type == 4) {
-  //     url = '/pages/story/set-list/index'
-  //   }
-  //   if (item.type == 5) {
-  //     url = '/pages/material/set-list/index'
-  //   }
-  //   if (item.type == 6) {
-  //     url = '/pages/practice/set-list/index'
-  //   }
-  //   if (item.type == 7) {
-  //     url = '/pages/video/set-list/index'
-  //   }
-  //   url = url + api.parseParams(item)
-  //   wx.navigateTo({ url })
-  // },
   toChildPage(e) {
-    const {
-      url
-    } = this.data
-    const item = e.currentTarget.dataset
-    // 根据不同类型进入不同页面
-    wx.navigateTo({
-      url: `${url[item.type]}?id=${item.id}`
-    })
+    let isInside = e.currentTarget.dataset.isInside
+    if (isInside === '0') {
+      this.listPopularScienceByModule()
+    }else{
+      const { url } = this.data
+      const item = e.currentTarget.dataset
+      // 根据不同类型进入不同页面
+      wx.navigateTo({
+        url: `${url[item.type]}?id=${item.id}`
+      })
+    }
   },
   toPopularSciencePage(e) {
     const id = e.currentTarget.dataset.id
@@ -117,6 +95,14 @@ Page({
   },
   listPopularScienceData(isPull) {
     return api.request(this, '/popular/science/v1/miniapp/home', {}, isPull)
-  }
+  },
+  listPopularScienceByModule() {
+    api.request(this, '/popular/science/v1/list/no_permission', {}, true).then(res=>{
+      const list = res.popularScienceList || []
+      if (list.length == 1){
+        this.navigateTo(`/pages/science/detail/index?id=${list[0].id}`)
+      }
+    })
+  },
   // ===========数据获取 End===========
 })

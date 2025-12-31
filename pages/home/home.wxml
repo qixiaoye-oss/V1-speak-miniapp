@@ -52,7 +52,7 @@
       <!-- 卡片容器 -->
       <view class="{{group.layoutMode === 'QUAD_GRID' ? 'home-main-item__content--grid' : 'home-main-item__content'}}">
         <block wx:for="{{group.list}}" wx:key="subjectIndex" wx:for-item="subject" wx:for-index="subjectIndex">
-          <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}">
+          <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
             <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
               <view class="home-card__content">
                 <view class="home-card__header">
