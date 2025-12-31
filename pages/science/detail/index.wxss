@@ -1,1 +1,22 @@
-/* pages/science/detail/index.wxss */
+/* 页面级滚动模式 - 使用 padding-bottom 为按钮组留空间 */
+page {
+  padding-bottom: var(--button-group-total-height-single);
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.notice__title {
+  padding: 15px;
+  border: 1px solid var(--dashed-border-color);
+  border-radius: 9px;
+}
+
+.notice__content {
+  padding: 15px;
+  border: 1px solid var(--dashed-border-color);
+  border-radius: 9px;
+}

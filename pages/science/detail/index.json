@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "skeleton": "/components/skeleton/skeleton"
+    "skeleton": "/components/skeleton/skeleton",
+    "tap-action": "/components/tap-action/index"
   }
 }

@@ -1,9 +1,17 @@
-<import src="/templates/page-loading.wxml"/>
-<template is="pageLoading" data="{{loading, loadProgress}}"/>
-
-<!-- 骨架屏 -->
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 <skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
-
-<view wx:if="{{!loading}}" style="padding: 15px;border: 1px solid var(--dashed-border-color);border-radius: 9px;">
-  <rich-text nodes="{{content}}"></rich-text>
+<view class="notice" wx:if="{{!loading}}">
+  <view class="notice__title">{{title}}</view>
+  <view class="notice__content">
+    <rich-text nodes="{{content}}"></rich-text>
+  </view>
+</view>
+<view class="btn-page-bottom" wx:if="{{!loading}}">
+  <view class="btn-group-single">
+    <tap-action icon="flag" class="{{shaking?'btn--shake':''}}" bind:tap="useful">
+      <view>有用<text wx:if="{{usefulCount > 0}}"> +{{usefulCount}}</text></view>
+      <image src="/images/v2/heart_bt.png"></image>
+    </tap-action>
+  </view>
 </view>
