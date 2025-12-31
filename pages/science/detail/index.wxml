@@ -1,9 +1,22 @@
-<import src="/templates/page-loading.wxml"/>
-<template is="pageLoading" data="{{loading, loadProgress}}"/>
-
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 <!-- 骨架屏 -->
-<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
-
-<view wx:if="{{!loading}}" style="padding: 15px;border: 1px solid var(--dashed-border-color);border-radius: 9px;">
-  <rich-text nodes="{{content}}"></rich-text>
+<skeleton type="detail" loading="{{loading}}" />
+<!-- padding-bottom = buttonGroupHeight，确保内容底边距离按钮组顶边 15px -->
+<view class="notice" wx:if="{{_isDataReady}}" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : 'var(--button-group-total-height-single)'}}">
+  <view class="notice__title">{{title}}</view>
+  <view class="notice__content">
+    <rich-text nodes="{{content}}"></rich-text>
+  </view>
+</view>
+<view class="btn-page-bottom" wx:if="{{_isDataReady}}">
+  <view class="btn-group-single">
+    <tap-action icon="flag" class="{{shaking?'btn--shake':''}}" bind:tap="useful">
+      <image src="/images/v2/heart_bt.png" class="img_flag"></image>
+      <view>
+        <text>有用</text>
+        <text wx:if="{{usefulCount > 0}}">+{{usefulCount}}</text>
+      </view>
+    </tap-action>
+  </view>
 </view>

@@ -1,11 +1,9 @@
 <import src="/templates/page-loading.wxml"/>
 <import src="/templates/load-error.wxml"/>
 <template is="pageLoading" data="{{loading, loadProgress}}"/>
-<template is="loadError" data="{{loadError}}"/>
-
+<template is="loadError" data="{{loadError}}" />
 <!-- 骨架屏 -->
-<skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
-
+<skeleton type="list" loading="{{loading}}" rows="5" wx:if="{{!loadError}}" />
 <view class="main-page" wx:if="{{!loading && list.length > 0}}">
   <view class="main-item" wx:for="{{list}}" wx:key="index">
     <view class="main-item__title" style="background: {{item.colorRgba}};">
@@ -13,16 +11,19 @@
       <view class="main-item__title--text">{{item.title}}</view>
     </view>
     <block wx:for="{{item.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapterIndex">
-      <view class="sub-item" hover-class="tap-active" bind:tap="toDetail" data-album-id="{{item.id}}" data-item="{{chapter}}" data-group-background="{{parent.backgroundColor}}" style="border-color: {{chapter.color}};">
-        <view class="sub-item__header">
-          <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
-            <image class="sub-item__title--icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
-            <view class="sub-item__title--text" wx:if="{{chapter.title}}">{{chapter.title}}</view>
+      <tap-action type="card" style="width: 100%;" bind:tap="toDetail" data-album-id="{{item.id}}" data-item="{{chapter}}" data-group-background="{{parent.backgroundColor}}">
+        <view class="sub-item" style="border-color: {{chapter.color}};">
+          <view class="sub-item__header">
+            <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
+              <image class="sub-item__title--icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+              <view class="sub-item__title--text" wx:if="{{chapter.title}}">{{chapter.title}}</view>
+            </view>
+            <view class="tag tag__multi tag__multi--orange tag--right" wx:if="{{chapter.description}}">{{chapter.description}}</view>
           </view>
-          <view class="tag tag__multi tag__multi--orange tag--right">{{chapter.description}}</view>
         </view>
-      </view>
+      </tap-action>
     </block>
   </view>
 </view>
 <view class="page-safe-area"></view>
+<view class="no-data" wx:if="{{!loading && list.length==0}}">暂无数据</view>

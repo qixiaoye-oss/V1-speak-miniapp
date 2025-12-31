@@ -31,9 +31,9 @@
       </block>
     </view>
     <view class="home-view-all">
-      <tap-action type="button" icon="next" bind:tap="toPopularScienceListPage">
-        <view style="color: {{popularScience.colorRgb}};">查看所有</view>
-        <image src="/images/v2/go_bt.png"></image>
+      <tap-action icon="next" bind:tap="toPopularScienceListPage">
+        <view>查看所有</view>
+        <image src="/images/v2/next_bt.png"></image>
       </tap-action>
     </view>
   </view>
@@ -43,7 +43,7 @@
     <view class="home-main-item" style="background:{{group.colorRgba}}">
       <view class="home-main-item__title" style="color:{{group.colorRgb}}">{{group.title}}</view>
       <!-- 说明徽章（可选） -->
-      <tap-action type="card" wx:if="{{group.notice}}" bind:tap="onNoticeTap">
+      <tap-action type="card" wx:if="{{group.notice}}" bind:tap="onNoticeTap" data-id="{{group.notice.id}}">
         <view class="home-main-item__notice" style="background: {{group.notice.colorRgba}};">
           <image class="home-main-item__notice-img" src="{{group.notice.iconUrl}}"></image>
           <view class="home-main-item__notice-text" style="color: {{group.notice.colorRgb}};">{{group.notice.title}}</view>

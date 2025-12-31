@@ -1,1 +1,29 @@
-/* pages/science/detail/index.wxss */
+/* 覆盖全局 page 的 padding-bottom，避免与内容区域 padding-bottom 叠加 */
+page {
+  padding-bottom: 0;
+}
+
+/* 页面内容区域 - 动态 padding-bottom 由 buttonGroupHeight behavior 计算 */
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-sizing: border-box;
+}
+
+.notice__title {
+  padding: 15px;
+  border: 1px solid var(--dashed-border-color);
+  border-radius: 9px;
+}
+
+.notice__content {
+  padding: 15px;
+  border: 1px solid var(--dashed-border-color);
+  border-radius: 9px;
+}
+
+.btn-action image {
+  margin-left: 0;
+  margin-right: var(--button-icon-margin);
+}
