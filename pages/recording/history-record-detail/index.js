@@ -42,9 +42,6 @@ Page({
   onUnload() {
     audio.destroy()
   },
-  onShareAppMessage() {
-    return api.share(this.data.setTitle, this, '/images/record/share.png')
-  },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
   playRecording() {
