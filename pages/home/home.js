@@ -85,8 +85,11 @@ Page({
       url: `/pages/science/list/index`,
     })
   },
-  onNoticeTap() {
-    // 点击说明徽章（暂未连接API）
+  onNoticeTap(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/science/detail/index?id=${id}`,
+    })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
