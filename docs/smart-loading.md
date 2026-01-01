@@ -605,7 +605,7 @@ loadData(showLoading) {
 ## 十、已优化的页面清单
 
 ### 10.1 首页模块
-- `pages/home/home.js` - 首页（预加载 + 缓存）
+- `pages/home/home.js` - 首页（预加载 + 缓存，只首次加载，不刷新）
 
 ### 10.2 P1 模块
 - `pages/question/set-p1-list/index.js` - 套题列表
@@ -646,3 +646,85 @@ loadData(showLoading) {
 - 移除页面：
   - `pages/question/ai-correction/index`
   - `pages/question/ai-correction-detail/index`
+
+---
+
+## 十二、各页面刷新策略汇总
+
+| 页面 | 首次加载 | 子页面返回 | 后台返回 | 说明 |
+|------|----------|------------|----------|------|
+| 首页 | loading | 不刷新 | 不刷新 | 内容无需实时更新 |
+| P1 套题列表 | loading | 静默刷新 | 不刷新 | 更新完成角标 |
+| P1 题目列表 | loading | 静默刷新 | 不刷新 | 更新完成角标 |
+| P1 题目详情 | loading | 静默刷新 | 不刷新 | 更新录音数量角标 |
+| P2/P3 套题列表 | loading | 静默刷新 | 不刷新 | 更新完成角标 |
+| P2 详情 | loading | 静默刷新 | 不刷新 | 更新录音数量角标 |
+| P3 列表 | loading | 静默刷新 | 不刷新 | 更新完成角标 |
+| P3 详情 | loading | 静默刷新 | 不刷新 | 更新录音数量角标 |
+| 科普列表 | loading | 不刷新 | 不刷新 | 静态内容 |
+| 科普详情 | loading | 不刷新 | 不刷新 | 静态内容 |
+| 录音列表 | loading | 静默刷新 | 不刷新 | 更新录音状态 |
+| 录音详情 | loading | - | - | 只在 onLoad 加载 |
+
+### 刷新策略代码模板
+
+**模式 A：只首次加载，后续不刷新**（适用于静态内容页面）
+
+```javascript
+onShow() {
+  const isFirstLoad = !this.data._hasLoaded
+  if (!isFirstLoad) {
+    return  // 后续一律不刷新
+  }
+  this.startLoading()
+  this.loadData(true)
+}
+```
+
+**模式 B：首次 loading + 子页面返回静默刷新**（适用于需要更新角标的页面）
+
+```javascript
+onShow() {
+  const isFirstLoad = !this.data._hasLoaded
+
+  // 从后台返回，不刷新
+  if (!isFirstLoad && this.isFromBackground()) {
+    return
+  }
+
+  if (isFirstLoad) {
+    this.startLoading()
+    this.loadData(true)
+  } else {
+    // 从子页面返回：静默刷新（不显示 loading）
+    this.loadData(false)
+  }
+}
+```
+
+---
+
+## 十三、更新日志
+
+### 2026-01-01 Phase 6
+- 移除 `ai-correction` 模块（8 个文件，无入口）
+- 优化 `science/list` 和 `science/detail`（只首次加载，不刷新）
+- 优化 `recording/p1p2p3-record-list`（标准刷新模式）
+- 确认 `recording/history-record-detail` 无需改造（只在 onLoad 加载）
+- 首页改为只首次加载，后续不刷新（内容无需实时更新）
+
+### 2026-01-01 Phase 4
+- 优化 P2/P3 模块（4 个页面）
+- 移除 `p2-block` 和 `p3-block` 模块（32 个文件）
+
+### 2026-01-01 Phase 3
+- 创建 `utils/diff.js` 数据 diff 工具
+- 优化 P1 模块（3 个页面）
+- 修复 hasToast 参数逻辑（true = 不显示 loading）
+
+### 2026-01-01 Phase 1-2
+- 创建 `behaviors/smartLoading.js` 智能加载控制
+- 优化 `behaviors/pageLoading.js` 进度条动画
+- 修改 `utils/api.js` 添加 autoSetData 参数
+- 修改 `app.js` 添加后台状态追踪和数据预加载
+- 首页优化：预加载 + 缓存 + 并行请求
