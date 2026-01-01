@@ -37,21 +37,26 @@ Promise.prototype.finally = function (callback) {
 
 /**
  * 微信请求方法
- * that 当前页面this
- * url 请求地址
- * data 以对象的格式传入
- * hasToast 是否需要显示toast(下拉刷新不需要toast)
- * hasUser 是否包含User信息
- * method GET或POST请求
+ * @param {Object} that 当前页面this
+ * @param {string} url 请求地址
+ * @param {Object} data 请求数据
+ * @param {boolean} hasToast 是否需要显示toast(下拉刷新不需要toast)
+ * @param {string} method GET或POST请求
+ * @param {boolean} autoSetData 是否自动调用setData更新页面数据（默认true，设为false可手动控制合并多个请求的数据）
  */
-function request(that, url, data, hasToast, method) {
+function request(that, url, data, hasToast, method, autoSetData) {
+  // 默认自动 setData（保持向后兼容）
+  if (autoSetData === undefined) {
+    autoSetData = true
+  }
+
   let timer
   if (!hasToast) {
     timer = setTimeout(function () {
       wx.showLoading({
         title: '努力加载中...',
       })
-    }, 1000)
+    }, 500)  // 优化：从1000ms缩短到500ms，更快显示加载提示
   }
   return new Promise((resolve, reject) => {
     wx.request({
@@ -66,7 +71,8 @@ function request(that, url, data, hasToast, method) {
         wx.hideLoading()
         if (res.data.code == '200') {
           console.log(res.data)
-          if (isNotEmpty(that) && !isEmpty(that.route) && !isEmpty(res.data.data)) {
+          // 只有 autoSetData 为 true 时才自动调用 setData
+          if (autoSetData && isNotEmpty(that) && !isEmpty(that.route) && !isEmpty(res.data.data)) {
             that.setData(res.data.data)
           }
           resolve(res.data.data)

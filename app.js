@@ -22,10 +22,19 @@ App({
     audioContext: null,
     // 每个页面可以注册自己专属的录音/音频事件处理函数
     pageEventHandlers: new Map(), // key: 页面路由, value: { onRecorderStart, onRecorderStop, ... }
+    // 缓存系统信息（避免同步调用阻塞）
+    windowWidth: null,
+    systemInfo: null,
+    // 首页数据预加载缓存
+    homeDataCache: null,
+    popularScienceCache: null,
   },
   api: api,
   pageGuard: pageGuard,
   onShow: function () {
+    // 标记从后台返回（用于页面判断是否需要刷新）
+    this._fromBackground = true
+
     if (wx.canIUse('getUpdateManager')) {
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate(function (res) {
@@ -47,20 +56,86 @@ App({
       api.modal('提示', '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。', false)
     }
   },
+  onHide: function () {
+    // 记录进入后台的时间（可用于判断后台时长）
+    this._hideTime = Date.now()
+  },
   onLaunch() {
     // 保持屏幕常亮 true / false
     if (wx.setScreenBrightness) {
       wx.setKeepScreenOn({ keepScreenOn: true });
     }
-    // 自动登录
-    wx.login().then(data => {
-      api.request(this, '/user/v1/login', {
+
+    // 预获取系统信息（异步，避免同步调用阻塞）
+    wx.getSystemInfo({
+      success: (res) => {
+        this.globalData.windowWidth = res.windowWidth
+        this.globalData.systemInfo = res
+      }
+    })
+
+    // 自动登录 + 首页数据预加载（并行执行）
+    const loginPromise = this._doLogin()
+    const preloadPromise = this._preloadHomeData()
+
+    // 登录成功后触发首页加载
+    loginPromise.then(() => {
+      userData.login = true
+    })
+  },
+
+  /**
+   * 执行登录
+   */
+  _doLogin() {
+    return wx.login().then(data => {
+      return api.request(this, '/user/v1/login', {
         code: data.code
       }, true, false).then(res => {
         wx.setStorageSync('token', res.token)
-        userData.login = true
+        return res
       })
     })
+  },
+
+  /**
+   * 预加载首页数据（与登录并行，加快首页显示）
+   */
+  _preloadHomeData() {
+    const baseUrl = 'https://speak.jingying.vip/api/mao'
+
+    // 并行请求首页两个接口
+    const homePromise = new Promise((resolve) => {
+      wx.request({
+        url: baseUrl + '/v2/home/list',
+        method: 'GET',
+        header: { 'Content-Type': 'application/json' },
+        success: (res) => {
+          if (res.data && res.data.code == '200') {
+            this.globalData.homeDataCache = res.data.data
+          }
+          resolve()
+        },
+        fail: () => resolve()
+      })
+    })
+
+    const sciencePromise = new Promise((resolve) => {
+      wx.request({
+        url: baseUrl + '/popular/science/v1/miniapp/home',
+        method: 'GET',
+        header: { 'Content-Type': 'application/json' },
+        success: (res) => {
+          if (res.data && res.data.code == '200') {
+            this.globalData.popularScienceCache = res.data.data
+          }
+          resolve()
+        },
+        fail: () => resolve()
+      })
+    })
+
+    return Promise.all([homePromise, sciencePromise])
     // 初始化全局录音管理器
     // const recorderManager = wx.getRecorderManager();
     // this.globalData.recorderManager = recorderManager;
