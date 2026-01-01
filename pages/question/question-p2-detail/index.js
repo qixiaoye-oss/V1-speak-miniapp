@@ -188,13 +188,6 @@ Page({
     // 播放音频
     this.playAudio(sentence.audioUrl)
   },
-  gotoStoryBlock(e) {
-    let item = {
-      type: 4,
-      ...e.currentTarget.dataset
-    }
-    this.navigateTo('/pages/p2-block/block-group/index' + api.parseParams(item))
-  },
   recordingOrClocking() {
     const { detail, seriesIndex, seriesList, color, backgroundColor, recordId } = this.data
     let itemList = ['仅打卡']

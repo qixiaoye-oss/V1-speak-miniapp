@@ -10,8 +10,6 @@ Page({
     url: {
       "P1": "/pages/question/set-p1-list/index",
       "P2": "/pages/question/set-p2p3-list/index",
-      "STORY": "/pages/p2-block/set-list/index",
-      "MATERIAL": "/pages/p3-block/set-list/index",
       "POPULAR_SCIENCE": "/pages/science/list/index"
     }
   },
