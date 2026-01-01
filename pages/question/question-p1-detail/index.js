@@ -150,10 +150,12 @@ Page({
     return preferredIndex >= 0 ? preferredIndex : 0
   },
   getData(showLoading) {
+    // hasToast: true 表示不显示 loading，false 表示显示 loading
+    const hasToast = !showLoading
     api.request(this, '/question/v2/detail', {
       setType: 1,
       ...this.data.queryParam
-    }, showLoading, 'GET', false)  // autoSetData = false，手动处理数据
+    }, hasToast, 'GET', false)  // autoSetData = false，手动处理数据
       .then(res => {
         // 使用 diff 更新，只更新变化的字段
         diffSetData(this, res)

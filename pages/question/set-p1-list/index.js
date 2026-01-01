@@ -56,10 +56,12 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData(showLoading) {
+    // hasToast: true 表示不显示 loading，false 表示显示 loading
+    const hasToast = !showLoading
     api.request(this, '/set/v2/list', {
       albumId: this.options.id,
       albumType: 1,
-    }, showLoading, 'GET', false)  // autoSetData = false，手动处理数据
+    }, hasToast, 'GET', false)  // autoSetData = false，手动处理数据
       .then((res) => {
         // 使用 diff 更新，只更新变化的字段
         diffSetData(this, res)
