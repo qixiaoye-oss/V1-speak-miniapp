@@ -22,11 +22,9 @@ Page({
   onShowLogin() {
     const app = getApp()
 
-    // 首次加载必须执行，不检查后台返回状态
+    // 首页只在首次加载时请求数据，后续不刷新（内容无需实时更新）
     const isFirstLoad = !this.data._hasLoaded
-
-    // 已加载过 且 从后台返回 → 不刷新
-    if (!isFirstLoad && this.isFromBackground()) {
+    if (!isFirstLoad) {
       return
     }
 
@@ -36,7 +34,7 @@ Page({
       return
     }
 
-    // 首次加载或需要刷新 - 走正常加载流程
+    // 首次加载 - 走正常加载流程
     this.startLoading()
     this.hideLoadError()
     this._loadAllData()
