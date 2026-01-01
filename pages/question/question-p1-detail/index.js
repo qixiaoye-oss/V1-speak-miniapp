@@ -2,10 +2,12 @@ const pageLoading = require('../../../behaviors/pageLoading')
 const pageGuard = require('../../../behaviors/pageGuard')
 const sentenceAudio = require('../../../behaviors/sentenceAudio')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 const api = getApp().api
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight],
+  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading],
   data: {
     showPopup: false,  // 打卡窗口
     versionIndex: 0
@@ -17,8 +19,22 @@ Page({
       getApp()._fromImagePreview = false
       return
     }
-    this.startLoading()
-    this.getData(true)
+
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.getData(true)
+    } else {
+      // 从子页面（录音页）返回：静默刷新（录音计数需要更新）
+      this.getData(false)
+    }
   },
   onLoad(options) {
     this.setData({
@@ -133,18 +149,24 @@ Page({
     const preferredIndex = list.findIndex(item => item.isPreferred === true)
     return preferredIndex >= 0 ? preferredIndex : 0
   },
-  getData(isPull) {
-    const _this = this
+  getData(showLoading) {
+    // hasToast: true 表示不显示 loading，false 表示显示 loading
+    const hasToast = !showLoading
     api.request(this, '/question/v2/detail', {
       setType: 1,
       ...this.data.queryParam
-    }, isPull)
+    }, hasToast, 'GET', false)  // autoSetData = false，手动处理数据
       .then(res => {
+        // 使用 diff 更新，只更新变化的字段
+        diffSetData(this, res)
+
         // 自动定位到置顶版本
         const preferredIndex = this.findPreferredVersionIndex()
         if (preferredIndex !== this.data.versionIndex) {
           this.setData({ versionIndex: preferredIndex })
         }
+
+        this.markLoaded()
         this.setDataReady()
       })
       .catch(() => { pageGuard.goBack(this) })

@@ -2,10 +2,12 @@ const pageLoading = require('../../../behaviors/pageLoading')
 const pageGuard = require('../../../behaviors/pageGuard')
 const sentenceAudio = require('../../../behaviors/sentenceAudio')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 const api = getApp().api
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight],
+  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading],
   data: {
     showPopup: false,
     seriesIndex: 0,
@@ -18,8 +20,22 @@ Page({
       getApp()._fromImagePreview = false
       return
     }
-    this.startLoading()
-    this.getData(true)
+
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.getData(true)
+    } else {
+      // 从子页面（录音页）返回：静默刷新
+      this.getData(false)
+    }
   },
   onLoad(options) {
     this.setData({
@@ -188,13 +204,6 @@ Page({
     // 播放音频
     this.playAudio(sentence.audioUrl)
   },
-  gotoStoryBlock(e) {
-    let item = {
-      type: 4,
-      ...e.currentTarget.dataset
-    }
-    this.navigateTo('/pages/p2-block/block-group/index' + api.parseParams(item))
-  },
   recordingOrClocking() {
     const { detail, seriesIndex, seriesList, color, backgroundColor, recordId } = this.data
     let itemList = ['仅打卡']
@@ -292,36 +301,43 @@ Page({
     const preferredIndex = list.findIndex(item => item.isPreferred === true)
     return preferredIndex >= 0 ? preferredIndex : 0
   },
-  getData(isPull) {
-    const _this = this
+  getData(showLoading) {
+    const hasToast = !showLoading
     api.request(this, '/question/v3/detail', {
       setType: 2,
       ...this.data.queryParam
-    }, isPull)
-      .then(() => {
+    }, hasToast, 'GET', false)
+      .then((res) => {
+        diffSetData(this, res)
+
         // 自动定位到置顶版本
         const preferredIndex = this.findPreferredVersionIndex()
         if (preferredIndex !== this.data.versionIndex) {
           this.setData({ versionIndex: preferredIndex })
         }
-        _this.getStoryData(true)
+
+        this.getStoryData(!showLoading)
+        this.markLoaded()
         this.setDataReady()
-        // 数据就绪后重新计算按钮组高度（此时 hint_banner 已渲染）
         this.updateButtonGroupHeight()
       })
       .catch(() => { pageGuard.goBack(this) })
       .finally(() => { this.finishLoading() })
   },
-  getStoryData(isPull) {
+  getStoryData(silent) {
     const { detail, seriesList, seriesIndex } = this.data
     let param = {
       setId: this.options.setId,
       id: detail.id,
     }
-    if (seriesList.length > 0) {
+    if (seriesList && seriesList.length > 0) {
       param['seriesId'] = seriesList[seriesIndex].id
     }
-    api.request(this, '/question/v3/detail/story', param, isPull)
+    const hasToast = silent ? true : false
+    api.request(this, '/question/v3/detail/story', param, hasToast, 'GET', false)
+      .then((res) => {
+        diffSetData(this, res)
+      })
   },
   popupConfirm(e) {
     api.request(this, '/question/signIn', {

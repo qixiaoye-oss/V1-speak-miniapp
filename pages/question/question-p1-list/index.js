@@ -2,17 +2,32 @@ const api = getApp().api
 const pageLoading = require('../../../behaviors/pageLoading')
 const loadError = require('../../../behaviors/loadError')
 const pageGuard = require('../../../behaviors/pageGuard')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, loadError],
+  behaviors: [pageGuard.behavior, pageLoading, loadError, smartLoading],
   data: {
     hasMastered: false
   },
   // ===========生命周期 Start===========
   onShow() {
-    this.startLoading()
-    this.hideLoadError()
-    this.listData(true)
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.hideLoadError()
+      this.listData(true)
+    } else {
+      // 从子页面返回：静默刷新（打卡后 tag 需要更新）
+      this.listData(false)
+    }
   },
   // 重试加载
   retryLoad() {
@@ -60,15 +75,6 @@ Page({
     // 整理跳转选项
     let menu = []
     let menuUrl = []
-    // 判断是否开启带练模式
-    // if (true) {
-    //   menu.push('带练')
-    //   menuUrl.push(`../recording-p1/index?setId=${this.options.setId}`)
-    // }
-    // if (this.data.practiceRecordId) {
-    //   menu.push('带练结果')
-    //   menuUrl.push(`../recording-p1-record/index?setId=${this.options.setId}&recordId=${this.data.practiceRecordId}`)
-    // }
     let param = {
       type: 1,
       setId: this.options.setId,
@@ -88,17 +94,25 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
-  listData(isPull) {
+  listData(showLoading) {
+    // hasToast: true 表示不显示 loading，false 表示显示 loading
+    const hasToast = !showLoading
     api.request(this, '/question/v2/p1/list', {
       setType: 1,
       ...this.options
-    }, isPull)
+    }, hasToast, 'GET', false)  // autoSetData = false，手动处理数据
       .then(res => {
+        // 使用 diff 更新，只更新变化的字段
+        diffSetData(this, res)
+
+        // 保存题目 ID 列表
         let idArr = []
         res.list.forEach(i => {
           idArr.push(i.id)
         })
         wx.setStorageSync('questionIdArr', idArr)
+
+        this.markLoaded()
         this.setDataReady()
       })
       .catch(() => { pageGuard.showRetry(this) })

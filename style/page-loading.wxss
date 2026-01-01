@@ -13,9 +13,15 @@
 .page-loading-bar__inner {
   height: 100%;
   background: linear-gradient(90deg, var(--theme-color, #007bff), #00c6ff);
-  transition: width 0.1s ease-out;
+  /* 优化：使用较长的 transition 实现平滑动画，减少 JS setData 调用 */
+  transition: width 1.5s ease-out;
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
   position: relative;
+}
+
+/* 进度条完成状态：快速过渡到 100% */
+.page-loading-bar__inner.finishing {
+  transition: width 0.2s ease-out;
 }
 
 .page-loading-bar__inner::after {

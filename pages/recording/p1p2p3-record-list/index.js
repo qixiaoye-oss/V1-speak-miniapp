@@ -3,6 +3,8 @@ const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 const loadError = require('../../../behaviors/loadError')
 const audioListBehavior = require('../../../behaviors/audioListBehavior')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 
 // 根据 type 配置不同的 API
 const apiConfig = {
@@ -27,15 +29,28 @@ const apiConfig = {
 }
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, loadError, audioListBehavior],
+  behaviors: [pageGuard.behavior, pageLoading, loadError, audioListBehavior, smartLoading],
   data: {
     msg: "",
     type: 2
   },
   // ===========生命周期 Start===========
   onShow() {
-    this.startLoading()
-    this.fetchRecordingList(false)
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.fetchRecordingList(true)
+    } else {
+      // 从子页面返回：静默刷新
+      this.fetchRecordingList(false)
+    }
   },
   onLoad(options) {
     const type = parseInt(options.type) || 2
@@ -48,7 +63,7 @@ Page({
     const user = this.data.user || {}
     if (options.userId == user.id || user.isManager == 1) {
       this.fetchQuestionDetail(true)
-      this.fetchRecordingList(false)
+      // 录音列表数据由 onShow 加载
     } else {
       api.modal("提示", '暂无权限', false)
       return
@@ -81,19 +96,22 @@ Page({
       ...this.options
     }, isPull)
   },
-  fetchRecordingList(isPull) {
+  fetchRecordingList(showLoading) {
     this.hideLoadError()
+    const hasToast = !showLoading
     const config = apiConfig[this.data.type]
-    api.request(this, config.list, config.listParam(this.options), isPull).then(() => {
-      this.setDataReady()
-      this.finishLoading()
-    }).catch(() => {
-      pageGuard.showRetry(this)
-    })
+    api.request(this, config.list, config.listParam(this.options), hasToast, 'GET', false)
+      .then((res) => {
+        diffSetData(this, res)
+        this.markLoaded()
+        this.setDataReady()
+      })
+      .catch(() => { pageGuard.showRetry(this) })
+      .finally(() => { this.finishLoading() })
   },
   retryLoad() {
     this.startLoading()
-    this.fetchRecordingList(false)
+    this.fetchRecordingList(true)
   },
   delRecording(id) {
     const _this = this

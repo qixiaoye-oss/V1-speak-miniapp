@@ -1,5 +1,5 @@
 <view class="recording-cell">
-  <view class="recording-cell__info" hover-class="tap-active" bind:tap="onDetail">
+  <view class="recording-cell__info">
     <view class="recording-cell__time">{{item.recordingTime}}</view>
     <view class="recording-cell__duration">{{item.duration}}秒</view>
   </view>

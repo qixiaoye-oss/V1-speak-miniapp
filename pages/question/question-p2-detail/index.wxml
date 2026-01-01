@@ -15,15 +15,6 @@
         </view>
       </view>
     </view>
-    <view class="link-block" hover-class="tap-active" bind:tap="gotoStoryBlock" wx:for="{{story}}" wx:key="item" data-set-id="{{item.id}}">
-      <view class="link-block__title">
-        <view class="link-block__title-content" style="background: {{item.backgroundColor}};">
-          <image class="link-block__title-img" wx:if="{{item.iconUrl}}" src="{{item.iconUrl}}" />
-          <view class="link-block__title-text">{{item.title}}</view>
-        </view>
-      </view>
-      <view class="link-block__tag">查看所有相关题目</view>
-    </view>
     <version-tabs list="{{list}}" current="{{versionIndex}}" activeColor="{{backgroundColor}}" bind:change="checkVersion" />
     <block wx:for="{{list}}" wx:key="answer" wx:for-item="answer" wx:for-index="answerIdx" wx:if="{{versionIndex == answerIdx}}">
       <!-- 置顶开关（多版本时显示） -->

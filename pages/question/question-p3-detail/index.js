@@ -2,10 +2,12 @@ const pageLoading = require('../../../behaviors/pageLoading')
 const pageGuard = require('../../../behaviors/pageGuard')
 const sentenceAudio = require('../../../behaviors/sentenceAudio')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 const api = getApp().api
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight],
+  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading],
   data: {
     showPopup: false,
     versionIndex: 0
@@ -17,8 +19,22 @@ Page({
       getApp()._fromImagePreview = false
       return
     }
-    this.startLoading()
-    this.getData(true)
+
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.getData(true)
+    } else {
+      // 从子页面（录音页）返回：静默刷新
+      this.getData(false)
+    }
   },
   onLoad(options) {
     this.setData({
@@ -130,19 +146,23 @@ Page({
     const preferredIndex = list.findIndex(item => item.isPreferred === true)
     return preferredIndex >= 0 ? preferredIndex : 0
   },
-  getData(isPull) {
+  getData(showLoading) {
+    const hasToast = !showLoading
     api.request(this, '/question/v2/detail', {
       setType: 3,
       ...this.data.queryParam
-    }, isPull)
-      .then(() => {
+    }, hasToast, 'GET', false)
+      .then((res) => {
+        diffSetData(this, res)
+
         // 自动定位到置顶版本
         const preferredIndex = this.findPreferredVersionIndex()
         if (preferredIndex !== this.data.versionIndex) {
           this.setData({ versionIndex: preferredIndex })
         }
+
+        this.markLoaded()
         this.setDataReady()
-        // 数据就绪后重新计算按钮组高度（此时 hint_banner 已渲染）
         this.updateButtonGroupHeight()
       })
       .catch(() => { pageGuard.goBack(this) })

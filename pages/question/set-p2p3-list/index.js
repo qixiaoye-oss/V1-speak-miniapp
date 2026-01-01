@@ -2,9 +2,11 @@ const api = getApp().api
 const pageLoading = require('../../../behaviors/pageLoading')
 const loadError = require('../../../behaviors/loadError')
 const pageGuard = require('../../../behaviors/pageGuard')
+const smartLoading = require('../../../behaviors/smartLoading')
+const { diffSetData } = require('../../../utils/diff')
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, loadError],
+  behaviors: [pageGuard.behavior, pageLoading, loadError, smartLoading],
   data: {
     seriesIndex: 0,
     showMode: 'full'
@@ -12,15 +14,28 @@ Page({
   // ===========生命周期 Start===========
   onLoad(options) { },
   onShow() {
-    this.startLoading()
-    this.hideLoadError()
-    this.listSeriesData(false)
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 从后台返回，不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
+      return
+    }
+
+    // 首次加载：显示 loading
+    if (isFirstLoad) {
+      this.startLoading()
+      this.hideLoadError()
+      this.listSeriesData(true)
+    } else {
+      // 从子页面返回：静默刷新
+      this.listSeriesData(false)
+    }
   },
   // 重试加载
   retryLoad() {
     this.startLoading()
     this.hideLoadError()
-    this.listSeriesData(false)
+    this.listSeriesData(true)
   },
   onShareAppMessage() {
     return api.share('考雅口语Open题库', this)
@@ -61,27 +76,34 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
-  listSeriesData(isPull) {
+  listSeriesData(showLoading) {
+    const hasToast = !showLoading
     api.request(this, '/set/v3/series/list', {
       albumId: this.options.id
-    }, isPull)
+    }, hasToast, 'GET', false)
       .then(res => {
-        this.listData(false)
+        diffSetData(this, res)
+        this.listData(showLoading)
       })
       .catch(() => { pageGuard.showRetry(this) })
       .finally(() => { this.finishLoading() })
   },
-  listData(isPull) {
+  listData(showLoading) {
     const { seriesList, seriesIndex } = this.data
     let param = {
       albumId: this.options.id,
       albumType: 2
     }
-    if (seriesList.length > 0) {
+    if (seriesList && seriesList.length > 0) {
       param['seriesId'] = seriesList[seriesIndex].id
     }
-    api.request(this, '/set/v3/list', param, isPull)
-      .then(() => { this.setDataReady() })
+    const hasToast = !showLoading
+    api.request(this, '/set/v3/list', param, hasToast, 'GET', false)
+      .then((res) => {
+        diffSetData(this, res)
+        this.markLoaded()
+        this.setDataReady()
+      })
       .catch(() => { pageGuard.showRetry(this) })
       .finally(() => { this.finishLoading() })
   },

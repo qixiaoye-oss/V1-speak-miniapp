@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "tap-action": "/components/tap-action/index",
-    "parse-text": "/components/parse-text/index"
-  }
-}

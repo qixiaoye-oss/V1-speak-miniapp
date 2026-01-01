@@ -27,10 +27,6 @@ Component({
   },
 
   methods: {
-    // 点击详情
-    onDetail() {
-      this.triggerEvent('detail', { id: this.properties.item.id })
-    },
     // 切换播放/停止
     onTogglePlay() {
       const { item, index } = this.properties
