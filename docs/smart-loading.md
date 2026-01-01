@@ -599,3 +599,50 @@ loadData(showLoading) {
 3. 修改 `utils/api.js` 添加 `autoSetData` 参数
 4. 按模板改造需要优化的页面
 5. 注意 `hasToast` 参数的逻辑（true = 不显示 loading）
+
+---
+
+## 十、已优化的页面清单
+
+### 10.1 首页模块
+- `pages/home/home.js` - 首页（预加载 + 缓存）
+
+### 10.2 P1 模块
+- `pages/question/set-p1-list/index.js` - 套题列表
+- `pages/question/question-p1-list/index.js` - 题目列表
+- `pages/question/question-p1-detail/index.js` - 题目详情
+
+### 10.3 P2/P3 模块
+- `pages/question/set-p2p3-list/index.js` - 套题列表
+- `pages/question/question-p2-detail/index.js` - P2 详情
+- `pages/question/question-p3-list/index.js` - P3 列表
+- `pages/question/question-p3-detail/index.js` - P3 详情
+
+### 10.4 科普模块
+- `pages/science/list/index.js` - 科普列表（只首次加载，不刷新）
+- `pages/science/detail/index.js` - 科普详情（只首次加载，不刷新）
+
+### 10.5 录音模块
+- `pages/recording/p1p2p3-record-list/index.js` - 录音列表（标准刷新模式）
+- `pages/recording/history-record-detail/index.js` - 录音详情（只在 onLoad 加载，无需改造）
+
+---
+
+## 十一、已移除的模块
+
+### 11.1 p2-block 和 p3-block 模块（2026-01-01 移除）
+- 原因：没有入口，后台也没有相关逻辑
+- 移除文件：32 个文件，约 1824 行代码
+- 移除页面：
+  - `pages/p2-block/home/index`
+  - `pages/p2-block/record/index`
+  - `pages/p3-block/home/index`
+  - `pages/p3-block/record/index`
+  - 等共 7 个页面
+
+### 11.2 ai-correction 模块（2026-01-01 移除）
+- 原因：没有入口，页面无法访问
+- 移除文件：8 个文件
+- 移除页面：
+  - `pages/question/ai-correction/index`
+  - `pages/question/ai-correction-detail/index`

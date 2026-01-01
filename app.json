@@ -10,8 +10,6 @@
     "pages/question/question-p2-detail/index",
     "pages/question/question-p3-list/index",
     "pages/question/question-p3-detail/index",
-    "pages/question/ai-correction/index",
-    "pages/question/ai-correction-detail/index",
     "pages/recording/single-record/index",
     "pages/recording/p1-multi-record/index",
     "pages/recording/p1-multi-record-list/index",
