@@ -14,7 +14,6 @@
     "pages/recording/p1-multi-record/index",
     "pages/recording/p1-multi-record-list/index",
     "pages/recording/p1p2p3-record-list/index",
-    "pages/recording/history-record-detail/index",
     "pages/user/user/user",
     "pages/user/login/login"
   ],

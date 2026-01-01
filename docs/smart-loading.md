@@ -624,7 +624,6 @@ loadData(showLoading) {
 
 ### 10.5 录音模块
 - `pages/recording/p1p2p3-record-list/index.js` - 录音列表（标准刷新模式）
-- `pages/recording/history-record-detail/index.js` - 录音详情（只在 onLoad 加载，无需改造）
 
 ---
 
@@ -647,6 +646,11 @@ loadData(showLoading) {
   - `pages/question/ai-correction/index`
   - `pages/question/ai-correction-detail/index`
 
+### 11.3 history-record-detail 页面（2026-01-01 移除）
+- 原因：录音列表不再需要点击进入详情
+- 移除文件：4 个文件
+- 相关修改：`components/recording-cell` 组件移除点击事件
+
 ---
 
 ## 十二、各页面刷新策略汇总
@@ -664,7 +668,6 @@ loadData(showLoading) {
 | 科普列表 | loading | 不刷新 | 不刷新 | 静态内容 |
 | 科普详情 | loading | 不刷新 | 不刷新 | 静态内容 |
 | 录音列表 | loading | 静默刷新 | 不刷新 | 更新录音状态 |
-| 录音详情 | loading | - | - | 只在 onLoad 加载 |
 
 ### 刷新策略代码模板
 
@@ -710,8 +713,9 @@ onShow() {
 - 移除 `ai-correction` 模块（8 个文件，无入口）
 - 优化 `science/list` 和 `science/detail`（只首次加载，不刷新）
 - 优化 `recording/p1p2p3-record-list`（标准刷新模式）
-- 确认 `recording/history-record-detail` 无需改造（只在 onLoad 加载）
 - 首页改为只首次加载，后续不刷新（内容无需实时更新）
+- 移除 `history-record-detail` 页面（4 个文件）
+- 修改 `recording-cell` 组件：移除点击事件，录音项不再可点击
 
 ### 2026-01-01 Phase 4
 - 优化 P2/P3 模块（4 个页面）
