@@ -24,8 +24,11 @@ Page({
   onShowLogin() {
     const app = getApp()
 
-    // 从后台返回，不刷新
-    if (this.isFromBackground()) {
+    // 首次加载必须执行，不检查后台返回状态
+    const isFirstLoad = !this.data._hasLoaded
+
+    // 已加载过 且 从后台返回 → 不刷新
+    if (!isFirstLoad && this.isFromBackground()) {
       return
     }
 
