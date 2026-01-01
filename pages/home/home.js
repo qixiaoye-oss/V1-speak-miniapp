@@ -32,18 +32,16 @@ Page({
       return
     }
 
-    // 优先使用预加载缓存（app.js 在 onLaunch 时已预加载）
-    if (app.globalData.homeDataCache || app.globalData.popularScienceCache) {
+    // 优先使用预加载缓存（必须主数据缓存存在才使用，科普是可选的）
+    if (app.globalData.homeDataCache) {
       this._useCachedData(app)
       return
     }
 
-    // 首次加载或需要刷新
-    if (this.shouldLoad()) {
-      this.startLoading()
-      this.hideLoadError()
-      this._loadAllData()
-    }
+    // 首次加载或需要刷新 - 走正常加载流程
+    this.startLoading()
+    this.hideLoadError()
+    this._loadAllData()
   },
 
   /**
