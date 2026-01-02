@@ -1,6 +1,7 @@
 # 智能加载优化方案
 
-> 更新日期：2026-01-01
+> 版本：1.0.0
+> 更新日期：2026-01-02
 > 适用项目：微信小程序
 > 可复用到其他项目
 
@@ -9,6 +10,10 @@
 1. **减少首页加载时间**：从 1500-2500ms 优化到 300-800ms
 2. **减少页面刷新频率**：后台返回不刷新，子页面返回静默刷新
 3. **提升用户体验**：使用 diff 更新避免页面闪烁，保持滚动位置
+
+## 相关文档
+
+- [骨架屏与内容互斥显示规范](./skeleton-content-exclusion.md) - 解决骨架屏与内容同时显示的问题
 
 ---
 
@@ -20,7 +25,9 @@
 | `utils/diff.js` | 新增 | 数据 diff 工具 |
 | `behaviors/pageLoading.js` | 修改 | 进度条优化（减少 setData） |
 | `utils/api.js` | 修改 | 添加 autoSetData 参数 |
-| `app.js` | 修改 | 后台状态追踪 + 数据预加载 |
+| `app.js` | 修改 | 后台状态追踪 + 数据预加载 + loadingStage 状态 |
+| `pages/home/home.js` | 修改 | 动态加载提示监听 |
+| `pages/home/home.wxss` | 修改 | Shimmer 动效样式 |
 
 ---
 
@@ -490,9 +497,225 @@ Page({
 
 ---
 
-## 六、遇到的问题与解决方案
+## 六、骨架屏与内容互斥显示
 
-### 6.1 首页首次加载被跳过
+> 详细规范参见 [骨架屏与内容互斥显示规范](./skeleton-content-exclusion.md)
+
+### 6.1 问题
+
+使用 `loading` 同时控制骨架屏和内容，可能导致短暂同时显示：
+
+```xml
+<!-- ❌ 错误 -->
+<skeleton loading="{{loading}}" />
+<view wx:if="{{!loading}}">内容</view>
+```
+
+### 6.2 解决方案
+
+使用 `_isDataReady` 实现严格互斥：
+
+```xml
+<!-- ✅ 正确 -->
+<skeleton loading="{{!_isDataReady}}" />
+<view wx:if="{{_isDataReady}}">内容</view>
+```
+
+### 6.3 JS 调用顺序
+
+```javascript
+.then(res => {
+  this.setData(res)       // 1. 先设置数据
+  this.setDataReady()     // 2. 再标记就绪（触发显示切换）
+})
+.finally(() => {
+  this.finishLoading()    // 3. 最后结束进度条
+})
+```
+
+---
+
+## 七、首页动态加载提示（Shimmer 效果）
+
+首页在登录期间显示动态文字提示，根据登录阶段自动切换，配合 shimmer 动效提升用户体验。
+
+### 7.1 加载阶段定义
+
+在 `app.js` 中定义加载阶段状态：
+
+```javascript
+globalData: {
+  loadingStage: 'connecting',  // connecting | logging | ready
+},
+
+_doLogin() {
+  // 阶段1: 正在建立连接
+  this.globalData.loadingStage = 'connecting'
+
+  return wx.login().then(data => {
+    // 阶段2: wx.login 完成，开始调用登录 API
+    this.globalData.loadingStage = 'logging'
+
+    return api.request(this, '/user/v1/login', { code: data.code }, true, false)
+      .then(res => {
+        // 阶段3: 登录 API 完成
+        this.globalData.loadingStage = 'ready'
+        wx.setStorageSync('token', res.token)
+        return res
+      })
+  })
+}
+```
+
+### 7.2 首页监听与显示
+
+**JS 文件 (`pages/home/home.js`)**：
+
+```javascript
+// 加载阶段对应的提示文字
+const LOADING_TEXTS = {
+  connecting: '正在建立连接...',
+  logging: '加载用户数据...',
+  ready: '即将完成加载...'
+}
+
+Page({
+  data: {
+    loadingText: LOADING_TEXTS.connecting
+  },
+
+  onShow() {
+    this._watchLoadingStage()
+  },
+
+  onUnload() {
+    this._clearLoadingStageTimer()  // 清理定时器，防止内存泄漏
+  },
+
+  /**
+   * 监听加载阶段变化
+   */
+  _watchLoadingStage() {
+    // 如果已有数据，不需要监听
+    if (this.data.list) {
+      this._clearLoadingStageTimer()
+      return
+    }
+
+    const app = getApp()
+    this._updateLoadingText(app.globalData.loadingStage)
+
+    // 100ms 轮询检查状态变化
+    this._loadingStageTimer = setInterval(() => {
+      const stage = app.globalData.loadingStage
+      this._updateLoadingText(stage)
+    }, 100)
+  },
+
+  _updateLoadingText(stage) {
+    const text = LOADING_TEXTS[stage] || LOADING_TEXTS.connecting
+    if (this.data.loadingText !== text) {
+      this.setData({ loadingText: text })
+    }
+  },
+
+  _clearLoadingStageTimer() {
+    if (this._loadingStageTimer) {
+      clearInterval(this._loadingStageTimer)
+      this._loadingStageTimer = null
+    }
+  }
+})
+```
+
+**WXML 文件 (`pages/home/home.wxml`)**：
+
+```xml
+<!-- 初始化提示（登录中，骨架屏还未开始） -->
+<view class="init-loading" wx:if="{{!loading && !list}}">
+  <text class="init-loading__text">{{loadingText}}</text>
+</view>
+
+<!-- 骨架屏 -->
+<skeleton type="card" loading="{{loading}}" rows="{{6}}" />
+
+<!-- 实际内容 -->
+<view wx:if="{{!loading && list}}">...</view>
+```
+
+### 7.3 Shimmer 动效样式
+
+**WXSS 文件 (`pages/home/home.wxss`)**：
+
+```css
+/* 初始化提示容器 */
+.init-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 100rpx;  /* 底部 tabBar 偏移，视觉居中 */
+}
+
+/* Shimmer 文字效果 */
+.init-loading__text {
+  font-size: 15px;
+  background: linear-gradient(
+    90deg,
+    #999 0%,
+    #999 40%,
+    #ccc 50%,    /* 高亮区域 */
+    #999 60%,
+    #999 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+```
+
+### 7.4 显示时机
+
+| 条件 | 显示内容 |
+|------|---------|
+| `!loading && !list` | 动态加载提示（shimmer） |
+| `loading` | 骨架屏 + 进度条 |
+| `!loading && list` | 实际内容 |
+
+### 7.5 状态流转
+
+```
+App 启动
+    │
+    ├─► loadingStage = 'connecting'  →  "正在建立连接..."
+    │
+    ├─► wx.login() 完成
+    │   loadingStage = 'logging'     →  "加载用户数据..."
+    │
+    ├─► /login API 完成
+    │   loadingStage = 'ready'       →  "即将完成加载..."
+    │
+    └─► 触发 onShowLogin()
+        startLoading()               →  骨架屏显示
+        数据加载完成                  →  内容显示
+```
+
+---
+
+## 八、遇到的问题与解决方案
+
+### 8.1 首页首次加载被跳过
 
 **问题描述**：首页首次加载时，页面一直是白页。
 
@@ -513,7 +736,7 @@ onShow() {
 }
 ```
 
-### 6.2 首页只加载部分数据
+### 8.2 首页只加载部分数据
 
 **问题描述**：首页只显示"科普"部分，主内容不显示，无进度条和骨架屏。
 
@@ -539,7 +762,7 @@ if (app.globalData.homeDataCache) {
 }
 ```
 
-### 6.3 静默刷新时显示 loading toast
+### 8.3 静默刷新时显示 loading toast
 
 **问题描述**：从子页面返回时，会闪一下 "努力加载中..." 的 toast。
 
@@ -605,7 +828,7 @@ loadData(showLoading) {
 ## 十、已优化的页面清单
 
 ### 10.1 首页模块
-- `pages/home/home.js` - 首页（预加载 + 缓存，只首次加载，不刷新）
+- `pages/home/home.js` - 首页（预加载 + 缓存 + 动态加载提示 shimmer，只首次加载，不刷新）
 
 ### 10.2 P1 模块
 - `pages/question/set-p1-list/index.js` - 套题列表
@@ -708,6 +931,20 @@ onShow() {
 ---
 
 ## 十三、更新日志
+
+### 2026-01-02 代码审查修复 + 文档完善
+- 修复严重问题：删除对已删除页面 `history-record-detail` 的引用
+  - `pages/recording/p1p2p3-record-list/index.js`
+  - `pages/recording/p1-multi-record-list/index.js`
+- 修复潜在问题：统一详情页骨架屏使用 `_isDataReady` 控制，防止与内容重叠
+  - `pages/question/question-p1-detail/index.wxml`
+  - `pages/question/question-p2-detail/index.wxml`
+  - `pages/question/question-p3-detail/index.wxml`
+- 修复潜在问题：为 `home.js` 添加 `onUnload` 清理定时器
+- 清理冗余代码：删除 `app.js` 中注释掉的录音器/音频代码
+- 清理冗余代码：删除 `pageLoading.js` 中废弃的 `simulateProgress` 方法
+- 新增文档：`docs/skeleton-content-exclusion.md` 骨架屏与内容互斥显示规范
+- 补充文档：首页动态加载提示（Shimmer 效果）章节
 
 ### 2026-01-01 Phase 6
 - 移除 `ai-correction` 模块（8 个文件，无入口）

@@ -28,6 +28,8 @@ App({
     // 首页数据预加载缓存
     homeDataCache: null,
     popularScienceCache: null,
+    // 加载阶段状态（用于首页显示加载提示）
+    loadingStage: 'connecting',  // connecting | logging | ready
   },
   api: api,
   pageGuard: pageGuard,
@@ -88,10 +90,18 @@ App({
    * 执行登录
    */
   _doLogin() {
+    // 阶段1: 正在建立连接（初始状态）
+    this.globalData.loadingStage = 'connecting'
+
     return wx.login().then(data => {
+      // 阶段2: wx.login 完成，开始加载用户数据
+      this.globalData.loadingStage = 'logging'
+
       return api.request(this, '/user/v1/login', {
         code: data.code
       }, true, false).then(res => {
+        // 阶段3: 登录 API 完成，即将完成
+        this.globalData.loadingStage = 'ready'
         wx.setStorageSync('token', res.token)
         return res
       })
@@ -136,56 +146,6 @@ App({
     })
 
     return Promise.all([homePromise, sciencePromise])
-    // 初始化全局录音管理器
-    // const recorderManager = wx.getRecorderManager();
-    // this.globalData.recorderManager = recorderManager;
-    // 录音器监听
-    // recorderManager.onStart(() => {
-    //   this._triggerPageHandler('onRecorderStart');
-    // });
-
-    // recorderManager.onStop((res) => {
-    //   this._triggerPageHandler('onRecorderStop', res);
-    // });
-
-    // recorderManager.onError((err) => {
-    //   this._triggerPageHandler('onRecorderError', err);
-    // });
-
-    // recorderManager.onPause(() => {
-    //   this._triggerPageHandler('onRecorderPause');
-    // });
-
-    // recorderManager.onResume(() => {
-    //   this._triggerPageHandler('onRecorderResume');
-    // });
-    // 初始化全局音频播放器
-    // const audioContext = wx.createInnerAudioContext();
-    // this.globalData.audioContext = audioContext;
-    // 音频播放器监听
-    // audioContext.onPlay(() => {
-    //   this._triggerPageHandler('onAudioPlay');
-    // });
-
-    // audioContext.onPause(() => {
-    //   this._triggerPageHandler('onAudioPause');
-    // });
-
-    // audioContext.onStop(() => {
-    //   this._triggerPageHandler('onAudioStop');
-    // });
-
-    // audioContext.onEnded(() => {
-    //   this._triggerPageHandler('onAudioEnded');
-    // });
-
-    // audioContext.onError((err) => {
-    //   this._triggerPageHandler('onAudioError', err);
-    // });
-
-    // audioContext.onCanplay(() => {
-    //   this._triggerPageHandler('onAudioCanplay');
-    // });
   },
 
   /**

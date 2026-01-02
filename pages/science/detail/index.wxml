@@ -1,7 +1,7 @@
 <import src="/templates/page-loading.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
-<!-- 骨架屏 -->
-<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+<!-- 骨架屏：与内容互斥显示 -->
+<skeleton type="detail" loading="{{!_isDataReady}}" rows="{{3}}" />
 <!-- padding-bottom = buttonGroupHeight，确保内容底边距离按钮组顶边 15px -->
 <view class="notice" wx:if="{{_isDataReady}}" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : 'var(--button-group-total-height-single)'}}">
   <view class="notice__title">{{title}}</view>

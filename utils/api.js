@@ -4,7 +4,7 @@ var uploaduri = 'https://ielts-speak.oss-cn-qingdao.aliyuncs.com'
 let url = {
   // develop: 'https://local.lylo.top/api/mao',
   develop: 'https://speak.jingying.vip/api/mao',
-  trial: 'http://192.168.112.227:8080/api/mao',
+  trial: 'https://speak.jingying.vip/api/mao',
   release: 'https://speak.jingying.vip/api/mao',
 }
 const version = wx.getAccountInfoSync().miniProgram.envVersion

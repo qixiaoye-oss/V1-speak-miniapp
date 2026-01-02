@@ -2,27 +2,19 @@ const api = getApp().api
 const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
-const smartLoading = require('../../../behaviors/smartLoading')
-const { diffSetData } = require('../../../utils/diff')
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, buttonGroupHeight, smartLoading],
+  behaviors: [pageGuard.behavior, pageLoading, buttonGroupHeight],
   data: {
     usefulCount: 0,
     shaking: false
   },
   // ===========生命周期 Start===========
-  onShow() {
-    const isFirstLoad = !this.data._hasLoaded
-
-    // 科普详情页：只在首次加载时请求数据，后续不刷新
-    if (!isFirstLoad) {
-      return
-    }
-
-    // 首次加载：显示 loading
+  onLoad(options) {
+    // 保存参数，提前发起请求（页面动画期间就开始请求）
+    this._id = options.id
     this.startLoading()
-    this.listData(true)
+    this.listData()
   },
   onShareAppMessage() {
     return api.share('考雅口语Open题库', this)
@@ -52,23 +44,24 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   // 访问接口获取数据
-  listData(showLoading) {
-    const hasToast = !showLoading
-    api.request(this, `/popular/science/v1/detail/${this.options.id}`, {}, hasToast, 'GET', false)
+  listData() {
+    api.request(this, `/popular/science/v1/detail/${this._id}`, {}, false, 'GET', false)
       .then((res) => {
-        diffSetData(this, res)
-        this.markLoaded()
+        this.setData(res)
+        this.finishLoading()
         this.setDataReady()
         // 延迟计算，确保按钮组渲染完成
         wx.nextTick(() => {
           this.updateButtonGroupHeight()
         })
       })
-      .catch(() => { pageGuard.goBack(this) })
-      .finally(() => { this.finishLoading() })
+      .catch(() => {
+        this.finishLoading()
+        pageGuard.goBack(this)
+      })
   },
   lable(type) {
-    api.request(this, `/popular/science/v1/label/${type}/${this.options.id}`, {}, true).catch(() => {
+    api.request(this, `/popular/science/v1/label/${type}/${this._id}`, {}, true).catch(() => {
       // 点赞失败仅提示，已在 api.js 中 toast
     })
   },

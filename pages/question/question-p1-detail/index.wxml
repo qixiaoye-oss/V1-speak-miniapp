@@ -1,10 +1,10 @@
 <import src="/templates/page-loading.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
 
-<!-- 骨架屏 -->
-<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+<!-- 骨架屏：与内容互斥显示 -->
+<skeleton type="detail" loading="{{!_isDataReady}}" rows="{{3}}" />
 
-<view class="page-content" wx:if="{{!loading}}" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : ''}}">
+<view class="page-content" wx:if="{{_isDataReady}}" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : ''}}">
   <question-content content="{{detail.question}}" backgroundColor="{{detail.questionBackgroundColor}}" borderColor="{{detail.questionBorderColor}}" bind:tap="playMainAudio" />
   <version-tabs list="{{list}}" current="{{versionIndex}}" activeColor="{{detail.questionBackgroundColor}}" bind:change="checkVersion" />
   <block wx:for="{{list}}" wx:for-item="answer" wx:for-index="answerIndex" wx:key="answerIndex" wx:if="{{versionIndex == answerIndex}}">
@@ -50,7 +50,7 @@
     </answer-cell>
   </block>
 </view>
-<view class="btn-page-bottom" wx:if="{{!loading}}">
+<view class="btn-page-bottom" wx:if="{{_isDataReady}}">
   <view class="btn-group-hint-banner" data-icon="controller">点击答案句子/题目句，可以单句播放</view>
   <view class="btn-group-single">
     <tap-action icon="controller" bind:tap="recordingOrClocking">

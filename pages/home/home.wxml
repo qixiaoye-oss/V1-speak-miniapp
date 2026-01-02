@@ -4,6 +4,11 @@
 <template is="loadError" data="{{loadError}}"/>
 
 <view class="home">
+  <!-- 初始化提示（登录中，骨架屏还未开始） -->
+  <view class="init-loading" wx:if="{{!loading && !list}}">
+    <text class="init-loading__text">{{loadingText}}</text>
+  </view>
+
   <!-- 骨架屏 -->
   <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
 

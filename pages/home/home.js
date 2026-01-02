@@ -4,6 +4,13 @@ const loadError = require('../../behaviors/loadError')
 const pageGuard = require('../../behaviors/pageGuard')
 const smartLoading = require('../../behaviors/smartLoading')
 
+// 加载阶段对应的提示文字
+const LOADING_TEXTS = {
+  connecting: '正在建立连接...',
+  logging: '加载用户数据...',
+  ready: '即将完成加载...'
+}
+
 Page({
   behaviors: [pageGuard.behavior, pageLoading, loadError, smartLoading],
   data: {
@@ -11,16 +18,27 @@ Page({
       "P1": "/pages/question/set-p1-list/index",
       "P2": "/pages/question/set-p2p3-list/index",
       "POPULAR_SCIENCE": "/pages/science/list/index"
-    }
+    },
+    loadingText: LOADING_TEXTS.connecting
   },
   // ===========生命周期 Start===========
   onShow() {
     // 更新响应式布局（使用缓存的系统信息，避免同步调用阻塞）
     this._updateScreenLayout()
+    // 监听加载阶段变化
+    this._watchLoadingStage()
+  },
+
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    this._clearLoadingStageTimer()
   },
 
   onShowLogin() {
     const app = getApp()
+
+    // 清除加载阶段监听（登录已完成）
+    this._clearLoadingStageTimer()
 
     // 首页只在首次加载时请求数据，后续不刷新（内容无需实时更新）
     const isFirstLoad = !this.data._hasLoaded
@@ -90,6 +108,47 @@ Page({
       .finally(() => {
         this.finishLoading()
       })
+  },
+
+  /**
+   * 监听加载阶段变化，更新提示文字
+   */
+  _watchLoadingStage() {
+    // 如果已有数据，不需要监听
+    if (this.data.list) {
+      this._clearLoadingStageTimer()
+      return
+    }
+
+    const app = getApp()
+    // 立即更新一次
+    this._updateLoadingText(app.globalData.loadingStage)
+
+    // 启动定时器轮询
+    this._loadingStageTimer = setInterval(() => {
+      const stage = app.globalData.loadingStage
+      this._updateLoadingText(stage)
+    }, 100)
+  },
+
+  /**
+   * 更新加载提示文字
+   */
+  _updateLoadingText(stage) {
+    const text = LOADING_TEXTS[stage] || LOADING_TEXTS.connecting
+    if (this.data.loadingText !== text) {
+      this.setData({ loadingText: text })
+    }
+  },
+
+  /**
+   * 清除加载阶段监听定时器
+   */
+  _clearLoadingStageTimer() {
+    if (this._loadingStageTimer) {
+      clearInterval(this._loadingStageTimer)
+      this._loadingStageTimer = null
+    }
   },
 
   /**

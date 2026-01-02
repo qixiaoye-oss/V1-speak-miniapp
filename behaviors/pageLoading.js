@@ -71,14 +71,6 @@ module.exports = Behavior({
           loadProgress: 0
         })
       }, 200)
-    },
-
-    /**
-     * 兼容旧方法：模拟进度（保留以防其他地方调用）
-     * @deprecated 请使用 startLoading() 替代
-     */
-    simulateProgress() {
-      // 空实现，进度动画已由 CSS transition 处理
     }
   }
 })

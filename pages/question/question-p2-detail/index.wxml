@@ -1,10 +1,10 @@
 <import src="/templates/page-loading.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
 
-<!-- 骨架屏 -->
-<skeleton type="detail" loading="{{loading}}" rows="{{3}}" />
+<!-- 骨架屏：与内容互斥显示 -->
+<skeleton type="detail" loading="{{!_isDataReady}}" rows="{{3}}" />
 
-<block wx:if="{{!loading && detail}}">
+<block wx:if="{{_isDataReady}}">
   <view class="page-content" style="padding-bottom: {{buttonGroupHeight ? buttonGroupHeight + 'px' : ''}}">
     <question-content content="{{detail.content}}" additionalContent="{{detail.additionalContent}}" supplementaryContent="{{detail.supplementaryContent}}" backgroundColor="{{backgroundColor}}" borderColor="{{color}}" bind:tap="playMainAudio" />
     <view class="series" wx:if="{{seriesList.length > 0}}">

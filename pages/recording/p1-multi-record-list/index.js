@@ -25,11 +25,6 @@ Page({
     this.destroyAudioListBehavior()
   },
   // ===========生命周期 End===========
-  // ===========业务操作 Start===========
-  toDetail(e) {
-    this.navigateTo('../history-record-detail/index?id=' + e.currentTarget.dataset.id + '&mode=continuous')
-  },
-  // ===========业务操作 End===========
   // ===========数据获取 Start===========
   fetchRecordingList(isPull) {
     this.hideLoadError()
