@@ -56,7 +56,7 @@ function request(that, url, data, hasToast, method, autoSetData) {
       wx.showLoading({
         title: '努力加载中...',
       })
-    }, 500)  // 优化：从1000ms缩短到500ms，更快显示加载提示
+    }, 1000)  // 1秒延迟：大部分请求在此时间内完成，避免 toast 过度显示
   }
   return new Promise((resolve, reject) => {
     wx.request({

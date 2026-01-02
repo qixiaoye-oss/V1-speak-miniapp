@@ -1,6 +1,6 @@
 # 智能加载优化方案
 
-> 版本：1.0.0
+> 版本：1.0.2
 > 更新日期：2026-01-02
 > 适用项目：微信小程序
 > 可复用到其他项目
@@ -848,6 +848,9 @@ loadData(showLoading) {
 ### 10.5 录音模块
 - `pages/recording/p1p2p3-record-list/index.js` - 录音列表（标准刷新模式）
 
+### 10.6 用户模块
+- `pages/user/user/user.js` - 用户页面（只首次加载，不刷新）
+
 ---
 
 ## 十一、已移除的模块
@@ -932,7 +935,12 @@ onShow() {
 
 ## 十三、更新日志
 
-### 2026-01-02 代码审查修复 + 文档完善
+### 2026-01-02 v1.0.2 修复 Toast 过度显示
+- 恢复 `utils/api.js` 中 toast 延迟时间从 500ms 到 1000ms
+- 原因：500ms 延迟导致 toast 几乎必显示，与进度条+骨架屏冗余
+- 效果：大部分请求在 1 秒内完成，toast 只在真正慢请求时显示
+
+### 2026-01-02 v1.0.1 代码审查修复 + 文档完善
 - 修复严重问题：删除对已删除页面 `history-record-detail` 的引用
   - `pages/recording/p1p2p3-record-list/index.js`
   - `pages/recording/p1-multi-record-list/index.js`
@@ -945,6 +953,7 @@ onShow() {
 - 清理冗余代码：删除 `pageLoading.js` 中废弃的 `simulateProgress` 方法
 - 新增文档：`docs/skeleton-content-exclusion.md` 骨架屏与内容互斥显示规范
 - 补充文档：首页动态加载提示（Shimmer 效果）章节
+- 优化 `user` 页面：添加 smartLoading，只首次加载不重复刷新
 
 ### 2026-01-01 Phase 6
 - 移除 `ai-correction` 模块（8 个文件，无入口）
