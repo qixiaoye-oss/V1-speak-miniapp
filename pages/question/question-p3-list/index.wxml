@@ -3,7 +3,10 @@
 <template is="pageLoading" data="{{loading, loadProgress}}" />
 <template is="loadError" data="{{loadError}}" />
 
-<view class="chapter-cell">
+<!-- 骨架屏 -->
+<skeleton type="list" loading="{{!_isDataReady}}" rows="{{5}}" />
+
+<view class="chapter-cell" wx:if="{{_isDataReady}}">
   <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toChildPage" data-id="{{chapter.id}}">
     <view class="chapter__header">
       <view class="chapter__header-title" style="background: {{backgroundColorHex}};">
