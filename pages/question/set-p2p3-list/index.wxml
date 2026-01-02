@@ -4,10 +4,10 @@
 <template is="loadError" data="{{loadError}}" />
 
 <!-- 骨架屏 -->
-<skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
+<skeleton type="list" loading="{{!_isDataReady}}" rows="{{5}}" avatar="{{true}}" />
 
-<mode-switch wx:if="{{!loading}}" mode="{{showMode}}" bind:change="onModeChange" />
-<view class="series" wx:if="{{!loading && seriesList && seriesList.length > 0}}">
+<mode-switch wx:if="{{_isDataReady}}" mode="{{showMode}}" bind:change="onModeChange" />
+<view class="series" wx:if="{{_isDataReady && seriesList && seriesList.length > 0}}">
   <view class="series__item {{seriesIndex === index?'series__active':''}}" wx:for="{{seriesList}}" wx:key="index" hover-class="tap-active" bind:tap="changeLabel" data-index="{{index}}">
     <view style="background: {{item.backgroundColor}};">
       <image src="{{item.iconUrl}}"></image>
@@ -15,7 +15,7 @@
     </view>
   </view>
 </view>
-<view class="chapter-container" wx:if="{{!loading}}">
+<view class="chapter-container" wx:if="{{_isDataReady}}">
   <view class="chapter-group" wx:for="{{list}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="group" wx:if="{{!group.hidden}}">
     <view class="chapter-group__header--layout">
       <view class="chapter-group__header" style="background:{{group.backgroundColor}};">
