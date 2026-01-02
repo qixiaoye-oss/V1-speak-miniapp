@@ -101,6 +101,13 @@ App({
     const startTime = Date.now()
     console.log('[Login] 开始登录流程')
 
+    // 清除旧 token，避免旧 token 干扰新的登录请求
+    const oldToken = wx.getStorageSync('token')
+    if (oldToken) {
+      console.log('[Login] 清除旧 token')
+      wx.removeStorageSync('token')
+    }
+
     // 阶段1: 正在建立连接（初始状态）
     this.globalData.loadingStage = 'connecting'
 
