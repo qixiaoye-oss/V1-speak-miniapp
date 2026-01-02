@@ -146,56 +146,6 @@ App({
     })
 
     return Promise.all([homePromise, sciencePromise])
-    // 初始化全局录音管理器
-    // const recorderManager = wx.getRecorderManager();
-    // this.globalData.recorderManager = recorderManager;
-    // 录音器监听
-    // recorderManager.onStart(() => {
-    //   this._triggerPageHandler('onRecorderStart');
-    // });
-
-    // recorderManager.onStop((res) => {
-    //   this._triggerPageHandler('onRecorderStop', res);
-    // });
-
-    // recorderManager.onError((err) => {
-    //   this._triggerPageHandler('onRecorderError', err);
-    // });
-
-    // recorderManager.onPause(() => {
-    //   this._triggerPageHandler('onRecorderPause');
-    // });
-
-    // recorderManager.onResume(() => {
-    //   this._triggerPageHandler('onRecorderResume');
-    // });
-    // 初始化全局音频播放器
-    // const audioContext = wx.createInnerAudioContext();
-    // this.globalData.audioContext = audioContext;
-    // 音频播放器监听
-    // audioContext.onPlay(() => {
-    //   this._triggerPageHandler('onAudioPlay');
-    // });
-
-    // audioContext.onPause(() => {
-    //   this._triggerPageHandler('onAudioPause');
-    // });
-
-    // audioContext.onStop(() => {
-    //   this._triggerPageHandler('onAudioStop');
-    // });
-
-    // audioContext.onEnded(() => {
-    //   this._triggerPageHandler('onAudioEnded');
-    // });
-
-    // audioContext.onError((err) => {
-    //   this._triggerPageHandler('onAudioError', err);
-    // });
-
-    // audioContext.onCanplay(() => {
-    //   this._triggerPageHandler('onAudioCanplay');
-    // });
   },
 
   /**

@@ -29,6 +29,11 @@ Page({
     this._watchLoadingStage()
   },
 
+  onUnload() {
+    // 清理定时器，防止内存泄漏
+    this._clearLoadingStageTimer()
+  },
+
   onShowLogin() {
     const app = getApp()
 

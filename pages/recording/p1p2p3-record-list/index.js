@@ -73,9 +73,6 @@ Page({
     this.destroyAudioListBehavior()
   },
   // 录音单元格事件处理
-  onCellDetail(e) {
-    this.navigateTo('../history-record-detail/index?id=' + e.detail.id + '&mode=single')
-  },
   onCellPlay(e) {
     const { index, playing } = e.detail
     if (playing) {
