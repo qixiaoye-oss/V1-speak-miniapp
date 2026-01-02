@@ -23,6 +23,7 @@ Page({
   },
   // ===========生命周期 Start===========
   onShow() {
+    console.log('[Home] onShow 触发')
     // 监听加载阶段变化
     this._watchLoadingStage()
   },
@@ -34,6 +35,8 @@ Page({
 
   onShowLogin() {
     const app = getApp()
+    const elapsed = app._launchTime ? Date.now() - app._launchTime : 0
+    console.log(`[Home] onShowLogin 触发，距启动: ${elapsed}ms`)
 
     // 清除加载阶段监听（登录已完成）
     this._clearLoadingStageTimer()
@@ -41,16 +44,19 @@ Page({
     // 首页只在首次加载时请求数据，后续不刷新（内容无需实时更新）
     const isFirstLoad = !this.data._hasLoaded
     if (!isFirstLoad) {
+      console.log('[Home] 非首次加载，跳过')
       return
     }
 
     // 优先使用预加载缓存（必须主数据缓存存在才使用，科普是可选的）
     if (app.globalData.homeDataCache) {
+      console.log('[Home] 使用预加载缓存')
       this._useCachedData(app)
       return
     }
 
     // 首次加载 - 走正常加载流程
+    console.log('[Home] 无缓存，开始正常加载流程')
     this.startLoading()
     this.hideLoadError()
     this._loadAllData()
@@ -83,6 +89,9 @@ Page({
    * 并行加载所有数据
    */
   _loadAllData() {
+    const startTime = Date.now()
+    console.log('[Home] _loadAllData 开始')
+
     // 并行请求两个接口，禁用自动 setData，手动合并数据
     const promises = [
       api.request(this, '/popular/science/v1/miniapp/home', {}, true, 'GET', false)
@@ -92,6 +101,8 @@ Page({
 
     Promise.all(promises)
       .then(([scienceData, homeData]) => {
+        const elapsed = Date.now() - startTime
+        console.log(`[Home] 数据加载完成，耗时: ${elapsed}ms`)
         // 合并数据，只调用一次 setData
         this.setData({
           ...scienceData,
@@ -100,7 +111,9 @@ Page({
         this.setDataReady()
         this.markLoaded()
       })
-      .catch(() => {
+      .catch((err) => {
+        const elapsed = Date.now() - startTime
+        console.error(`[Home] 数据加载失败，耗时: ${elapsed}ms, 错误:`, err)
         pageGuard.showRetry(this)
       })
       .finally(() => {
@@ -119,12 +132,28 @@ Page({
     }
 
     const app = getApp()
+    const watchStartTime = Date.now()
+    let lastStage = null
+
     // 立即更新一次
     this._updateLoadingText(app.globalData.loadingStage)
 
     // 启动定时器轮询
     this._loadingStageTimer = setInterval(() => {
       const stage = app.globalData.loadingStage
+      const elapsed = Date.now() - watchStartTime
+
+      // 阶段变化时打印日志
+      if (stage !== lastStage) {
+        console.log(`[Home] 加载阶段变化: ${lastStage} -> ${stage}，已等待: ${elapsed}ms`)
+        lastStage = stage
+      }
+
+      // 超时警告（每 10 秒打印一次）
+      if (elapsed > 0 && elapsed % 10000 < 100) {
+        console.warn(`[Home] 等待登录已超过 ${Math.floor(elapsed / 1000)} 秒，当前阶段: ${stage}`)
+      }
+
       this._updateLoadingText(stage)
     }, 100)
   },

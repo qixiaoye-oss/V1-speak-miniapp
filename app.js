@@ -63,6 +63,10 @@ App({
     this._hideTime = Date.now()
   },
   onLaunch() {
+    // 记录启动时间（用于性能分析）
+    this._launchTime = Date.now()
+    console.log('[App] onLaunch 开始', new Date().toISOString())
+
     // 保持屏幕常亮 true / false
     if (wx.setScreenBrightness) {
       wx.setKeepScreenOn({ keepScreenOn: true });
@@ -82,7 +86,11 @@ App({
 
     // 登录成功后触发首页加载
     loginPromise.then(() => {
+      const elapsed = Date.now() - this._launchTime
+      console.log(`[App] 登录流程完成，触发 userData.login = true，总耗时: ${elapsed}ms`)
       userData.login = true
+    }).catch(err => {
+      console.error('[App] 登录流程失败:', err)
     })
   },
 
@@ -90,21 +98,40 @@ App({
    * 执行登录
    */
   _doLogin() {
+    const startTime = Date.now()
+    console.log('[Login] 开始登录流程')
+
     // 阶段1: 正在建立连接（初始状态）
     this.globalData.loadingStage = 'connecting'
 
     return wx.login().then(data => {
+      const wxLoginTime = Date.now() - startTime
+      console.log(`[Login] wx.login 完成，耗时: ${wxLoginTime}ms, code: ${data.code ? '已获取' : '获取失败'}`)
+
       // 阶段2: wx.login 完成，开始加载用户数据
       this.globalData.loadingStage = 'logging'
+      const apiStartTime = Date.now()
 
       return api.request(this, '/user/v1/login', {
         code: data.code
       }, true, false).then(res => {
+        const apiTime = Date.now() - apiStartTime
+        const totalTime = Date.now() - startTime
+        console.log(`[Login] /user/v1/login API 完成，API耗时: ${apiTime}ms, 总耗时: ${totalTime}ms`)
+
         // 阶段3: 登录 API 完成，即将完成
         this.globalData.loadingStage = 'ready'
         wx.setStorageSync('token', res.token)
         return res
+      }).catch(err => {
+        const apiTime = Date.now() - apiStartTime
+        console.error(`[Login] /user/v1/login API 失败，耗时: ${apiTime}ms, 错误:`, err)
+        throw err
       })
+    }).catch(err => {
+      const elapsed = Date.now() - startTime
+      console.error(`[Login] wx.login 失败，耗时: ${elapsed}ms, 错误:`, err)
+      throw err
     })
   },
 
