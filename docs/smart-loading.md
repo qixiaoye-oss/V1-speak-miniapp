@@ -1,6 +1,6 @@
 # 智能加载优化方案
 
-> 更新日期：2026-01-01
+> 更新日期：2026-01-02
 > 适用项目：微信小程序
 > 可复用到其他项目
 
@@ -9,6 +9,10 @@
 1. **减少首页加载时间**：从 1500-2500ms 优化到 300-800ms
 2. **减少页面刷新频率**：后台返回不刷新，子页面返回静默刷新
 3. **提升用户体验**：使用 diff 更新避免页面闪烁，保持滚动位置
+
+## 相关文档
+
+- [骨架屏与内容互斥显示规范](./skeleton-content-exclusion.md) - 解决骨架屏与内容同时显示的问题
 
 ---
 
@@ -490,9 +494,47 @@ Page({
 
 ---
 
-## 六、遇到的问题与解决方案
+## 六、骨架屏与内容互斥显示
 
-### 6.1 首页首次加载被跳过
+> 详细规范参见 [骨架屏与内容互斥显示规范](./skeleton-content-exclusion.md)
+
+### 6.1 问题
+
+使用 `loading` 同时控制骨架屏和内容，可能导致短暂同时显示：
+
+```xml
+<!-- ❌ 错误 -->
+<skeleton loading="{{loading}}" />
+<view wx:if="{{!loading}}">内容</view>
+```
+
+### 6.2 解决方案
+
+使用 `_isDataReady` 实现严格互斥：
+
+```xml
+<!-- ✅ 正确 -->
+<skeleton loading="{{!_isDataReady}}" />
+<view wx:if="{{_isDataReady}}">内容</view>
+```
+
+### 6.3 JS 调用顺序
+
+```javascript
+.then(res => {
+  this.setData(res)       // 1. 先设置数据
+  this.setDataReady()     // 2. 再标记就绪（触发显示切换）
+})
+.finally(() => {
+  this.finishLoading()    // 3. 最后结束进度条
+})
+```
+
+---
+
+## 七、遇到的问题与解决方案
+
+### 7.1 首页首次加载被跳过
 
 **问题描述**：首页首次加载时，页面一直是白页。
 
@@ -513,7 +555,7 @@ onShow() {
 }
 ```
 
-### 6.2 首页只加载部分数据
+### 7.2 首页只加载部分数据
 
 **问题描述**：首页只显示"科普"部分，主内容不显示，无进度条和骨架屏。
 
@@ -539,7 +581,7 @@ if (app.globalData.homeDataCache) {
 }
 ```
 
-### 6.3 静默刷新时显示 loading toast
+### 7.3 静默刷新时显示 loading toast
 
 **问题描述**：从子页面返回时，会闪一下 "努力加载中..." 的 toast。
 
@@ -708,6 +750,19 @@ onShow() {
 ---
 
 ## 十三、更新日志
+
+### 2026-01-02 代码审查修复
+- 修复严重问题：删除对已删除页面 `history-record-detail` 的引用
+  - `pages/recording/p1p2p3-record-list/index.js`
+  - `pages/recording/p1-multi-record-list/index.js`
+- 修复潜在问题：统一详情页骨架屏使用 `_isDataReady` 控制，防止与内容重叠
+  - `pages/question/question-p1-detail/index.wxml`
+  - `pages/question/question-p2-detail/index.wxml`
+  - `pages/question/question-p3-detail/index.wxml`
+- 修复潜在问题：为 `home.js` 添加 `onUnload` 清理定时器
+- 清理冗余代码：删除 `app.js` 中注释掉的录音器/音频代码
+- 清理冗余代码：删除 `pageLoading.js` 中废弃的 `simulateProgress` 方法
+- 新增文档：`docs/skeleton-content-exclusion.md` 骨架屏与内容互斥显示规范
 
 ### 2026-01-01 Phase 6
 - 移除 `ai-correction` 模块（8 个文件，无入口）
