@@ -1,6 +1,6 @@
 # 智能加载优化方案
 
-> 版本：1.0.1
+> 版本：1.0.2
 > 更新日期：2026-01-02
 > 适用项目：微信小程序
 > 可复用到其他项目
@@ -935,7 +935,12 @@ onShow() {
 
 ## 十三、更新日志
 
-### 2026-01-02 代码审查修复 + 文档完善
+### 2026-01-02 v1.0.2 修复 Toast 过度显示
+- 恢复 `utils/api.js` 中 toast 延迟时间从 500ms 到 1000ms
+- 原因：500ms 延迟导致 toast 几乎必显示，与进度条+骨架屏冗余
+- 效果：大部分请求在 1 秒内完成，toast 只在真正慢请求时显示
+
+### 2026-01-02 v1.0.1 代码审查修复 + 文档完善
 - 修复严重问题：删除对已删除页面 `history-record-detail` 的引用
   - `pages/recording/p1p2p3-record-list/index.js`
   - `pages/recording/p1-multi-record-list/index.js`
