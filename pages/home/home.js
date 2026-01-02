@@ -23,8 +23,6 @@ Page({
   },
   // ===========生命周期 Start===========
   onShow() {
-    // 更新响应式布局（使用缓存的系统信息，避免同步调用阻塞）
-    this._updateScreenLayout()
     // 监听加载阶段变化
     this._watchLoadingStage()
   },
@@ -148,40 +146,6 @@ Page({
     if (this._loadingStageTimer) {
       clearInterval(this._loadingStageTimer)
       this._loadingStageTimer = null
-    }
-  },
-
-  /**
-   * 更新屏幕布局（异步，使用缓存）
-   */
-  _updateScreenLayout() {
-    const app = getApp()
-    const cachedWidth = app.globalData.windowWidth
-
-    if (cachedWidth) {
-      this._applyLayout(cachedWidth)
-    } else {
-      // 缓存未就绪，异步获取
-      wx.getSystemInfo({
-        success: (res) => {
-          app.globalData.windowWidth = res.windowWidth
-          this._applyLayout(res.windowWidth)
-        }
-      })
-    }
-  },
-
-  /**
-   * 应用布局设置
-   */
-  _applyLayout(windowWidth) {
-    const isWideScreen = windowWidth >= 768
-    // 只在值变化时才 setData
-    if (this.data.isWideScreen !== isWideScreen || this.data.windowWidth !== windowWidth) {
-      this.setData({
-        isWideScreen: isWideScreen,
-        windowWidth: windowWidth
-      })
     }
   },
 
