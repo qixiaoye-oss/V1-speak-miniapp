@@ -10,10 +10,10 @@
   </view>
 
   <!-- 骨架屏 -->
-  <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
+  <skeleton type="card" loading="{{!_isDataReady}}" rows="{{6}}" />
 
   <!-- 科普内容区域 -->
-  <view class="home-main-item" wx:if="{{!loading && popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
+  <view class="home-main-item" wx:if="{{_isDataReady && popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
     <view class="home-main-item__title" style="color:{{popularScience.colorRgb}}">{{popularScience.title}}</view>
     <view class="home-main-item__content--grid">
       <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
@@ -44,7 +44,7 @@
   </view>
 
   <!-- 主体内容分组 -->
-  <block wx:for="{{list}}" wx:key="groupIndex" wx:for-item="group" wx:for-index="groupIndex" wx:if="{{!loading && group.list.length > 0}}">
+  <block wx:for="{{list}}" wx:key="groupIndex" wx:for-item="group" wx:for-index="groupIndex" wx:if="{{_isDataReady && group.list.length > 0}}">
     <view class="home-main-item" style="background:{{group.colorRgba}}">
       <view class="home-main-item__title" style="color:{{group.colorRgb}}">{{group.title}}</view>
       <!-- 说明徽章（可选） -->

@@ -4,10 +4,10 @@
 <template is="loadError" data="{{loadError}}" />
 
 <!-- 骨架屏 -->
-<skeleton type="list" loading="{{loading}}" rows="{{5}}" avatar="{{true}}" />
+<skeleton type="list" loading="{{!_isDataReady}}" rows="{{5}}" avatar="{{true}}" />
 
-<mode-switch wx:if="{{!loading}}" mode="{{showMode}}" bind:change="onModeChange" />
-<view class="chapter-container" wx:if="{{!loading}}">
+<mode-switch wx:if="{{_isDataReady}}" mode="{{showMode}}" bind:change="onModeChange" />
+<view class="chapter-container" wx:if="{{_isDataReady}}">
   <view class="chapter-group" wx:for="{{list}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="group" wx:if="{{!group.hidden}}">
     <view class="chapter-group__header--layout">
       <view class="chapter-group__header" style="background:{{group.titleBackgroundColor}};">
