@@ -1,5 +1,46 @@
 /* 首页样式 - 与参考项目对齐 */
 
+/* 初始化提示（登录中） */
+.init-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 底部 tabBar 约 100rpx，向上偏移使视觉居中 */
+  padding-bottom: 100rpx;
+}
+
+.init-loading__text {
+  font-size: 15px;
+  color: #999;
+  background: linear-gradient(
+    90deg,
+    #999 0%,
+    #999 40%,
+    #ccc 50%,
+    #999 60%,
+    #999 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 /* 查看所有按钮中的图标 */
 .home-view-all image {
   width: 20px;
