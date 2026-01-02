@@ -848,6 +848,9 @@ loadData(showLoading) {
 ### 10.5 录音模块
 - `pages/recording/p1p2p3-record-list/index.js` - 录音列表（标准刷新模式）
 
+### 10.6 用户模块
+- `pages/user/user/user.js` - 用户页面（只首次加载，不刷新）
+
 ---
 
 ## 十一、已移除的模块
@@ -945,6 +948,7 @@ onShow() {
 - 清理冗余代码：删除 `pageLoading.js` 中废弃的 `simulateProgress` 方法
 - 新增文档：`docs/skeleton-content-exclusion.md` 骨架屏与内容互斥显示规范
 - 补充文档：首页动态加载提示（Shimmer 效果）章节
+- 优化 `user` 页面：添加 smartLoading，只首次加载不重复刷新
 
 ### 2026-01-01 Phase 6
 - 移除 `ai-correction` 模块（8 个文件，无入口）
