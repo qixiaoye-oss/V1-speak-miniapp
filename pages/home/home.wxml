@@ -5,12 +5,12 @@
 
 <view class="home">
   <!-- 初始化提示（登录中，骨架屏还未开始） -->
-  <view class="init-loading" wx:if="{{!loading && !list}}">
+  <view class="init-loading" wx:if="{{!loading && !_isDataReady}}">
     <text class="init-loading__text">{{loadingText}}</text>
   </view>
 
-  <!-- 骨架屏 -->
-  <skeleton type="card" loading="{{!_isDataReady}}" rows="{{6}}" />
+  <!-- 骨架屏（仅在 loading 阶段显示，与初始化提示互斥） -->
+  <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
 
   <!-- 科普内容区域 -->
   <view class="home-main-item" wx:if="{{_isDataReady && popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
