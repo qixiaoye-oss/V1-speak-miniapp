@@ -28,6 +28,8 @@ App({
     // 首页数据预加载缓存
     homeDataCache: null,
     popularScienceCache: null,
+    // 加载阶段状态（用于首页显示加载提示）
+    loadingStage: 'connecting',  // connecting | logging | ready
   },
   api: api,
   pageGuard: pageGuard,
@@ -88,10 +90,18 @@ App({
    * 执行登录
    */
   _doLogin() {
+    // 阶段1: 正在建立连接（初始状态）
+    this.globalData.loadingStage = 'connecting'
+
     return wx.login().then(data => {
+      // 阶段2: wx.login 完成，开始加载用户数据
+      this.globalData.loadingStage = 'logging'
+
       return api.request(this, '/user/v1/login', {
         code: data.code
       }, true, false).then(res => {
+        // 阶段3: 登录 API 完成，即将完成
+        this.globalData.loadingStage = 'ready'
         wx.setStorageSync('token', res.token)
         return res
       })
