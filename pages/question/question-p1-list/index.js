@@ -63,35 +63,6 @@ Page({
     }
     this.navigateTo('/pages/question/question-p1-detail/index' + api.parseParams(param))
   },
-  recordingOrClocking() {
-    // 判断是否所有题目都存在题目音频
-    var emptyAudioCount = this.data.list.filter(function (item) {
-      return api.isEmpty(item.audioUrl)
-    }).length
-    if (emptyAudioCount != 0) {
-      api.toast("请联系小助手补充数据")
-      return
-    }
-    // 整理跳转选项
-    let menu = []
-    let menuUrl = []
-    let param = {
-      type: 1,
-      setId: this.options.setId,
-    }
-    menu.push('录音')
-    menuUrl.push('/pages/recording/p1-multi-record/index' + api.parseParams(param))
-    menu.push('历史录音')
-    menuUrl.push('/pages/recording/p1-multi-record-list/index' + api.parseParams(param))
-
-    const _this = this
-    wx.showActionSheet({
-      itemList: menu,
-      success(res) {
-        _this.navigateTo(menuUrl[res.tapIndex])
-      }
-    })
-  },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData(showLoading) {
