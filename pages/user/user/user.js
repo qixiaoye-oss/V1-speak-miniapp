@@ -1,22 +1,32 @@
 const api = getApp().api
 const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
+const smartLoading = require('../../../behaviors/smartLoading')
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading, smartLoading],
   data: {
     version: '1.0.0',
     accent: 'uk', // 'uk' 或 'us'
     accentText: '英音',
   },
   onShow() {
-    this.startLoading()
-    this.getUserInfo()
+    // tabBar 选中状态需要每次更新
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({
         selected: 1
       })
     }
+
+    // 只在首次加载时请求数据（用户信息不需要频繁刷新）
+    const isFirstLoad = !this.data._hasLoaded
+    if (!isFirstLoad) {
+      return
+    }
+
+    this.startLoading()
+    this.getUserInfo()
+
     // 获取小程序版本信息
     const accountInfo = wx.getAccountInfoSync()
     const version = accountInfo.miniProgram.version
@@ -63,6 +73,7 @@ Page({
         accent: pronunciation,
         accentText: pronunciation === 'us' ? '美音' : '英音'
       })
+      _this.markLoaded()
       _this.setDataReady()
       _this.finishLoading()
     }).catch(() => {
