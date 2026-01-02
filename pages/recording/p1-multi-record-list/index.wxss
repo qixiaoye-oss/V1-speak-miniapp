@@ -1,6 +1,0 @@
-@import "/style/recording.wxss";
-
-/* P1录音列表页面特有样式 */
-.audio_duration {
-  color: #c5c5c5;
-}
