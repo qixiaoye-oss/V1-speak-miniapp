@@ -58,14 +58,17 @@ Page({
       .then((res) => {
         diffSetData(this, res)
         this.markLoaded()
-        this.setDataReady()
+        this.finishLoading()  // 先隐藏骨架屏
+        this.setDataReady()   // 再显示内容
         // 延迟计算，确保按钮组渲染完成
         wx.nextTick(() => {
           this.updateButtonGroupHeight()
         })
       })
-      .catch(() => { pageGuard.goBack(this) })
-      .finally(() => { this.finishLoading() })
+      .catch(() => {
+        this.finishLoading()
+        pageGuard.goBack(this)
+      })
   },
   lable(type) {
     api.request(this, `/popular/science/v1/label/${type}/${this.options.id}`, {}, true).catch(() => {
