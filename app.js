@@ -90,6 +90,9 @@ App({
    * 执行登录
    */
   _doLogin() {
+    // 清除旧 token，避免旧 token 干扰新的登录请求
+    wx.removeStorageSync('token')
+
     // 阶段1: 正在建立连接（初始状态）
     this.globalData.loadingStage = 'connecting'
 
