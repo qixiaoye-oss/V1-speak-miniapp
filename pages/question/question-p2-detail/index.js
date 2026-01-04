@@ -47,9 +47,6 @@ Page({
     wx.removeStorageSync('questionIdArr')
     this.destroySentenceAudio()
   },
-  onShareAppMessage() {
-    return api.share('考雅口语Open题库', this)
-  },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
   // 播放/停止指定 block 的所有句子

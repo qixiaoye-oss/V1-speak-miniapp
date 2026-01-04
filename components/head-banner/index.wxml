@@ -1,0 +1,9 @@
+<view class="head-banner-wrapper" style="background: linear-gradient(180deg, {{color}} 0%, rgba(0, 166, 237, 0) 100%);">
+  <!-- 标题区域 -->
+  <view class="head-banner" wx:if="{{title}}">
+    <view class="head-banner__title">{{title}}</view>
+    <view class="head-banner__subtitle" wx:if="{{subtitle}}">{{subtitle}}</view>
+  </view>
+  <!-- 内容插槽 -->
+  <slot></slot>
+</view>

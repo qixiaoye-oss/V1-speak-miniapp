@@ -46,3 +46,14 @@
   width: 20px;
   height: 20px;
 }
+
+/* 科普区域特殊样式 */
+.home-main-item--science {
+  background: #ffffff;
+  border: 2px dotted var(--main-blue-color);
+}
+
+.home-card--science {
+  background: #ffffff !important;
+  border-color: var(--main-blue-color) !important;
+}
