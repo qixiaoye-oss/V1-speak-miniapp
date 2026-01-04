@@ -12,36 +12,39 @@
   <!-- 骨架屏（仅在 loading 阶段显示，与初始化提示互斥） -->
   <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
 
-  <!-- 科普内容区域 -->
-  <view class="home-main-item" wx:if="{{_isDataReady && popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
-    <view class="home-main-item__title" style="color:{{popularScience.colorRgb}}">{{popularScience.title}}</view>
-    <view class="home-main-item__content--grid">
-      <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
-        <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
-          <view class="home-card home-card--notice" style="background:{{popularScience.colorRgba}};border-color:{{popularScience.colorRgb}};">
-            <view class="home-card__content">
-              <view class="home-card__category" style="color: {{popularScience.colorRgb}};">{{notice.groupTitle}}</view>
-              <view class="home-card__body">
-                <text class="home-card__body-title">{{notice.title}}</text>
-                <text class="home-card__body-separator"> · </text>
-                <text class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</text>
-              </view>
-              <view class="home-card__meta">
-                <image src="/images/v2/heart_bt.png"></image>
-                <view>{{notice.helpfulCount}}人觉得有用</view>
+  <!-- Head Banner + 科普区域（带渐变背景） -->
+  <head-banner wx:if="{{_isDataReady}}" title="考雅口语Open题库" subtitle="九分学长出品｜开源免费">
+    <!-- 科普内容区域 -->
+    <view class="home-main-item home-main-item--science" wx:if="{{popularScience.list.length > 0}}">
+      <view class="home-main-item__title" style="color:var(--main-blue-color)">{{popularScience.title}}</view>
+      <view class="home-main-item__content--grid">
+        <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
+          <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+            <view class="home-card home-card--notice home-card--science">
+              <view class="home-card__content">
+                <view class="home-card__category" style="color: var(--main-blue-color);">{{notice.groupTitle}}</view>
+                <view class="home-card__body">
+                  <text class="home-card__body-title">{{notice.title}}</text>
+                  <text class="home-card__body-separator"> · </text>
+                  <text class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</text>
+                </view>
+                <view class="home-card__meta">
+                  <image src="/images/v2/heart_bt.png"></image>
+                  <view>{{notice.helpfulCount}}人觉得有用</view>
+                </view>
               </view>
             </view>
-          </view>
+          </tap-action>
+        </block>
+      </view>
+      <view class="home-view-all">
+        <tap-action icon="next" bind:tap="toPopularScienceListPage">
+          <view>查看所有</view>
+          <image src="/images/v2/next_bt.png"></image>
         </tap-action>
-      </block>
+      </view>
     </view>
-    <view class="home-view-all">
-      <tap-action icon="next" bind:tap="toPopularScienceListPage">
-        <view>查看所有</view>
-        <image src="/images/v2/next_bt.png"></image>
-      </tap-action>
-    </view>
-  </view>
+  </head-banner>
 
   <!-- 主体内容分组 -->
   <block wx:for="{{list}}" wx:key="groupIndex" wx:for-item="group" wx:for-index="groupIndex" wx:if="{{_isDataReady && group.list.length > 0}}">

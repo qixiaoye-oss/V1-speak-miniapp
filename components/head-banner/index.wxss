@@ -1,0 +1,22 @@
+/* Head Banner 组件样式 */
+.head-banner-wrapper {
+  margin: -20px -20px 0 -20px;
+  padding: 20px 20px 0 20px;
+}
+
+.head-banner {
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.head-banner__title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.head-banner__subtitle {
+  font-size: 12px;
+  color: #ffffff;
+  margin-top: 5px;
+}

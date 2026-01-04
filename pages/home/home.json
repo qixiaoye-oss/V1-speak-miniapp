@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "tap-action": "/components/tap-action/index",
-    "skeleton": "/components/skeleton/skeleton"
+    "skeleton": "/components/skeleton/skeleton",
+    "head-banner": "/components/head-banner/index"
   }
 }
