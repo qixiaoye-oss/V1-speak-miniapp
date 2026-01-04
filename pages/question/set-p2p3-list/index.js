@@ -37,9 +37,6 @@ Page({
     this.hideLoadError()
     this.listSeriesData(true)
   },
-  onShareAppMessage() {
-    return api.share('考雅口语Open题库', this)
-  },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
   toUnit(e) {
