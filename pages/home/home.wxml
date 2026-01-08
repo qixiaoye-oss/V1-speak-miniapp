@@ -56,13 +56,13 @@
     </view>
   </head-banner>
 
-  <!-- 小程序跳转导航 -->
-  <view class="nav-cards" wx:if="{{_isDataReady}}">
-    <tap-action type="card" bind:tap="onNavCardTap" data-type="jijing">
-      <view class="nav-card">机经开源题库</view>
+  <!-- 小程序跳转链接 -->
+  <view class="miniapp-links" wx:if="{{_isDataReady}}">
+    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="jijing">
+      <view class="miniapp-link">机经开源题库</view>
     </tap-action>
-    <tap-action type="card" bind:tap="onNavCardTap" data-type="tingli">
-      <view class="nav-card">听力专项训练</view>
+    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="tingli">
+      <view class="miniapp-link">听力专项训练</view>
     </tap-action>
   </view>
 

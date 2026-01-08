@@ -220,10 +220,10 @@ Page({
       url: `/pages/science/detail/index?id=${id}`,
     })
   },
-  // 导航卡片点击（暂未实现跳转）
-  onNavCardTap(e) {
+  // 小程序跳转链接点击（暂未实现跳转）
+  onMiniappLinkTap(e) {
     const type = e.currentTarget.dataset.type
-    console.log('导航卡片点击:', type)
+    console.log('小程序跳转链接点击:', type)
     // TODO: 实现小程序跳转
   },
   // ===========业务操作 End===========

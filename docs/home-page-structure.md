@@ -19,9 +19,9 @@ home (首页容器)
 │       │       └── home-card--notice home-card--science (科普卡片)
 │       └── home-view-all (查看所有)
 │
-├── nav-cards (小程序跳转导航)
-│   ├── nav-card (机经开源题库)
-│   └── nav-card (听力专项训练)
+├── miniapp-links (小程序跳转链接)
+│   ├── miniapp-link (机经开源题库)
+│   └── miniapp-link (听力专项训练)
 │
 └── home-main-item (分组区块 - 循环渲染)
     ├── home-main-item__title (分组标题)
@@ -125,37 +125,37 @@ _splitToColumns(list) {
 
 ---
 
-## 导航卡片 (nav-cards)
+## 小程序跳转链接 (miniapp-links)
 
 ### 描述
-小程序跳转导航卡片，水平排列两个入口。
+小程序跳转链接，水平排列两个入口，点击可跳转到其他小程序。
 
 ### 结构
 ```html
-<view class="nav-cards" wx:if="{{_isDataReady}}">
-  <tap-action type="card" bind:tap="onNavCardTap" data-type="jijing">
-    <view class="nav-card">机经开源题库</view>
+<view class="miniapp-links" wx:if="{{_isDataReady}}">
+  <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="jijing">
+    <view class="miniapp-link">机经开源题库</view>
   </tap-action>
-  <tap-action type="card" bind:tap="onNavCardTap" data-type="tingli">
-    <view class="nav-card">听力专项训练</view>
+  <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="tingli">
+    <view class="miniapp-link">听力专项训练</view>
   </tap-action>
 </view>
 ```
 
 ### 样式
 ```css
-.nav-cards {
+.miniapp-links {
   display: flex;
   gap: 10px;
   width: 100%;
 }
 
-.nav-cards > tap-action {
+.miniapp-links > tap-action {
   flex: 1;
   min-width: 0;
 }
 
-.nav-card {
+.miniapp-link {
   padding: 15px;
   font-size: 16px;
   font-weight: bold;
@@ -377,7 +377,7 @@ _splitToColumns(list) {
 | `toPopularSciencePage` | `home-card--science` | 进入科普详情 |
 | `toPopularScienceListPage` | `.home-view-all` | 进入科普列表 |
 | `onNoticeTap` | `home-main-item__notice` | 点击说明徽章 |
-| `onNavCardTap` | `.nav-card` | 小程序跳转（待实现） |
+| `onMiniappLinkTap` | `.miniapp-link` | 小程序跳转（待实现） |
 
 ---
 
