@@ -39,13 +39,14 @@
               <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
             </view>
           </view>
+          <!-- DEBUG: 测试颜色 - backgroundColor={{chapter.backgroundColor}}, solidColor={{util.toSolidColor(chapter.backgroundColor)}} -->
           <view class="chapter__header-answers" wx:if="{{chapter.answers && chapter.answers.length > 0}}">
             <view
               class="tag tag--dynamic-translucent"
               wx:for="{{chapter.answers}}"
               wx:for-item="answer"
               wx:key="index"
-              style="--tag-color-bg: {{chapter.backgroundColor}}; --tag-color: {{util.toSolidColor(chapter.backgroundColor)}}"
+              style="--tag-color-bg: {{chapter.backgroundColor}}; --tag-color: rgba(80,146,255,1)"
             >{{answer}}</view>
           </view>
         </view>
