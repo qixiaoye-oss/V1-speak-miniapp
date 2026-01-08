@@ -262,6 +262,8 @@ Page({
     const { versionIndex } = this.data
     const checkIndex = e.detail.index
     if (versionIndex !== checkIndex) {
+      // 切换前打断音频
+      this.interruptAudio()
       this.setData({ versionIndex: checkIndex })
     }
   },

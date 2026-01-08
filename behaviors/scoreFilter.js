@@ -64,6 +64,10 @@ module.exports = Behavior({
             api.toast('该版本暂未更新')
             return
           }
+          // 切换前打断音频
+          if (typeof _this.interruptAudio === 'function') {
+            _this.interruptAudio()
+          }
           _this.setData({
             scoreFilter: String(selected.value),
             scoreFilterText: selected.text
