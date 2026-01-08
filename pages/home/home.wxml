@@ -77,8 +77,51 @@
           <view class="home-main-item__notice-text" style="color: {{group.notice.colorRgb}};">{{group.notice.title}}</view>
         </view>
       </tap-action>
-      <!-- 卡片容器 -->
-      <view class="{{group.layoutMode === 'QUAD_GRID' ? 'home-main-item__content--grid' : 'home-main-item__content'}}">
+      <!-- 卡片容器 - 瀑布流布局（QUAD_GRID模式） -->
+      <view class="home-main-item__content--waterfall" wx:if="{{group.layoutMode === 'QUAD_GRID' && group.columns}}">
+        <!-- 左列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{group.columns.leftColumn}}" wx:key="id" wx:for-item="subject">
+            <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
+              <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
+                <view class="home-card__content">
+                  <view class="home-card__header">
+                    <image class="home-card__icon" wx:if="{{subject.iconUrl}}" src="{{subject.iconUrl}}" />
+                    <view class="home-card__title">{{subject.title}}</view>
+                  </view>
+                  <view class="home-card__footer">
+                    <view class="tag tag__multi--blue" wx:if="{{subject.label}}">{{subject.label === '视频版' ? '大陆在考版' : (subject.label === '面对面版' ? '个别地区版' : subject.label)}}</view>
+                    <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">{{subject.childTotal}}</view>
+                    <view class="tag tag--dynamic-solid" style="--tag-color:{{group.colorRgb}}" wx:if="{{subject.description}}">{{subject.description}}</view>
+                  </view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
+        <!-- 右列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{group.columns.rightColumn}}" wx:key="id" wx:for-item="subject">
+            <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
+              <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
+                <view class="home-card__content">
+                  <view class="home-card__header">
+                    <image class="home-card__icon" wx:if="{{subject.iconUrl}}" src="{{subject.iconUrl}}" />
+                    <view class="home-card__title">{{subject.title}}</view>
+                  </view>
+                  <view class="home-card__footer">
+                    <view class="tag tag__multi--blue" wx:if="{{subject.label}}">{{subject.label === '视频版' ? '大陆在考版' : (subject.label === '面对面版' ? '个别地区版' : subject.label)}}</view>
+                    <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">{{subject.childTotal}}</view>
+                    <view class="tag tag--dynamic-solid" style="--tag-color:{{group.colorRgb}}" wx:if="{{subject.description}}">{{subject.description}}</view>
+                  </view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
+      </view>
+      <!-- 卡片容器 - 普通列表布局 -->
+      <view class="home-main-item__content" wx:else>
         <block wx:for="{{group.list}}" wx:key="subjectIndex" wx:for-item="subject" wx:for-index="subjectIndex">
           <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
             <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">

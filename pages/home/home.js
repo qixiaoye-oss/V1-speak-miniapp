@@ -78,6 +78,11 @@ Page({
       updateData.popularScienceColumns = columns
     }
 
+    // 处理主体分组数据分列（瀑布流布局）
+    if (updateData.list) {
+      updateData.list = this._processGroupColumns(updateData.list)
+    }
+
     if (Object.keys(updateData).length > 0) {
       this.setData(updateData)
     }
@@ -102,6 +107,22 @@ Page({
   },
 
   /**
+   * 处理主体分组的瀑布流分列
+   * 为 layoutMode === 'QUAD_GRID' 的分组生成 columns 数据
+   */
+  _processGroupColumns(list) {
+    return list.map(group => {
+      if (group.layoutMode === 'QUAD_GRID' && group.list && group.list.length > 0) {
+        return {
+          ...group,
+          columns: this._splitToColumns(group.list)
+        }
+      }
+      return group
+    })
+  },
+
+  /**
    * 并行加载所有数据
    */
   _loadAllData() {
@@ -118,6 +139,11 @@ Page({
         let popularScienceColumns = null
         if (scienceData.popularScience && scienceData.popularScience.list) {
           popularScienceColumns = this._splitToColumns(scienceData.popularScience.list)
+        }
+
+        // 处理主体分组数据分列（瀑布流布局）
+        if (homeData.list) {
+          homeData.list = this._processGroupColumns(homeData.list)
         }
 
         // 合并数据，只调用一次 setData
