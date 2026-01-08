@@ -90,7 +90,14 @@ Page({
   // 根据 scoreFilter 过滤答案列表
   filterAndSetList() {
     const { rawList, scoreFilter } = this.data
-    if (!rawList || rawList.length === 0) return
+    console.log('[P2] filterAndSetList 开始')
+    console.log('[P2] rawList.length:', rawList?.length)
+    console.log('[P2] scoreFilter:', scoreFilter)
+
+    if (!rawList || rawList.length === 0) {
+      console.log('[P2] rawList 为空，退出')
+      return
+    }
 
     // 过滤：保留匹配版本 + 通用版本（使用 String 确保类型一致）
     const filteredList = rawList.filter(item => {
@@ -98,6 +105,9 @@ Page({
       if (difficulty === 'general') return true
       return difficulty === scoreFilter
     })
+
+    console.log('[P2] 过滤后 filteredList.length:', filteredList.length)
+    console.log('[P2] filteredList 各项 difficulty:', filteredList.map(item => item.difficulty))
 
     // 保持 versionIndex 不变，只更新 list
     this.setData({ list: filteredList })
@@ -432,6 +442,9 @@ Page({
     const hasToast = silent ? true : false
     api.request(this, '/question/v3/detail/story', param, hasToast, 'GET', false)
       .then((res) => {
+        console.log('[P2] getStoryData 返回:', res)
+        console.log('[P2] res.list:', res.list)
+        console.log('[P2] res.list 各项 difficulty:', res.list?.map(item => item.difficulty))
         // 保存原始列表用于筛选
         if (res.list) {
           this.setData({ rawList: res.list })
@@ -446,20 +459,35 @@ Page({
   // 校验 scoreFilter 是否有效，无效则修正，然后过滤数据
   validateAndFilter() {
     const { rawList, scoreFilter, scoreFilterList } = this.data
-    if (!rawList || rawList.length === 0) return
+    console.log('[P2] validateAndFilter 开始')
+    console.log('[P2] rawList.length:', rawList?.length)
+    console.log('[P2] 当前 scoreFilter:', scoreFilter)
+    console.log('[P2] scoreFilterList:', scoreFilterList)
+
+    if (!rawList || rawList.length === 0) {
+      console.log('[P2] rawList 为空，退出')
+      return
+    }
 
     // 检查当前 scoreFilter 是否在数据中存在
     const hasMatchingData = rawList.some(item => {
       const difficulty = String(item.difficulty)
       return difficulty === scoreFilter || difficulty === 'general'
     })
+    console.log('[P2] hasMatchingData:', hasMatchingData)
+
+    // 检查是否有精确匹配 scoreFilter 的数据
+    const hasExactMatch = rawList.some(item => String(item.difficulty) === scoreFilter)
+    console.log('[P2] hasExactMatch (scoreFilter in data):', hasExactMatch)
 
     // 如果没有匹配的数据（除了 general），尝试使用第一个有效的 difficulty
-    if (!hasMatchingData || !rawList.some(item => String(item.difficulty) === scoreFilter)) {
+    if (!hasMatchingData || !hasExactMatch) {
       // 从数据中找到第一个非 general 的 difficulty
       const firstNonGeneral = rawList.find(item => String(item.difficulty) !== 'general')
+      console.log('[P2] firstNonGeneral:', firstNonGeneral)
       if (firstNonGeneral) {
         const newFilter = String(firstNonGeneral.difficulty)
+        console.log('[P2] 修正 scoreFilter 为:', newFilter)
         // 从 scoreFilterList 中找到对应的文字
         let newText = newFilter + '+版本'
         if (scoreFilterList && scoreFilterList.length > 0) {
@@ -476,6 +504,7 @@ Page({
     }
 
     // 执行过滤
+    console.log('[P2] 执行 filterAndSetList，当前 scoreFilter:', this.data.scoreFilter)
     this.filterAndSetList()
   },
   popupConfirm(e) {
