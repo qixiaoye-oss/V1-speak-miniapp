@@ -86,16 +86,26 @@ module.exports = Behavior({
      * difficulty 在句子层（第三层）
      */
     filterAndSetList() {
-      const { rawList, scoreFilter } = this.data
+      const { rawList, scoreFilter, list: currentList } = this.data
       if (!rawList || rawList.length === 0) return
 
-      // 筛选逻辑：对每个版本内的分组内的句子进行筛选
+      // 1. 保存当前置顶状态（通过 id 映射）
+      const preferredMap = {}
+      if (currentList && currentList.length > 0) {
+        currentList.forEach(item => {
+          if (item.id) {
+            preferredMap[item.id] = item.isPreferred
+          }
+        })
+      }
+
+      // 2. 筛选逻辑：对每个版本内的分组内的句子进行筛选
       const filteredList = rawList.map(version => {
-        if (!version.list || version.list.length === 0) return version
+        if (!version.list || version.list.length === 0) return { ...version }
 
         // 对每个分组，筛选其中的句子
         const filteredGroups = version.list.map(group => {
-          if (!group.list || group.list.length === 0) return group
+          if (!group.list || group.list.length === 0) return { ...group }
 
           // 过滤句子：保留匹配版本 + 通用版本 + 无difficulty字段的句子
           const filteredSentences = group.list.filter(sentence => {
@@ -111,43 +121,131 @@ module.exports = Behavior({
         return { ...version, list: filteredGroups }
       }).filter(version => version.list && version.list.length > 0) // 移除空版本
 
+      // 3. 恢复置顶状态
+      filteredList.forEach(item => {
+        if (item.id && preferredMap[item.id] !== undefined) {
+          item.isPreferred = preferredMap[item.id]
+        }
+      })
+
       // 保持 versionIndex 不变，只更新 list
       this.setData({ list: filteredList })
     },
 
     /**
+     * 重置 difficulty 到用户全局默认设置
+     * 在切换 version-tab 时调用
+     * 基于当前版本的可用 difficulty 判断，避免切换到空内容
+     */
+    resetToDefaultDifficulty() {
+      const defaultDifficulty = wx.getStorageSync('difficultySpeak') || '6.5'
+      const { scoreFilterList, scoreFilter, versionIndex, rawList } = this.data
+
+      // 获取当前版本预计算的可用 difficulty
+      const version = rawList?.[versionIndex]
+      const versionDifficulties = version?._availableDifficulties || []
+
+      // 如果当前版本没有任何 difficulty 数据，不做处理
+      if (versionDifficulties.length === 0) return
+
+      // 确定目标 difficulty
+      let targetFilter = String(defaultDifficulty)
+
+      if (!versionDifficulties.includes(targetFilter)) {
+        // 默认 difficulty 在当前版本不可用
+        if (versionDifficulties.includes(scoreFilter)) {
+          // 当前 difficulty 可用，维持不变
+          return
+        }
+        // 降级到当前版本第一个可用的 difficulty
+        targetFilter = versionDifficulties[0]
+      }
+
+      // 如果已经是目标值，无需更新
+      if (scoreFilter === targetFilter) return
+
+      // 获取对应的显示文字
+      let filterText = targetFilter + '+版本'
+      if (scoreFilterList && scoreFilterList.length > 0) {
+        const matched = scoreFilterList.find(item => String(item.value) === targetFilter)
+        if (matched) filterText = matched.text
+      }
+
+      this.setData({
+        scoreFilter: targetFilter,
+        scoreFilterText: filterText
+      })
+      this.filterAndSetList()
+    },
+
+    /**
+     * 同步置顶状态到 rawList
+     * 在 onTopSwitch 修改置顶后调用，确保 rawList 与 list 的置顶状态一致
+     */
+    syncPreferredToRawList() {
+      const { list, rawList } = this.data
+      if (!list || !rawList || list.length === 0 || rawList.length === 0) return
+
+      // 构建 id -> isPreferred 映射
+      const preferredMap = {}
+      list.forEach(item => {
+        if (item.id) {
+          preferredMap[item.id] = item.isPreferred
+        }
+      })
+
+      // 更新 rawList 中的置顶状态
+      let hasChanges = false
+      rawList.forEach(item => {
+        if (item.id && item.id in preferredMap) {
+          if (item.isPreferred !== preferredMap[item.id]) {
+            item.isPreferred = preferredMap[item.id]
+            hasChanges = true
+          }
+        }
+      })
+
+      // 只有有变化时才更新
+      if (hasChanges) {
+        this.setData({ rawList })
+      }
+    },
+
+    /**
      * 检测数据中可用的版本，并决定是否禁用筛选按钮
      * 同时收集数据中可用的difficulty值（非general）
+     * 预计算每个版本的可用 difficulty 列表，存储到 version._availableDifficulties
      */
     checkScoreFilterDisabled() {
       const { rawList } = this.data
       if (!rawList || rawList.length === 0) return
 
-      // 收集所有句子（三层嵌套）
-      const allSentences = []
+      // 全局可用的 difficulty 集合
+      const globalAvailableSet = new Set()
+
+      // 遍历每个版本，预计算其可用的 difficulty
       rawList.forEach(version => {
+        const versionDiffSet = new Set()
         if (version.list && version.list.length > 0) {
           version.list.forEach(group => {
             if (group.list && group.list.length > 0) {
-              allSentences.push(...group.list)
+              group.list.forEach(sentence => {
+                if (sentence.difficulty != null) {
+                  const diff = String(sentence.difficulty)
+                  if (diff !== 'general') {
+                    versionDiffSet.add(diff)
+                    globalAvailableSet.add(diff)
+                  }
+                }
+              })
             }
           })
         }
+        // 存储到版本对象，供 resetToDefaultDifficulty 使用
+        version._availableDifficulties = Array.from(versionDiffSet)
       })
 
-      if (allSentences.length === 0) return
-
-      // 收集数据中可用的difficulty值（非general、非空）
-      const availableSet = new Set()
-      allSentences.forEach(sentence => {
-        if (sentence.difficulty !== undefined && sentence.difficulty !== null) {
-          const diff = String(sentence.difficulty)
-          if (diff !== 'general') {
-            availableSet.add(diff)
-          }
-        }
-      })
-      const availableDifficulties = Array.from(availableSet)
+      const availableDifficulties = Array.from(globalAvailableSet)
       this.setData({ availableDifficulties })
 
       // 检查是否所有句子都是 general 或无 difficulty 字段

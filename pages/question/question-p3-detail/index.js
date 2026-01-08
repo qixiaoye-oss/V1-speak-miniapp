@@ -60,6 +60,8 @@ Page({
       // 切换前打断音频
       this.interruptAudio()
       this.setData({ versionIndex: checkIndex })
+      // 重置到用户默认 difficulty
+      this.resetToDefaultDifficulty()
     }
   },
   // 播放/停止答案所有句子
@@ -131,6 +133,7 @@ Page({
       list: list
     })
     this.updatePin(index)
+    this.syncPreferredToRawList()
   },
   // 保存P3答案置顶状态
   updatePin(index) {

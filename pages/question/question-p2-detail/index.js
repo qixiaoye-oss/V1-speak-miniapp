@@ -265,6 +265,8 @@ Page({
       // 切换前打断音频
       this.interruptAudio()
       this.setData({ versionIndex: checkIndex })
+      // 重置到用户默认 difficulty
+      this.resetToDefaultDifficulty()
     }
   },
   // 切换灵感块展开/收起状态
@@ -286,6 +288,7 @@ Page({
       list: list
     })
     this.updatePin(index)
+    this.syncPreferredToRawList()
   },
   // 保存P2答案置顶状态
   updatePin(index) {
