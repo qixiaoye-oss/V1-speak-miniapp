@@ -286,6 +286,7 @@ Page({
       list: list
     })
     this.updatePin(index)
+    this.syncPreferredToRawList()
   },
   // 保存P2答案置顶状态
   updatePin(index) {

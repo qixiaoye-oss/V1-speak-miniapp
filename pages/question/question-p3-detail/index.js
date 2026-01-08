@@ -131,6 +131,7 @@ Page({
       list: list
     })
     this.updatePin(index)
+    this.syncPreferredToRawList()
   },
   // 保存P3答案置顶状态
   updatePin(index) {

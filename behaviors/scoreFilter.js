@@ -133,6 +133,39 @@ module.exports = Behavior({
     },
 
     /**
+     * 同步置顶状态到 rawList
+     * 在 onTopSwitch 修改置顶后调用，确保 rawList 与 list 的置顶状态一致
+     */
+    syncPreferredToRawList() {
+      const { list, rawList } = this.data
+      if (!list || !rawList || list.length === 0 || rawList.length === 0) return
+
+      // 构建 id -> isPreferred 映射
+      const preferredMap = {}
+      list.forEach(item => {
+        if (item.id) {
+          preferredMap[item.id] = item.isPreferred
+        }
+      })
+
+      // 更新 rawList 中的置顶状态
+      let hasChanges = false
+      rawList.forEach(item => {
+        if (item.id && item.id in preferredMap) {
+          if (item.isPreferred !== preferredMap[item.id]) {
+            item.isPreferred = preferredMap[item.id]
+            hasChanges = true
+          }
+        }
+      })
+
+      // 只有有变化时才更新
+      if (hasChanges) {
+        this.setData({ rawList })
+      }
+    },
+
+    /**
      * 检测数据中可用的版本，并决定是否禁用筛选按钮
      * 同时收集数据中可用的difficulty值（非general）
      */

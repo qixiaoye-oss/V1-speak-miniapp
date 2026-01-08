@@ -126,6 +126,7 @@ Page({
       list: list
     })
     this.updatePin(index)
+    this.syncPreferredToRawList()
   },
   // 切换版本
   checkVersion(e) {
