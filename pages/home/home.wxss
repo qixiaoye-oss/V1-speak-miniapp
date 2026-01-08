@@ -61,6 +61,7 @@
 /* 科普卡片内部样式微调 */
 .home-card--science .home-card__body {
   display: block;
+  overflow: hidden;
 }
 
 .home-card--science .home-card__body-title {
@@ -78,6 +79,7 @@
 
 .home-card--science .home-card__body-desc {
   display: block;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
