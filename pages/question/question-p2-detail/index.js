@@ -87,32 +87,51 @@ Page({
       }
     })
   },
-  // 根据 scoreFilter 过滤答案列表
+  // 根据 scoreFilter 过滤答案列表（P2是两层结构，difficulty在block层）
   filterAndSetList() {
     const { rawList, scoreFilter } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 过滤：保留匹配版本 + 通用版本 + 无difficulty字段的数据
-    const filteredList = rawList.filter(item => {
-      // 如果没有 difficulty 字段，视为通用版本，保留
-      if (item.difficulty === undefined || item.difficulty === null) return true
-      const difficulty = String(item.difficulty)
-      if (difficulty === 'general') return true
-      return difficulty === scoreFilter
-    })
+    // P2的difficulty在block层（list[].list[]），需要对每个版本内部的block进行筛选
+    const filteredList = rawList.map(version => {
+      // 如果版本没有 list 属性，直接返回
+      if (!version.list || version.list.length === 0) return version
+
+      // 过滤block：保留匹配版本 + 通用版本 + 无difficulty字段的block
+      const filteredBlocks = version.list.filter(block => {
+        // 如果没有 difficulty 字段，视为通用版本，保留
+        if (block.difficulty === undefined || block.difficulty === null) return true
+        const difficulty = String(block.difficulty)
+        if (difficulty === 'general') return true
+        return difficulty === scoreFilter
+      })
+
+      // 返回新版本对象，包含筛选后的block列表
+      return { ...version, list: filteredBlocks }
+    }).filter(version => version.list && version.list.length > 0) // 移除空版本
 
     // 保持 versionIndex 不变，只更新 list
     this.setData({ list: filteredList })
   },
-  // 检测是否只有通用版本数据（禁用筛选按钮）
+  // 检测是否只有通用版本数据（禁用筛选按钮）- P2在block层检查
   checkScoreFilterDisabled() {
     const { rawList } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 检查是否所有数据都是 general 或无 difficulty 字段
-    const onlyGeneralOrNone = rawList.every(item => {
-      if (item.difficulty === undefined || item.difficulty === null) return true
-      return String(item.difficulty) === 'general'
+    // P2的difficulty在block层，收集所有block
+    const allBlocks = []
+    rawList.forEach(version => {
+      if (version.list && version.list.length > 0) {
+        allBlocks.push(...version.list)
+      }
+    })
+
+    if (allBlocks.length === 0) return
+
+    // 检查是否所有block都是 general 或无 difficulty 字段
+    const onlyGeneralOrNone = allBlocks.every(block => {
+      if (block.difficulty === undefined || block.difficulty === null) return true
+      return String(block.difficulty) === 'general'
     })
     if (onlyGeneralOrNone) {
       this.setData({
@@ -448,13 +467,26 @@ Page({
         this.validateAndFilter()
       })
   },
-  // 校验 scoreFilter 是否有效，无效则修正，然后过滤数据
+  // 校验 scoreFilter 是否有效，无效则修正，然后过滤数据 - P2在block层检查
   validateAndFilter() {
     const { rawList, scoreFilter, scoreFilterList } = this.data
     if (!rawList || rawList.length === 0) return
 
+    // P2的difficulty在block层，收集所有block
+    const allBlocks = []
+    rawList.forEach(version => {
+      if (version.list && version.list.length > 0) {
+        allBlocks.push(...version.list)
+      }
+    })
+
+    if (allBlocks.length === 0) {
+      this.filterAndSetList()
+      return
+    }
+
     // 检查数据中是否有 difficulty 字段
-    const hasAnyDifficulty = rawList.some(item => item.difficulty !== undefined && item.difficulty !== null)
+    const hasAnyDifficulty = allBlocks.some(block => block.difficulty !== undefined && block.difficulty !== null)
 
     // 如果数据中都没有 difficulty 字段，直接显示所有数据
     if (!hasAnyDifficulty) {
@@ -463,16 +495,16 @@ Page({
     }
 
     // 检查当前 scoreFilter 是否在数据中存在
-    const hasExactMatch = rawList.some(item => {
-      if (item.difficulty === undefined || item.difficulty === null) return false
-      return String(item.difficulty) === scoreFilter
+    const hasExactMatch = allBlocks.some(block => {
+      if (block.difficulty === undefined || block.difficulty === null) return false
+      return String(block.difficulty) === scoreFilter
     })
 
     // 如果没有精确匹配，尝试使用数据中第一个有效的 difficulty
     if (!hasExactMatch) {
-      const firstWithDifficulty = rawList.find(item => {
-        if (item.difficulty === undefined || item.difficulty === null) return false
-        return String(item.difficulty) !== 'general'
+      const firstWithDifficulty = allBlocks.find(block => {
+        if (block.difficulty === undefined || block.difficulty === null) return false
+        return String(block.difficulty) !== 'general'
       })
       if (firstWithDifficulty) {
         const newFilter = String(firstWithDifficulty.difficulty)
