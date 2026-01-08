@@ -92,10 +92,8 @@
 }
 
 .chapter__title-text {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   line-height: 1.4;
+  word-break: break-word;
 }
 
 .chapter__intervals {
