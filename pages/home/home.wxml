@@ -17,18 +17,35 @@
     <!-- 科普内容区域 -->
     <view class="home-main-item home-main-item--science" wx:if="{{popularScience.list.length > 0}}">
       <view class="home-main-item__title" style="color:var(--main-blue-color)">{{popularScience.title}}</view>
-      <view class="home-main-item__content--grid">
-        <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
-          <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
-            <view class="home-card home-card--notice home-card--science">
-              <view class="home-card__content">
-                <view class="home-card__body-title">{{notice.title}}</view>
-                <view class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</view>
-                <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
+      <view class="home-main-item__content--waterfall">
+        <!-- 左列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{popularScienceColumns.leftColumn}}" wx:key="id" wx:for-item="notice">
+            <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+              <view class="home-card home-card--notice home-card--science">
+                <view class="home-card__content">
+                  <view class="home-card__body-title">{{notice.title}}</view>
+                  <view class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</view>
+                  <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
+                </view>
               </view>
-            </view>
-          </tap-action>
-        </block>
+            </tap-action>
+          </block>
+        </view>
+        <!-- 右列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{popularScienceColumns.rightColumn}}" wx:key="id" wx:for-item="notice">
+            <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+              <view class="home-card home-card--notice home-card--science">
+                <view class="home-card__content">
+                  <view class="home-card__body-title">{{notice.title}}</view>
+                  <view class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</view>
+                  <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
       </view>
       <view class="home-view-all">
         <tap-action icon="next" bind:tap="toPopularScienceListPage">

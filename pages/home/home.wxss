@@ -53,9 +53,17 @@
   border: 2px dotted var(--main-blue-color);
 }
 
-/* 确保 tap-action 组件在 grid 容器中正确作为 grid item */
-.home-main-item--science .home-main-item__content--grid > tap-action {
-  display: block;
+/* 瀑布流布局 */
+.home-main-item__content--waterfall {
+  display: flex;
+  gap: 10px;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   min-width: 0;
 }
 

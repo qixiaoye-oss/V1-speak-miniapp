@@ -72,11 +72,33 @@ Page({
       app.globalData.homeDataCache = null  // 清除缓存
     }
 
+    // 处理科普数据分列（瀑布流布局）
+    if (updateData.popularScience && updateData.popularScience.list) {
+      const columns = this._splitToColumns(updateData.popularScience.list)
+      updateData.popularScienceColumns = columns
+    }
+
     if (Object.keys(updateData).length > 0) {
       this.setData(updateData)
     }
     this.setDataReady()
     this.markLoaded()
+  },
+
+  /**
+   * 将列表数据分成左右两列（用于瀑布流布局）
+   */
+  _splitToColumns(list) {
+    const leftColumn = []
+    const rightColumn = []
+    list.forEach((item, index) => {
+      if (index % 2 === 0) {
+        leftColumn.push(item)
+      } else {
+        rightColumn.push(item)
+      }
+    })
+    return { leftColumn, rightColumn }
   },
 
   /**
@@ -92,10 +114,17 @@ Page({
 
     Promise.all(promises)
       .then(([scienceData, homeData]) => {
+        // 处理科普数据分列（瀑布流布局）
+        let popularScienceColumns = null
+        if (scienceData.popularScience && scienceData.popularScience.list) {
+          popularScienceColumns = this._splitToColumns(scienceData.popularScience.list)
+        }
+
         // 合并数据，只调用一次 setData
         this.setData({
           ...scienceData,
-          ...homeData
+          ...homeData,
+          ...(popularScienceColumns ? { popularScienceColumns } : {})
         })
         this.setDataReady()
         this.markLoaded()
