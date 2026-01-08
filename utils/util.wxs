@@ -92,6 +92,20 @@ function accuracyStyle(value1, value2) {
   return Number(value1) > Number(value2)
 }
 
+/**
+ * 将 rgba 颜色的透明度转换为 1（全不透明）
+ * 例如: rgba(80,146,255,0.15) -> rgba(80,146,255,1)
+ */
+function toSolidColor(rgbaColor) {
+  if (isEmpty(rgbaColor)) return ''
+  // 查找最后一个逗号的位置，替换其后的透明度值
+  var lastCommaIndex = rgbaColor.lastIndexOf(',')
+  if (lastCommaIndex !== -1) {
+    return rgbaColor.substring(0, lastCommaIndex) + ',1)'
+  }
+  return rgbaColor
+}
+
 module.exports = {
   formatDate: formatDate,
   isCheck: isCheck,
@@ -99,5 +113,6 @@ module.exports = {
   formatNull: formatNull,
   formatNumber: formatNumber,
   isEmpty: isEmpty,
-  accuracyStyle: accuracyStyle
+  accuracyStyle: accuracyStyle,
+  toSolidColor: toSolidColor
 }
