@@ -28,16 +28,9 @@
     <view class="chapter-cell" wx:if="{{showMode === 'full'}}">
       <view class="chapter" wx:for="{{group.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}" wx:if="{{!chapter.hidden}}">
         <view class="chapter__header chapter__header--vertical">
-          <view class="chapter__header-top">
-            <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
-              <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
-              <view class="chapter__title-text">{{chapter.title}}</view>
-            </view>
-            <view class="chapter__tag">
-              <view class="tag tag--red" wx:if="{{chapter.description}}">{{chapter.description}}</view>
-              <view class="tag tag--orange" wx:if="{{chapter.isChargeable == 1}}">权限</view>
-              <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
-            </view>
+          <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
+            <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+            <view class="chapter__title-text">{{chapter.title}}</view>
           </view>
           <view class="chapter__header-answers" wx:if="{{chapter.answers && chapter.answers.length > 0}}">
             <view
