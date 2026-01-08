@@ -220,11 +220,26 @@ Page({
       url: `/pages/science/detail/index?id=${id}`,
     })
   },
-  // 小程序跳转链接点击（暂未实现跳转）
+  // 小程序跳转链接点击
   onMiniappLinkTap(e) {
     const type = e.currentTarget.dataset.type
-    console.log('小程序跳转链接点击:', type)
-    // TODO: 实现小程序跳转
+    // 小程序 appId 映射
+    const appIdMap = {
+      jijing: 'wx236ffece314ca802',   // 机经开源题库
+      tingli: 'wx9d02de9098ab4be3'    // 听力专项训练
+    }
+    const appId = appIdMap[type]
+    if (!appId) {
+      console.warn('未知的小程序类型:', type)
+      return
+    }
+    wx.navigateToMiniProgram({
+      appId,
+      envVersion: 'release',
+      fail(err) {
+        console.error('小程序跳转失败:', err)
+      }
+    })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
