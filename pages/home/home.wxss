@@ -59,23 +59,15 @@
 }
 
 /* 科普卡片内部样式 */
-.home-card--science .home-card__body {
-  display: block;
-  -webkit-line-clamp: unset;
-}
-
 .home-card--science .home-card__body-title {
-  display: block;
   font-size: 15px;
   font-weight: bold;
-}
-
-.home-card--science .home-card__body-separator {
-  display: none;
+  margin-bottom: 5px;
 }
 
 .home-card--science .home-card__body-desc {
-  display: block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
