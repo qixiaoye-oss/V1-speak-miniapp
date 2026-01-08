@@ -96,34 +96,62 @@ Page({
       }
     })
   },
-  // 根据 scoreFilter 过滤答案列表
+  // 根据 scoreFilter 过滤答案列表（P3是三层结构，difficulty在句子层）
   filterAndSetList() {
     const { rawList, scoreFilter } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 过滤：保留匹配版本 + 通用版本 + 无difficulty字段的数据
-    const filteredList = rawList.filter(item => {
-      // 如果没有 difficulty 字段，视为通用版本，保留
-      if (item.difficulty === undefined || item.difficulty === null) return true
-      const difficulty = String(item.difficulty)
-      if (difficulty === 'general') return true
-      return difficulty === scoreFilter
-    })
+    // P3的difficulty在句子层（list[].list[].list[]）
+    // 筛选逻辑：对每个分组内的句子进行筛选
+    const filteredList = rawList.map(version => {
+      if (!version.list || version.list.length === 0) return version
+
+      // 对每个分组，筛选其中的句子
+      const filteredGroups = version.list.map(group => {
+        if (!group.list || group.list.length === 0) return group
+
+        // 过滤句子：保留匹配版本 + 通用版本 + 无difficulty字段的句子
+        const filteredSentences = group.list.filter(sentence => {
+          if (sentence.difficulty === undefined || sentence.difficulty === null) return true
+          const difficulty = String(sentence.difficulty)
+          if (difficulty === 'general') return true
+          return difficulty === scoreFilter
+        })
+
+        return { ...group, list: filteredSentences }
+      }).filter(group => group.list && group.list.length > 0) // 移除空分组
+
+      return { ...version, list: filteredGroups }
+    }).filter(version => version.list && version.list.length > 0) // 移除空版本
 
     // 保持 versionIndex 不变，只更新 list
     this.setData({ list: filteredList })
   },
-  // 检测是否只有通用版本数据（禁用筛选按钮）
+  // 检测是否只有通用版本数据（禁用筛选按钮）- P3在句子层检查
   // 同时收集数据中可用的difficulty值
   checkScoreFilterDisabled() {
     const { rawList } = this.data
     if (!rawList || rawList.length === 0) return
 
+    // P3的difficulty在句子层，收集所有句子
+    const allSentences = []
+    rawList.forEach(version => {
+      if (version.list && version.list.length > 0) {
+        version.list.forEach(group => {
+          if (group.list && group.list.length > 0) {
+            allSentences.push(...group.list)
+          }
+        })
+      }
+    })
+
+    if (allSentences.length === 0) return
+
     // 收集数据中可用的difficulty值（非general、非空）
     const availableSet = new Set()
-    rawList.forEach(item => {
-      if (item.difficulty !== undefined && item.difficulty !== null) {
-        const diff = String(item.difficulty)
+    allSentences.forEach(sentence => {
+      if (sentence.difficulty !== undefined && sentence.difficulty !== null) {
+        const diff = String(sentence.difficulty)
         if (diff !== 'general') {
           availableSet.add(diff)
         }
@@ -132,7 +160,7 @@ Page({
     const availableDifficulties = Array.from(availableSet)
     this.setData({ availableDifficulties })
 
-    // 检查是否所有数据都是 general 或无 difficulty 字段
+    // 检查是否所有句子都是 general 或无 difficulty 字段
     const onlyGeneralOrNone = availableDifficulties.length === 0
     if (onlyGeneralOrNone) {
       this.setData({
