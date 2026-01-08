@@ -58,11 +58,19 @@
   <view class="btn-page-bottom">
     <view class="btn-group-hint-banner" data-icon="controller">点击答案句子/题目句，可以单句播放</view>
     <view class="btn-group-single">
-      <tap-action icon="controller" bind:tap="recordingOrClocking">
-        <view>打卡/录音</view>
-        <image src="/images/v2/controller_bt.png"></image>
-        <view class="btn-corner-mark">{{recordingCount || 0}}</view>
-      </tap-action>
+      <view class="btn-pos-left">
+        <tap-action icon="replay" bind:tap="onScoreFilterTap">
+          <view>{{scoreFilterText}}</view>
+          <image src="/images/v2/replay_bt.png"></image>
+        </tap-action>
+      </view>
+      <view class="btn-pos-right">
+        <tap-action icon="controller" bind:tap="recordingOrClocking">
+          <view>打卡/录音</view>
+          <image src="/images/v2/controller_bt.png"></image>
+          <view class="btn-corner-mark">{{recordingCount || 0}}</view>
+        </tap-action>
+      </view>
     </view>
   </view>
 </block>

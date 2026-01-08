@@ -11,7 +11,9 @@ Page({
   data: {
     showPopup: false,
     seriesIndex: 0,
-    versionIndex: 0
+    versionIndex: 0,
+    scoreFilter: '',           // 当前筛选值：'6+' | '7+' | ''
+    scoreFilterText: '分数筛选' // 按钮显示文字
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -49,6 +51,21 @@ Page({
   },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
+  // 分数筛选按钮点击
+  onScoreFilterTap() {
+    wx.showActionSheet({
+      itemList: ['6+版本', '7+版本'],
+      success: (res) => {
+        const options = ['6+', '7+']
+        const texts = ['6+版本', '7+版本']
+        this.setData({
+          scoreFilter: options[res.tapIndex],
+          scoreFilterText: texts[res.tapIndex]
+        })
+        // TODO: 后端API对接后，根据 scoreFilter 重新请求数据
+      }
+    })
+  },
   // 播放/停止指定 block 的所有句子
   onFooterPlay(e) {
     const { versionIndex, blockIndex } = e.currentTarget.dataset
