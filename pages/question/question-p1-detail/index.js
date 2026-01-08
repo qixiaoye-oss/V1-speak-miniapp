@@ -14,6 +14,7 @@ Page({
     scoreFilter: '6',           // 当前筛选值，默认6分版
     scoreFilterText: '6分版',   // 按钮显示文字
     scoreFilterDisabled: false, // 筛选按钮是否禁用（仅有通用版本时禁用）
+    scoreFilterList: [],        // 从接口动态获取的难度列表
     rawList: [],                // 原始答案列表（未筛选）
   },
   // ===========生命周期 Start===========
@@ -43,13 +44,12 @@ Page({
   onLoad(options) {
     // 读取用户默认难度设置
     const difficultySpeak = wx.getStorageSync('difficultySpeak') || '6'
-    const difficultyTextMap = { '6': '6分版', '7': '7分版', '8': '8分版' }
     this.setData({
       queryParam: options,
-      scoreFilter: difficultySpeak,
-      scoreFilterText: difficultyTextMap[difficultySpeak] || '6分版'
+      scoreFilter: String(difficultySpeak)
     })
     this.initSentenceAudio()
+    this.getDifficultyList()
   },
   onUnload() {
     this.destroySentenceAudio()
@@ -62,15 +62,21 @@ Page({
     if (this.data.scoreFilterDisabled) return
 
     const _this = this
+    const { scoreFilterList } = this.data
+    if (!scoreFilterList || scoreFilterList.length === 0) {
+      api.toast('加载中，请稍后再试')
+      return
+    }
+    // 排除 general 选项
+    const selectableList = scoreFilterList.filter(item => item.value !== 'general')
+    const itemList = selectableList.map(item => item.text)
     wx.showActionSheet({
-      itemList: ['6分版', '7分版', '8分版'],
+      itemList,
       success(res) {
-        const options = ['6', '7', '8']
-        const texts = ['6分版', '7分版', '8分版']
-        const scoreFilter = options[res.tapIndex]
+        const selected = selectableList[res.tapIndex]
         _this.setData({
-          scoreFilter,
-          scoreFilterText: texts[res.tapIndex]
+          scoreFilter: String(selected.value),
+          scoreFilterText: selected.text
         })
         // 根据新筛选值重新过滤数据
         _this.filterAndSetList()
@@ -84,10 +90,11 @@ Page({
     const { rawList, scoreFilter } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 过滤：保留匹配版本 + 通用版本
+    // 过滤：保留匹配版本 + 通用版本（使用 String 确保类型一致）
     const filteredList = rawList.filter(item => {
-      if (item.difficulty === 'general') return true
-      return item.difficulty === scoreFilter
+      const difficulty = String(item.difficulty)
+      if (difficulty === 'general') return true
+      return difficulty === scoreFilter
     })
 
     // 保持 versionIndex 不变，只更新 list
@@ -98,8 +105,8 @@ Page({
     const { rawList } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 检查是否所有数据都是 general
-    const onlyGeneral = rawList.every(item => item.difficulty === 'general')
+    // 检查是否所有数据都是 general（使用 String 确保类型一致）
+    const onlyGeneral = rawList.every(item => String(item.difficulty) === 'general')
     if (onlyGeneral) {
       this.setData({
         scoreFilterDisabled: true,
@@ -203,6 +210,21 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
+  // 获取难度列表
+  getDifficultyList() {
+    const _this = this
+    api.request(this, '/system/list/dict/classify_scores', {}, true).then(res => {
+      if (res && res.dictItems) {
+        _this.setData({ scoreFilterList: res.dictItems })
+        // 根据当前筛选值设置按钮文字
+        const { scoreFilter } = _this.data
+        const current = res.dictItems.find(item => String(item.value) === scoreFilter)
+        if (current) {
+          _this.setData({ scoreFilterText: current.text })
+        }
+      }
+    })
+  },
   // 查找置顶版本的索引
   findPreferredVersionIndex() {
     const { list } = this.data
