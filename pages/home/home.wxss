@@ -58,6 +58,28 @@
   border-color: var(--main-blue-color) !important;
 }
 
+/* 科普卡片内部样式 */
+.home-card--science .home-card__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-card--science .home-card__body-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.home-card--science .home-card__body-separator {
+  display: none;
+}
+
+.home-card--science .home-card__body-desc {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 小程序跳转区域样式 */
 .miniprogram-links {
   display: flex;
