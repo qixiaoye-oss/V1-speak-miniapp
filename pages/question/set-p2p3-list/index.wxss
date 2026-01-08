@@ -120,6 +120,7 @@ mode-switch {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  width: 100%;
 }
 
 .chapter__header-answers {
