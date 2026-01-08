@@ -60,11 +60,12 @@
 
 /* 科普卡片内部样式 */
 .home-card--science .home-card__body {
-  display: flex;
-  flex-direction: column;
+  display: block;
+  -webkit-line-clamp: unset;
 }
 
 .home-card--science .home-card__body-title {
+  display: block;
   font-size: 15px;
   font-weight: bold;
 }
