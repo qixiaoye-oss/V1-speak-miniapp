@@ -28,10 +28,7 @@
                   <text class="home-card__body-separator"> · </text>
                   <text class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</text>
                 </view>
-                <view class="home-card__meta">
-                  <image src="/images/v2/heart_bt.png"></image>
-                  <view>{{notice.helpfulCount}}人觉得有用</view>
-                </view>
+                <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
               </view>
             </view>
           </tap-action>
