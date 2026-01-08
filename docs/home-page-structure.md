@@ -6,22 +6,28 @@
 
 ```
 home (首页容器)
-├── page-loading (页面加载模板)
-├── load-error (加载错误模板)
+├── init-loading (初始化提示)
+├── skeleton (骨架屏)
 │
-├── home-main-item (科普模块 - popularScience)
-│   ├── home-main-item__title
-│   ├── home-main-item__content--grid
-│   │   └── home-card--notice (科普卡片)
-│   └── home-view-all (查看所有)
+├── head-banner (顶部横幅)
+│   └── home-main-item--science (科普模块)
+│       ├── home-main-item__title
+│       ├── home-main-item__content--waterfall (瀑布流布局)
+│       │   ├── waterfall-column (左列)
+│       │   │   └── home-card--notice home-card--science (科普卡片)
+│       │   └── waterfall-column (右列)
+│       │       └── home-card--notice home-card--science (科普卡片)
+│       └── home-view-all (查看所有)
 │
-└── home-main-item (分组区块 - "大卡片")
+├── nav-cards (小程序跳转导航)
+│   ├── nav-card (机经开源题库)
+│   └── nav-card (听力专项训练)
+│
+└── home-main-item (分组区块 - 循环渲染)
     ├── home-main-item__title (分组标题)
     ├── home-main-item__notice (说明徽章 - 可选)
     └── home-main-item__content / home-main-item__content--grid (卡片容器)
-        └── home-card (卡片 - "小卡片")
-            ├── home-card--subject (专项练习/套题训练卡片)
-            └── home-card--notice (补充说明卡片)
+        └── home-card--subject (专项练习/套题训练卡片)
 ```
 
 ## 命名规范
@@ -33,10 +39,139 @@ home (首页容器)
 - **Element（元素）**：块的组成部分，使用 `__` 连接（如 `home-card__content`）
 - **Modifier（修饰符）**：块或元素的状态/类型，使用 `--` 连接（如 `home-card--subject`）
 
+---
+
+## 科普模块 (home-main-item--science)
+
+### 描述
+科普模块位于顶部横幅内，使用**瀑布流布局**展示科普卡片，卡片高度自适应。
+
+### 结构
+```html
+<view class="home-main-item home-main-item--science" wx:if="{{popularScience.list.length > 0}}">
+  <view class="home-main-item__title" style="color:var(--main-blue-color)">
+    {{popularScience.title}}
+  </view>
+  <view class="home-main-item__content--waterfall">
+    <!-- 左列 -->
+    <view class="waterfall-column">
+      <block wx:for="{{popularScienceColumns.leftColumn}}" wx:key="id" wx:for-item="notice">
+        <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+          <view class="home-card home-card--notice home-card--science">
+            <view class="home-card__content">
+              <view class="home-card__body-title">{{notice.title}}</view>
+              <view class="home-card__body-desc">{{notice.description}}</view>
+              <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
+            </view>
+          </view>
+        </tap-action>
+      </block>
+    </view>
+    <!-- 右列 -->
+    <view class="waterfall-column">
+      <block wx:for="{{popularScienceColumns.rightColumn}}" wx:key="id" wx:for-item="notice">
+        <!-- 同左列结构 -->
+      </block>
+    </view>
+  </view>
+  <view class="home-view-all">
+    <tap-action icon="next" bind:tap="toPopularScienceListPage">
+      <view>查看所有</view>
+      <image src="/images/v2/next_bt.png"></image>
+    </tap-action>
+  </view>
+</view>
+```
+
+### 科普卡片子元素说明
+
+| 类名 | 说明 | 样式特点 |
+|-----|------|---------|
+| `home-card__body-title` | 标题 | 15px，**加粗**，可换行显示全部 |
+| `home-card__body-desc` | 描述 | 14px，灰色，一行截断（...） |
+| `home-card__meta` | 操作提示 | 12px，主蓝色，显示"查看详情" |
+
+### 瀑布流布局样式
+```css
+.home-main-item__content--waterfall {
+  display: flex;
+  gap: 10px;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+```
+
+### 数据分列逻辑
+```javascript
+_splitToColumns(list) {
+  const leftColumn = []
+  const rightColumn = []
+  list.forEach((item, index) => {
+    if (index % 2 === 0) {
+      leftColumn.push(item)
+    } else {
+      rightColumn.push(item)
+    }
+  })
+  return { leftColumn, rightColumn }
+}
+```
+
+---
+
+## 导航卡片 (nav-cards)
+
+### 描述
+小程序跳转导航卡片，水平排列两个入口。
+
+### 结构
+```html
+<view class="nav-cards" wx:if="{{_isDataReady}}">
+  <tap-action type="card" bind:tap="onNavCardTap" data-type="jijing">
+    <view class="nav-card">机经开源题库</view>
+  </tap-action>
+  <tap-action type="card" bind:tap="onNavCardTap" data-type="tingli">
+    <view class="nav-card">听力专项训练</view>
+  </tap-action>
+</view>
+```
+
+### 样式
+```css
+.nav-cards {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.nav-cards > tap-action {
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-card {
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background: #ffffff;
+  border: 2px dotted var(--main-blue-color);
+  border-radius: 10px;
+}
+```
+
+---
+
 ## 分组区块 (home-main-item)
 
 ### 描述
-分组区块，即"大卡片"，表示一个功能分组（如"专项练习"、"套题训练"、"补充说明"）。
+分组区块，即"大卡片"，表示一个功能分组（如"专项练习"、"套题训练"）。
 
 ### 结构
 ```html
@@ -69,14 +204,11 @@ home (首页容器)
 | `home-main-item__content` | 卡片容器（单列） | - |
 | `home-main-item__content--grid` | 卡片容器（网格 2x） | `group.layoutMode === 'QUAD_GRID'` |
 
-## 卡片 (home-card)
+---
 
-### 描述
-卡片，即"小卡片"，表示具体的功能项或信息项。分为两种：
-- **专项练习/套题训练卡片**（`home-card--subject`）
-- **补充说明卡片**（`home-card--notice`）
+## 卡片类型
 
-### 专项练习/套题训练卡片结构
+### 专项练习/套题训练卡片 (home-card--subject)
 
 ```html
 <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}">
@@ -88,6 +220,7 @@ home (首页容器)
         <view class="home-card__title">{{subject.title}}</view>
       </view>
       <view class="home-card__footer">
+        <view class="tag tag__multi--blue" wx:if="{{subject.label}}">{{subject.label}}</view>
         <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">
           {{subject.childTotal}}
         </view>
@@ -102,33 +235,23 @@ home (首页容器)
 
 #### 子元素说明
 
-| 类名 | 说明 | 数据来源 | 样式特点 |
-|-----|------|---------|---------|
-| `home-card__content` | 卡片内容容器 | - | 白色背景，圆角 |
-| `home-card__header` | 头部容器 | - | flex 布局 |
-| `home-card__icon` | 图标 | `subject.iconUrl` | 25x25px，top: 2px |
-| `home-card__title` | 标题 | `subject.title` | 18px，**加粗** |
-| `home-card__footer` | 底部标签容器 | - | flex 布局，flex-wrap |
+| 类名 | 说明 | 样式特点 |
+|-----|------|---------|
+| `home-card__content` | 卡片内容容器 | 白色背景，圆角 |
+| `home-card__header` | 头部容器 | flex 布局 |
+| `home-card__icon` | 图标 | 25x25px |
+| `home-card__title` | 标题 | 18px，**加粗** |
+| `home-card__footer` | 底部标签容器 | flex 布局，flex-wrap |
 
-### 补充说明卡片结构
+### 科普卡片 (home-card--notice home-card--science)
 
 ```html
 <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
-  <view class="home-card home-card--notice"
-        style="background:{{popularScience.colorRgba}};border-color:{{popularScience.colorRgb}};">
+  <view class="home-card home-card--notice home-card--science">
     <view class="home-card__content">
-      <view class="home-card__category" style="color: {{popularScience.colorRgb}};">
-        {{notice.groupTitle}}
-      </view>
-      <view class="home-card__body">
-        <text class="home-card__body-title">{{notice.title}}</text>
-        <text class="home-card__body-separator"> · </text>
-        <text class="home-card__body-desc">{{notice.description}}</text>
-      </view>
-      <view class="home-card__meta">
-        <image src="/images/v2/heart_bt.png"></image>
-        <view>{{notice.helpfulCount}}人觉得有用</view>
-      </view>
+      <view class="home-card__body-title">{{notice.title}}</view>
+      <view class="home-card__body-desc">{{notice.description}}</view>
+      <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
     </view>
   </view>
 </tap-action>
@@ -136,65 +259,98 @@ home (首页容器)
 
 #### 子元素说明
 
-| 类名 | 说明 | 数据来源 | 样式特点 |
+| 类名 | 说明 | 样式特点 |
+|-----|------|---------|
+| `home-card__content` | 卡片内容容器 | 白色背景，padding 15px |
+| `home-card__body-title` | 标题 | 15px，**加粗**，可换行 |
+| `home-card__body-desc` | 描述 | 14px，灰色，一行截断 |
+| `home-card__meta` | 操作提示 | 12px，主蓝色，"查看详情" |
+
+---
+
+## 布局模式对比
+
+| 布局 | 类名 | 使用场景 | 实现方式 |
 |-----|------|---------|---------|
-| `home-card__content` | 卡片内容容器 | - | 白色背景，padding 15px |
-| `home-card__category` | 分类标签 | `notice.groupTitle` | 12px，单行截断 |
-| `home-card__body` | 正文容器 | - | 14px，最多 2 行 |
-| `home-card__body-title` | 正文黑色部分 | `notice.title` | 黑色，**不加粗** |
-| `home-card__body-separator` | 分隔符 | - | 灰色 " · " |
-| `home-card__body-desc` | 正文灰色部分 | `notice.description` | 灰色，**不加粗** |
-| `home-card__meta` | 元信息（有用人数） | `notice.helpfulCount` | 12px，flex 布局 |
+| 单列 | `home-main-item__content` | 默认分组 | Flexbox 纵向 |
+| 网格 | `home-main-item__content--grid` | `layoutMode === 'QUAD_GRID'` | CSS Grid 2列 |
+| 瀑布流 | `home-main-item__content--waterfall` | 科普模块 | Flexbox 双列 |
 
-## 样式特点对比
+### 样式定义
 
-| 特性 | 专项练习/套题训练 | 补充说明 |
-|-----|----------------|---------|
-| 修饰符 | `--subject` | `--notice` |
-| 标题样式 | 18px，**加粗** | 14px，**不加粗** |
-| 文字颜色 | 纯黑色 | 黑色 + 灰色混合 |
-| 内容结构 | header + footer | category + body + meta |
-| 点击包裹 | `<tap-action type="card">` | `<tap-action type="card">` |
-
-## 布局模式
-
-### 单列布局
 ```css
+/* 单列布局 */
 .home-main-item__content {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-```
 
-### 网格布局
-```css
+/* 网格布局 */
 .home-main-item__content--grid {
   display: grid;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   grid-template-columns: repeat(2, 1fr);
 }
+
+/* 瀑布流布局 */
+.home-main-item__content--waterfall {
+  display: flex;
+  gap: 10px;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
 ```
 
-**触发条件**：`group.layoutMode === 'QUAD_GRID'`
+---
 
 ## 数据结构
+
+### popularScience 数据结构
+```javascript
+{
+  title: "科普",
+  list: [
+    {
+      id: 1,
+      title: "加群！获得更新！",
+      description: "雅思考试瞬息万变，我们会在群内第一时间分享有用的资料",
+      // groupTitle 和 helpfulCount 已不再使用
+    }
+  ]
+}
+```
+
+### popularScienceColumns 数据结构（JS 处理后）
+```javascript
+{
+  leftColumn: [/* 偶数索引项 */],
+  rightColumn: [/* 奇数索引项 */]
+}
+```
 
 ### group 数据结构
 ```javascript
 {
   title: "专项练习",
-  layoutMode: "QUAD_GRID",
+  layoutMode: "QUAD_GRID",  // 或其他值
   colorRgb: "rgb(255,140,0)",
   colorRgba: "rgba(255,140,0,0.1)",
   notice: {
+    id: 1,
     title: "什么是专项",
     iconUrl: "/images/icon.png",
     colorRgb: "rgb(...)",
     colorRgba: "rgba(...)"
   },
-  list: [ /* subject 数据 */ ]
+  list: [/* subject 数据 */]
 }
 ```
 
@@ -206,45 +362,35 @@ home (首页容器)
   iconUrl: "/images/icon.png",
   childTotal: "共100题",
   description: "初级",
+  label: "视频版",
   type: "P1"
 }
 ```
 
-### popularScience 数据结构
-```javascript
-{
-  title: "备考技巧",
-  colorRgb: "rgb(...)",
-  colorRgba: "rgba(...)",
-  list: [
-    {
-      id: 1,
-      groupTitle: "口语技巧",
-      title: "如何提高口语",
-      description: "掌握方法...",
-      helpfulCount: 128
-    }
-  ]
-}
-```
+---
 
 ## 事件处理
 
 | 事件处理函数 | 触发元素 | 功能 |
 |------------|---------|------|
 | `toChildPage` | `home-card--subject` | 进入专项练习/套题训练列表 |
-| `toPopularSciencePage` | `home-card--notice` | 进入科普详情 |
+| `toPopularSciencePage` | `home-card--science` | 进入科普详情 |
 | `toPopularScienceListPage` | `.home-view-all` | 进入科普列表 |
 | `onNoticeTap` | `home-main-item__notice` | 点击说明徽章 |
+| `onNavCardTap` | `.nav-card` | 小程序跳转（待实现） |
+
+---
 
 ## 文件清单
 
 | 文件路径 | 说明 |
 |---------|------|
 | `pages/home/home.wxml` | 首页模板 |
-| `pages/home/home.wxss` | 首页样式 |
-| `pages/home/home.js` | 首页逻辑 |
-| `style/default-styles.wxss` | 通用样式（首页卡片等） |
+| `pages/home/home.wxss` | 首页样式（科普区域、导航卡片、瀑布流） |
+| `pages/home/home.js` | 首页逻辑（含数据分列处理） |
+| `style/default-styles.wxss` | 通用样式（卡片基础样式） |
+
+---
 
 ## API 接口
 
@@ -253,32 +399,7 @@ home (首页容器)
 | `/v2/home/list` | 首页分组列表 | `list` |
 | `/popular/science/v1/miniapp/home` | 科普模块数据 | `popularScience` |
 
-## 维护指南
-
-### 新增卡片类型
-
-1. **定义新的修饰符**
-```css
-.home-card--new-type .home-card__content {
-  /* 自定义样式 */
-}
-```
-
-2. **更新 HTML 结构**
-```html
-<tap-action type="card" bind:tap="onNewTypeClick">
-  <view class="home-card home-card--new-type">
-    <!-- 自定义内容 -->
-  </view>
-</tap-action>
-```
-
-3. **添加事件处理**
-```javascript
-onNewTypeClick(e) {
-  // 处理逻辑
-}
-```
+---
 
 ## 设计原则
 
@@ -288,9 +409,10 @@ onNewTypeClick(e) {
 4. **tap-action 包裹**：可点击卡片统一使用 `<tap-action type="card">` 包裹
 5. **样式独立**：避免复杂的嵌套选择器
 6. **易于扩展**：新增功能只需添加新修饰符
+7. **瀑布流优化**：科普卡片使用瀑布流布局，适应不同高度内容
 
 ---
 
-*文档版本：v1.0*
-*创建日期：2025-12-26*
+*文档版本：v2.0*
+*更新日期：2026-01-08*
 *适用项目：V1-speak-miniapp*
