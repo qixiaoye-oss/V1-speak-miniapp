@@ -191,6 +191,11 @@ Page({
       url: `/pages/science/detail/index?id=${id}`,
     })
   },
+  onMiniprogramLinkTap(e) {
+    const type = e.currentTarget.dataset.type
+    console.log('小程序跳转点击:', type)
+    // TODO: 实现小程序跳转逻辑
+  },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   /**

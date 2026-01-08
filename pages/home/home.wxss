@@ -57,3 +57,35 @@
   background: #ffffff !important;
   border-color: var(--main-blue-color) !important;
 }
+
+/* 小程序跳转区域样式 */
+.miniprogram-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.miniprogram-links > tap-action {
+  flex: 1;
+}
+
+.miniprogram-link-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 15px;
+  border: 2px dotted var(--main-blue-color);
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.miniprogram-link-item__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.miniprogram-link-item__text {
+  font-size: 16px;
+  color: #333;
+}
