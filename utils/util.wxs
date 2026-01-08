@@ -98,10 +98,10 @@ function accuracyStyle(value1, value2) {
  */
 function toSolidColor(rgbaColor) {
   if (isEmpty(rgbaColor)) return ''
-  // 匹配 rgba(r,g,b,a) 格式
-  var match = rgbaColor.match(getRegExp('rgba?\\s*\\(\\s*([\\d.]+)\\s*,\\s*([\\d.]+)\\s*,\\s*([\\d.]+)\\s*(?:,\\s*[\\d.]+)?\\s*\\)', 'i'))
-  if (match) {
-    return 'rgba(' + match[1] + ',' + match[2] + ',' + match[3] + ',1)'
+  // 查找最后一个逗号的位置，替换其后的透明度值
+  var lastCommaIndex = rgbaColor.lastIndexOf(',')
+  if (lastCommaIndex !== -1) {
+    return rgbaColor.substring(0, lastCommaIndex) + ',1)'
   }
   return rgbaColor
 }
