@@ -13,6 +13,7 @@ Page({
     versionIndex: 0,
     scoreFilter: '6',           // 当前筛选值，默认6分版
     scoreFilterText: '6分版',   // 按钮显示文字
+    scoreFilterDisabled: false, // 筛选按钮是否禁用（仅有通用版本时禁用）
     rawList: [],                // 原始答案列表（未筛选）
   },
   // ===========生命周期 Start===========
@@ -57,6 +58,9 @@ Page({
   // ===========业务操作 Start===========
   // 分数筛选按钮点击
   onScoreFilterTap() {
+    // 禁用状态下不响应点击
+    if (this.data.scoreFilterDisabled) return
+
     const _this = this
     wx.showActionSheet({
       itemList: ['6分版', '7分版', '8分版'],
@@ -70,6 +74,8 @@ Page({
         })
         // 根据新筛选值重新过滤数据
         _this.filterAndSetList()
+        // 滚动到页面顶部
+        wx.pageScrollTo({ scrollTop: 0, duration: 300 })
       }
     })
   },
@@ -84,7 +90,26 @@ Page({
       return item.difficulty === scoreFilter
     })
 
-    this.setData({ list: filteredList, versionIndex: 0 })
+    // 保持 versionIndex 不变，只更新 list
+    this.setData({ list: filteredList })
+  },
+  // 检测是否只有通用版本数据（禁用筛选按钮）
+  checkScoreFilterDisabled() {
+    const { rawList } = this.data
+    if (!rawList || rawList.length === 0) return
+
+    // 检查是否所有数据都是 general
+    const onlyGeneral = rawList.every(item => item.difficulty === 'general')
+    if (onlyGeneral) {
+      this.setData({
+        scoreFilterDisabled: true,
+        scoreFilterText: '通用版本'
+      })
+    } else {
+      this.setData({
+        scoreFilterDisabled: false
+      })
+    }
   },
   // 播放题目音频（扩展 behavior 的 playMainAudio）
   playMainAudio() {
@@ -199,6 +224,8 @@ Page({
         }
         // 使用 diff 更新，只更新变化的字段
         diffSetData(this, res)
+        // 检测是否只有通用版本（决定是否禁用筛选按钮）
+        this.checkScoreFilterDisabled()
         // 根据当前筛选值过滤数据
         this.filterAndSetList()
 
