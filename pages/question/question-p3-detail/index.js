@@ -60,6 +60,8 @@ Page({
       // 切换前打断音频
       this.interruptAudio()
       this.setData({ versionIndex: checkIndex })
+      // 重置到用户默认 difficulty
+      this.resetToDefaultDifficulty()
     }
   },
   // 播放/停止答案所有句子

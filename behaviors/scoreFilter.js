@@ -133,6 +133,39 @@ module.exports = Behavior({
     },
 
     /**
+     * 重置 difficulty 到用户全局默认设置
+     * 在切换 version-tab 时调用
+     */
+    resetToDefaultDifficulty() {
+      const defaultDifficulty = wx.getStorageSync('difficultySpeak') || '6.5'
+      const { scoreFilterList, availableDifficulties, scoreFilter } = this.data
+
+      // 如果当前已经是默认值，无需重置
+      if (scoreFilter === String(defaultDifficulty)) return
+
+      // 检查默认版本是否可用
+      let targetFilter = String(defaultDifficulty)
+      if (availableDifficulties && availableDifficulties.length > 0 &&
+          !availableDifficulties.includes(targetFilter)) {
+        // 默认版本不可用，降级到第一个可用版本
+        targetFilter = availableDifficulties[0]
+      }
+
+      // 获取对应的显示文字
+      let filterText = targetFilter + '+版本'
+      if (scoreFilterList && scoreFilterList.length > 0) {
+        const matched = scoreFilterList.find(item => String(item.value) === targetFilter)
+        if (matched) filterText = matched.text
+      }
+
+      this.setData({
+        scoreFilter: targetFilter,
+        scoreFilterText: filterText
+      })
+      this.filterAndSetList()
+    },
+
+    /**
      * 同步置顶状态到 rawList
      * 在 onTopSwitch 修改置顶后调用，确保 rawList 与 list 的置顶状态一致
      */
