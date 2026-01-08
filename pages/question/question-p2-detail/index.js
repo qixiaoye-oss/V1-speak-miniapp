@@ -3,21 +3,16 @@ const pageGuard = require('../../../behaviors/pageGuard')
 const sentenceAudio = require('../../../behaviors/sentenceAudio')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
 const smartLoading = require('../../../behaviors/smartLoading')
+const scoreFilter = require('../../../behaviors/scoreFilter')
 const { diffSetData } = require('../../../utils/diff')
 const api = getApp().api
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading],
+  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading, scoreFilter],
   data: {
     showPopup: false,
     seriesIndex: 0,
     versionIndex: 0,
-    scoreFilter: '6.5',         // 当前筛选值，默认6.5版
-    scoreFilterText: '6.5+版本', // 按钮显示文字
-    scoreFilterDisabled: false, // 筛选按钮是否禁用（仅有通用版本时禁用）
-    scoreFilterList: [],        // 从接口动态获取的难度列表
-    availableDifficulties: [],  // 当前数据中可用的difficulty值（非general）
-    rawList: [],                // 原始答案列表（未筛选）
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -59,121 +54,6 @@ Page({
   },
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
-  // 分数筛选按钮点击
-  onScoreFilterTap() {
-    // 禁用状态下不响应点击
-    if (this.data.scoreFilterDisabled) return
-
-    const _this = this
-    const { scoreFilterList, availableDifficulties } = this.data
-    if (!scoreFilterList || scoreFilterList.length === 0) {
-      api.toast('加载中，请稍后再试')
-      return
-    }
-    // 排除 general 选项，构建菜单列表
-    const selectableList = scoreFilterList.filter(item => item.value !== 'general')
-    // 标记每个选项是否可用，不可用的显示"（待更新）"
-    const itemList = selectableList.map(item => {
-      const isAvailable = availableDifficulties.includes(String(item.value))
-      return isAvailable ? item.text : item.text + '（待更新）'
-    })
-    wx.showActionSheet({
-      itemList,
-      success(res) {
-        const selected = selectableList[res.tapIndex]
-        const isAvailable = availableDifficulties.includes(String(selected.value))
-        // 如果选择的版本不可用，不执行切换
-        if (!isAvailable) {
-          api.toast('该版本暂未更新')
-          return
-        }
-        _this.setData({
-          scoreFilter: String(selected.value),
-          scoreFilterText: selected.text
-        })
-        // 根据新筛选值重新过滤数据
-        _this.filterAndSetList()
-        // 滚动到页面顶部
-        wx.pageScrollTo({ scrollTop: 0, duration: 300 })
-      }
-    })
-  },
-  // 根据 scoreFilter 过滤答案列表（P2是三层结构，difficulty在句子层）
-  filterAndSetList() {
-    const { rawList, scoreFilter } = this.data
-    if (!rawList || rawList.length === 0) return
-
-    // P2的difficulty在句子层（list[].list[].list[]）
-    // 筛选逻辑：对每个block内的句子进行筛选
-    const filteredList = rawList.map(version => {
-      if (!version.list || version.list.length === 0) return version
-
-      // 对每个block，筛选其中的句子
-      const filteredBlocks = version.list.map(block => {
-        if (!block.list || block.list.length === 0) return block
-
-        // 过滤句子：保留匹配版本 + 通用版本 + 无difficulty字段的句子
-        const filteredSentences = block.list.filter(sentence => {
-          if (sentence.difficulty === undefined || sentence.difficulty === null) return true
-          const difficulty = String(sentence.difficulty)
-          if (difficulty === 'general') return true
-          return difficulty === scoreFilter
-        })
-
-        return { ...block, list: filteredSentences }
-      }).filter(block => block.list && block.list.length > 0) // 移除空block
-
-      return { ...version, list: filteredBlocks }
-    }).filter(version => version.list && version.list.length > 0) // 移除空版本
-
-    this.setData({ list: filteredList })
-  },
-  // 检测是否只有通用版本数据（禁用筛选按钮）- P2在句子层检查
-  // 同时收集数据中可用的difficulty值
-  checkScoreFilterDisabled() {
-    const { rawList } = this.data
-    if (!rawList || rawList.length === 0) return
-
-    // P2的difficulty在句子层，收集所有句子
-    const allSentences = []
-    rawList.forEach(version => {
-      if (version.list && version.list.length > 0) {
-        version.list.forEach(block => {
-          if (block.list && block.list.length > 0) {
-            allSentences.push(...block.list)
-          }
-        })
-      }
-    })
-
-    if (allSentences.length === 0) return
-
-    // 收集数据中可用的difficulty值（非general、非空）
-    const availableSet = new Set()
-    allSentences.forEach(sentence => {
-      if (sentence.difficulty !== undefined && sentence.difficulty !== null) {
-        const diff = String(sentence.difficulty)
-        if (diff !== 'general') {
-          availableSet.add(diff)
-        }
-      }
-    })
-    const availableDifficulties = Array.from(availableSet)
-    this.setData({ availableDifficulties })
-
-    // 检查是否所有句子都是 general 或无 difficulty 字段
-    const onlyGeneralOrNone = availableDifficulties.length === 0
-    if (onlyGeneralOrNone) {
-      this.setData({
-        scoreFilterDisabled: true,
-        scoreFilterText: '通用版本'
-      })
-    } else {
-      this.setData({
-        scoreFilterDisabled: false
-      })
-    }
-  },
   // 播放/停止指定 block 的所有句子
   onFooterPlay(e) {
     const { versionIndex, blockIndex } = e.currentTarget.dataset
@@ -416,34 +296,6 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
-  // 获取难度列表
-  getDifficultyList() {
-    const _this = this
-    api.request(this, '/system/list/dict/classify_scores', {}, true).then(res => {
-      if (res && res.dictItems) {
-        _this.setData({ scoreFilterList: res.dictItems })
-        // 根据当前筛选值设置按钮文字
-        const { scoreFilter } = _this.data
-        const current = res.dictItems.find(item => String(item.value) === scoreFilter)
-        if (current) {
-          _this.setData({ scoreFilterText: current.text })
-        } else {
-          // 当前筛选值不在列表中，使用第一个非 general 选项
-          const firstValid = res.dictItems.find(item => item.value !== 'general')
-          if (firstValid) {
-            _this.setData({
-              scoreFilter: String(firstValid.value),
-              scoreFilterText: firstValid.text
-            })
-            // 如果数据已加载，重新过滤
-            if (_this.data.rawList && _this.data.rawList.length > 0) {
-              _this.filterAndSetList()
-            }
-          }
-        }
-      }
-    })
-  },
   // 查找置顶版本的索引
   findPreferredVersionIndex() {
     const { list } = this.data
@@ -496,41 +348,6 @@ Page({
         // 校验并修正 scoreFilter，然后过滤数据
         this.validateAndFilter()
       })
-  },
-  // 校验 scoreFilter 是否有效，无效则修正，然后过滤数据 - P2在句子层检查
-  // 逻辑：如果用户选择的版本不存在，自动降级到其他可用版本
-  validateAndFilter() {
-    const { rawList, scoreFilter, scoreFilterList, availableDifficulties } = this.data
-    if (!rawList || rawList.length === 0) return
-
-    // 如果没有可用的非general版本，直接显示所有数据
-    if (!availableDifficulties || availableDifficulties.length === 0) {
-      this.filterAndSetList()
-      return
-    }
-
-    // 检查当前 scoreFilter 是否在可用版本中
-    const isCurrentAvailable = availableDifficulties.includes(scoreFilter)
-
-    if (!isCurrentAvailable) {
-      // 当前选择的版本不可用，降级到其他可用版本
-      // 优先选择第一个可用版本
-      const fallbackFilter = availableDifficulties[0]
-      let fallbackText = fallbackFilter + '+版本'
-      if (scoreFilterList && scoreFilterList.length > 0) {
-        const matched = scoreFilterList.find(item => String(item.value) === fallbackFilter)
-        if (matched) {
-          fallbackText = matched.text
-        }
-      }
-      this.setData({
-        scoreFilter: fallbackFilter,
-        scoreFilterText: fallbackText
-      })
-    }
-
-    // 执行过滤
-    this.filterAndSetList()
   },
   popupConfirm(e) {
     api.request(this, '/question/signIn', {
