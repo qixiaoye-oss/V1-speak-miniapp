@@ -72,16 +72,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
   padding: 15px;
   border: 2px dotted var(--main-blue-color);
   border-radius: 9px;
   background: #ffffff;
-}
-
-.miniprogram-link-item__icon {
-  width: 20px;
-  height: 20px;
 }
 
 .miniprogram-link-item__text {
