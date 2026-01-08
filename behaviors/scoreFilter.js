@@ -135,21 +135,34 @@ module.exports = Behavior({
     /**
      * 重置 difficulty 到用户全局默认设置
      * 在切换 version-tab 时调用
+     * 基于当前版本的可用 difficulty 判断，避免切换到空内容
      */
     resetToDefaultDifficulty() {
       const defaultDifficulty = wx.getStorageSync('difficultySpeak') || '6.5'
-      const { scoreFilterList, availableDifficulties, scoreFilter } = this.data
+      const { scoreFilterList, scoreFilter, versionIndex, rawList } = this.data
 
-      // 如果当前已经是默认值，无需重置
-      if (scoreFilter === String(defaultDifficulty)) return
+      // 获取当前版本预计算的可用 difficulty
+      const version = rawList?.[versionIndex]
+      const versionDifficulties = version?._availableDifficulties || []
 
-      // 检查默认版本是否可用
+      // 如果当前版本没有任何 difficulty 数据，不做处理
+      if (versionDifficulties.length === 0) return
+
+      // 确定目标 difficulty
       let targetFilter = String(defaultDifficulty)
-      if (availableDifficulties && availableDifficulties.length > 0 &&
-          !availableDifficulties.includes(targetFilter)) {
-        // 默认版本不可用，降级到第一个可用版本
-        targetFilter = availableDifficulties[0]
+
+      if (!versionDifficulties.includes(targetFilter)) {
+        // 默认 difficulty 在当前版本不可用
+        if (versionDifficulties.includes(scoreFilter)) {
+          // 当前 difficulty 可用，维持不变
+          return
+        }
+        // 降级到当前版本第一个可用的 difficulty
+        targetFilter = versionDifficulties[0]
       }
+
+      // 如果已经是目标值，无需更新
+      if (scoreFilter === targetFilter) return
 
       // 获取对应的显示文字
       let filterText = targetFilter + '+版本'
@@ -201,36 +214,38 @@ module.exports = Behavior({
     /**
      * 检测数据中可用的版本，并决定是否禁用筛选按钮
      * 同时收集数据中可用的difficulty值（非general）
+     * 预计算每个版本的可用 difficulty 列表，存储到 version._availableDifficulties
      */
     checkScoreFilterDisabled() {
       const { rawList } = this.data
       if (!rawList || rawList.length === 0) return
 
-      // 收集所有句子（三层嵌套）
-      const allSentences = []
+      // 全局可用的 difficulty 集合
+      const globalAvailableSet = new Set()
+
+      // 遍历每个版本，预计算其可用的 difficulty
       rawList.forEach(version => {
+        const versionDiffSet = new Set()
         if (version.list && version.list.length > 0) {
           version.list.forEach(group => {
             if (group.list && group.list.length > 0) {
-              allSentences.push(...group.list)
+              group.list.forEach(sentence => {
+                if (sentence.difficulty != null) {
+                  const diff = String(sentence.difficulty)
+                  if (diff !== 'general') {
+                    versionDiffSet.add(diff)
+                    globalAvailableSet.add(diff)
+                  }
+                }
+              })
             }
           })
         }
+        // 存储到版本对象，供 resetToDefaultDifficulty 使用
+        version._availableDifficulties = Array.from(versionDiffSet)
       })
 
-      if (allSentences.length === 0) return
-
-      // 收集数据中可用的difficulty值（非general、非空）
-      const availableSet = new Set()
-      allSentences.forEach(sentence => {
-        if (sentence.difficulty !== undefined && sentence.difficulty !== null) {
-          const diff = String(sentence.difficulty)
-          if (diff !== 'general') {
-            availableSet.add(diff)
-          }
-        }
-      })
-      const availableDifficulties = Array.from(availableSet)
+      const availableDifficulties = Array.from(globalAvailableSet)
       this.setData({ availableDifficulties })
 
       // 检查是否所有句子都是 general 或无 difficulty 字段
