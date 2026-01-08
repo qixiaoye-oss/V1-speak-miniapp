@@ -46,6 +46,16 @@
     </view>
   </head-banner>
 
+  <!-- 小程序跳转导航 -->
+  <view class="nav-cards" wx:if="{{_isDataReady}}">
+    <tap-action type="card" bind:tap="onNavCardTap" data-type="jijing">
+      <view class="nav-card">机经开源题库</view>
+    </tap-action>
+    <tap-action type="card" bind:tap="onNavCardTap" data-type="tingli">
+      <view class="nav-card">听力专项训练</view>
+    </tap-action>
+  </view>
+
   <!-- 主体内容分组 -->
   <block wx:for="{{list}}" wx:key="groupIndex" wx:for-item="group" wx:for-index="groupIndex" wx:if="{{_isDataReady && group.list.length > 0}}">
     <view class="home-main-item" style="background:{{group.colorRgba}}">

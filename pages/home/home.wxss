@@ -57,3 +57,21 @@
   background: #ffffff !important;
   border-color: var(--main-blue-color) !important;
 }
+
+/* 小程序跳转导航卡片 */
+.nav-cards {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.nav-card {
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background: #ffffff;
+  border: 2px dotted var(--main-blue-color);
+  border-radius: 10px;
+}
