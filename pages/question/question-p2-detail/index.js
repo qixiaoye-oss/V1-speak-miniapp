@@ -90,7 +90,19 @@ Page({
   // 根据 scoreFilter 过滤答案列表（P2是三层结构，difficulty在句子层）
   filterAndSetList() {
     const { rawList, scoreFilter } = this.data
+    console.log('[P2] filterAndSetList - scoreFilter:', scoreFilter, 'type:', typeof scoreFilter)
     if (!rawList || rawList.length === 0) return
+
+    // 收集所有句子的difficulty用于调试
+    const allDifficulties = []
+    rawList.forEach(version => {
+      version.list?.forEach(block => {
+        block.list?.forEach(sentence => {
+          allDifficulties.push({ difficulty: sentence.difficulty, type: typeof sentence.difficulty })
+        })
+      })
+    })
+    console.log('[P2] 所有句子的difficulty:', allDifficulties)
 
     // P2的difficulty在句子层（list[].list[].list[]）
     // 筛选逻辑：对每个block内的句子进行筛选
@@ -106,15 +118,21 @@ Page({
           if (sentence.difficulty === undefined || sentence.difficulty === null) return true
           const difficulty = String(sentence.difficulty)
           if (difficulty === 'general') return true
-          return difficulty === scoreFilter
+          const match = difficulty === scoreFilter
+          if (!match && difficulty !== 'general') {
+            console.log('[P2] 句子被过滤 - difficulty:', difficulty, 'scoreFilter:', scoreFilter)
+          }
+          return match
         })
 
+        console.log('[P2] block', block.content, '- 原句子数:', block.list.length, '过滤后:', filteredSentences.length)
         return { ...block, list: filteredSentences }
       }).filter(block => block.list && block.list.length > 0) // 移除空block
 
       return { ...version, list: filteredBlocks }
     }).filter(version => version.list && version.list.length > 0) // 移除空版本
 
+    console.log('[P2] 过滤后版本数:', filteredList.length)
     this.setData({ list: filteredList })
   },
   // 检测是否只有通用版本数据（禁用筛选按钮）- P2在句子层检查
