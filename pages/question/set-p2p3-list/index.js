@@ -51,10 +51,10 @@ Page({
       success(res) {
         switch (res.tapIndex) {
           case 0:
-            _this.hasAnswer(item.id)
+            _this.hasP2Answer(item.id)
             break;
           case 1:
-            _this.navigateTo(`/pages/question/question-p3-list/index?setId=${item.id}`)
+            _this.toP3List(item)
             break;
         }
       }
@@ -105,14 +105,22 @@ Page({
       .finally(() => { this.finishLoading() })
   },
   // 验证P2是否有答案内容
-  hasAnswer(setId) {
+  hasP2Answer(setId) {
     api.request(this, '/question/v2/p2/hasAnswer', { setId }, false).then(res => {
       if (res) {
         this.navigateTo(`/pages/question/question-p2-detail/index?setId=${setId}`)
       } else {
-        api.modal('', "本题暂无答案", false)
+        api.modal('', "即将更新（暂无内容）", false)
       }
     })
+  },
+  // 跳转P3列表（通过p3Total判断是否有内容）
+  toP3List(item) {
+    if (item.p3Total > 0) {
+      this.navigateTo(`/pages/question/question-p3-list/index?setId=${item.id}`)
+    } else {
+      api.modal('', "即将更新（暂无内容）", false)
+    }
   },
   // ===========数据获取 End===========
 })

@@ -19,25 +19,8 @@
   width: 100%;
   padding: 15px;
   box-sizing: border-box;
-  position: relative;
   display: flex;
   align-items: flex-start;
-}
-
-.chapter__header:after {
-  content: " ";
-  display: inline-block;
-  height: 8px;
-  width: 8px;
-  border-width: 2px 2px 0 0;
-  border-color: var(--solid-border-color);
-  border-style: solid;
-  -webkit-transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
-  transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
-  position: absolute;
-  top: 50%;
-  margin-top: -5px;
-  right: 15px;
 }
 
 .chapter__header-title {
@@ -51,7 +34,6 @@
   position: relative;
   left: -5px;
   min-width: 0;
-  margin-right: 18px;
 }
 
 .chapter__title-icon {
@@ -61,10 +43,8 @@
 }
 
 .chapter__title-text {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   line-height: 1.4;
+  word-break: break-word;
 }
 
 .chapter__intervals {

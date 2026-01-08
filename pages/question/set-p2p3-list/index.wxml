@@ -56,7 +56,7 @@
               <view class="tag__intervals"></view>
               <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>
             </view>
-            <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.p3SignInTotal == chapter.p3Total}}">
+            <view class="tag tag__multi tag__multi--green" wx:if="{{chapter.p3Total != 0 && chapter.p3SignInTotal == chapter.p3Total}}">
               <view>P3打卡/录音</view>
               <view class="tag__intervals"></view>
               <view>{{chapter.p3SignInTotal}}/{{chapter.p3Total}}</view>

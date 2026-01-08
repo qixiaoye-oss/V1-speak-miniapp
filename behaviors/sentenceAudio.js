@@ -117,6 +117,23 @@ module.exports = Behavior({
     },
 
     /**
+     * 统一的音频打断方法
+     * 用于版本切换、难度切换等场景
+     */
+    interruptAudio() {
+      this.stopAudio()
+      this._playAllState = null
+      this._singlePlayState = null
+      this.resetSentenceAudioStatus()
+      this._resetAllPlayingStatus()
+
+      // 如果页面有自定义的重置方法（如 P2 的 block 状态），调用它
+      if (typeof this._resetAllBlockPlayingStatus === 'function') {
+        this._resetAllBlockPlayingStatus()
+      }
+    },
+
+    /**
      * 播放题目主音频
      */
     playMainAudio() {

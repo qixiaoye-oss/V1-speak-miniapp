@@ -3,15 +3,16 @@ const pageGuard = require('../../../behaviors/pageGuard')
 const sentenceAudio = require('../../../behaviors/sentenceAudio')
 const buttonGroupHeight = require('../../../behaviors/button-group-height')
 const smartLoading = require('../../../behaviors/smartLoading')
+const scoreFilter = require('../../../behaviors/scoreFilter')
 const { diffSetData } = require('../../../utils/diff')
 const api = getApp().api
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading],
+  behaviors: [pageGuard.behavior, pageLoading, sentenceAudio, buttonGroupHeight, smartLoading, scoreFilter],
   data: {
     showPopup: false,
     seriesIndex: 0,
-    versionIndex: 0
+    versionIndex: 0,
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -38,10 +39,14 @@ Page({
     }
   },
   onLoad(options) {
+    // 读取用户默认难度设置
+    const difficultySpeak = wx.getStorageSync('difficultySpeak') || '6.5'
     this.setData({
-      queryParam: options
+      queryParam: options,
+      scoreFilter: String(difficultySpeak)
     })
     this.initSentenceAudio()
+    this.getDifficultyList()
   },
   onUnload() {
     wx.removeStorageSync('questionIdArr')
@@ -257,6 +262,8 @@ Page({
     const { versionIndex } = this.data
     const checkIndex = e.detail.index
     if (versionIndex !== checkIndex) {
+      // 切换前打断音频
+      this.interruptAudio()
       this.setData({ versionIndex: checkIndex })
     }
   },
@@ -333,7 +340,15 @@ Page({
     const hasToast = silent ? true : false
     api.request(this, '/question/v3/detail/story', param, hasToast, 'GET', false)
       .then((res) => {
+        // 保存原始列表用于筛选
+        if (res.list) {
+          this.setData({ rawList: res.list })
+        }
         diffSetData(this, res)
+        // 检测是否只有通用版本（决定是否禁用筛选按钮）
+        this.checkScoreFilterDisabled()
+        // 校验并修正 scoreFilter，然后过滤数据
+        this.validateAndFilter()
       })
   },
   popupConfirm(e) {
