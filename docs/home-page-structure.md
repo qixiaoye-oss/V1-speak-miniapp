@@ -26,7 +26,7 @@ home (首页容器)
 └── home-main-item (分组区块 - 循环渲染)
     ├── home-main-item__title (分组标题)
     ├── home-main-item__notice (说明徽章 - 可选)
-    └── home-main-item__content / home-main-item__content--grid (卡片容器)
+    └── home-main-item__content (单列) / home-main-item__content--waterfall (瀑布流)
         └── home-card--subject (专项练习/套题训练卡片)
 ```
 
@@ -108,6 +108,8 @@ home (首页容器)
 ```
 
 ### 数据分列逻辑
+
+#### 基础分列方法
 ```javascript
 _splitToColumns(list) {
   const leftColumn = []
@@ -120,6 +122,25 @@ _splitToColumns(list) {
     }
   })
   return { leftColumn, rightColumn }
+}
+```
+
+#### 主体分组分列处理
+```javascript
+/**
+ * 处理主体分组的瀑布流分列
+ * 为 layoutMode === 'QUAD_GRID' 的分组生成 columns 数据
+ */
+_processGroupColumns(list) {
+  return list.map(group => {
+    if (group.layoutMode === 'QUAD_GRID' && group.list && group.list.length > 0) {
+      return {
+        ...group,
+        columns: this._splitToColumns(group.list)
+      }
+    }
+    return group
+  })
 }
 ```
 
@@ -223,7 +244,21 @@ onMiniappLinkTap(e) {
       </view>
     </view>
   </tap-action>
-  <view class="{{group.layoutMode === 'QUAD_GRID' ? 'home-main-item__content--grid' : 'home-main-item__content'}}">
+  <!-- 瀑布流布局（QUAD_GRID模式） -->
+  <view class="home-main-item__content--waterfall" wx:if="{{group.layoutMode === 'QUAD_GRID' && group.columns}}">
+    <view class="waterfall-column">
+      <block wx:for="{{group.columns.leftColumn}}" wx:key="id" wx:for-item="subject">
+        <!-- 卡片 -->
+      </block>
+    </view>
+    <view class="waterfall-column">
+      <block wx:for="{{group.columns.rightColumn}}" wx:key="id" wx:for-item="subject">
+        <!-- 卡片 -->
+      </block>
+    </view>
+  </view>
+  <!-- 普通列表布局 -->
+  <view class="home-main-item__content" wx:else>
     <!-- 卡片列表 -->
   </view>
 </view>
@@ -237,8 +272,8 @@ onMiniappLinkTap(e) {
 | `home-main-item__notice` | 说明徽章容器（右上角） | `group.notice` |
 | `home-main-item__notice-img` | 说明徽章图标 | `group.notice.iconUrl` |
 | `home-main-item__notice-text` | 说明徽章文字 | `group.notice.title` |
-| `home-main-item__content` | 卡片容器（单列） | - |
-| `home-main-item__content--grid` | 卡片容器（网格 2x） | `group.layoutMode === 'QUAD_GRID'` |
+| `home-main-item__content` | 卡片容器（单列） | 默认布局 |
+| `home-main-item__content--waterfall` | 卡片容器（瀑布流双列） | `group.layoutMode === 'QUAD_GRID'` |
 
 ---
 
@@ -309,8 +344,7 @@ onMiniappLinkTap(e) {
 | 布局 | 类名 | 使用场景 | 实现方式 |
 |-----|------|---------|---------|
 | 单列 | `home-main-item__content` | 默认分组 | Flexbox 纵向 |
-| 网格 | `home-main-item__content--grid` | `layoutMode === 'QUAD_GRID'` | CSS Grid 2列 |
-| 瀑布流 | `home-main-item__content--waterfall` | 科普模块 | Flexbox 双列 |
+| 瀑布流 | `home-main-item__content--waterfall` | 科普模块、`QUAD_GRID` 分组 | Flexbox 双列 |
 
 ### 样式定义
 
@@ -322,15 +356,7 @@ onMiniappLinkTap(e) {
   gap: 15px;
 }
 
-/* 网格布局 */
-.home-main-item__content--grid {
-  display: grid;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-/* 瀑布流布局 */
+/* 瀑布流布局（科普模块 + QUAD_GRID 分组共用） */
 .home-main-item__content--waterfall {
   display: flex;
   gap: 10px;
@@ -386,7 +412,12 @@ onMiniappLinkTap(e) {
     colorRgb: "rgb(...)",
     colorRgba: "rgba(...)"
   },
-  list: [/* subject 数据 */]
+  list: [/* subject 数据 */],
+  // JS 处理后添加（仅 QUAD_GRID 模式）
+  columns: {
+    leftColumn: [/* 偶数索引项 */],
+    rightColumn: [/* 奇数索引项 */]
+  }
 }
 ```
 
@@ -445,10 +476,10 @@ onMiniappLinkTap(e) {
 4. **tap-action 包裹**：可点击卡片统一使用 `<tap-action type="card">` 包裹
 5. **样式独立**：避免复杂的嵌套选择器
 6. **易于扩展**：新增功能只需添加新修饰符
-7. **瀑布流优化**：科普卡片使用瀑布流布局，适应不同高度内容
+7. **瀑布流优化**：科普模块和 QUAD_GRID 分组均使用瀑布流布局，适应不同高度内容
 
 ---
 
-*文档版本：v2.1.0*
+*文档版本：v2.2.0*
 *更新日期：2026-01-08*
 *适用项目：V1-speak-miniapp*
