@@ -60,8 +60,9 @@
 
 /* 科普卡片内部样式微调 */
 .home-card--science .home-card__body {
-  display: block;
-  overflow: hidden;
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
 }
 
 .home-card--science .home-card__body-title {
@@ -69,7 +70,6 @@
   font-size: 15px;
   font-weight: bold;
   line-height: 1.4;
-  white-space: normal;
   margin-bottom: 5px;
 }
 
@@ -79,9 +79,8 @@
 
 .home-card--science .home-card__body-desc {
   display: block;
-  width: 100%;
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
