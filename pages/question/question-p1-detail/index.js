@@ -90,8 +90,10 @@ Page({
     const { rawList, scoreFilter } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 过滤：保留匹配版本 + 通用版本（使用 String 确保类型一致）
+    // 过滤：保留匹配版本 + 通用版本 + 无difficulty字段的数据
     const filteredList = rawList.filter(item => {
+      // 如果没有 difficulty 字段，视为通用版本，保留
+      if (item.difficulty === undefined || item.difficulty === null) return true
       const difficulty = String(item.difficulty)
       if (difficulty === 'general') return true
       return difficulty === scoreFilter
@@ -105,9 +107,12 @@ Page({
     const { rawList } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 检查是否所有数据都是 general（使用 String 确保类型一致）
-    const onlyGeneral = rawList.every(item => String(item.difficulty) === 'general')
-    if (onlyGeneral) {
+    // 检查是否所有数据都是 general 或无 difficulty 字段
+    const onlyGeneralOrNone = rawList.every(item => {
+      if (item.difficulty === undefined || item.difficulty === null) return true
+      return String(item.difficulty) === 'general'
+    })
+    if (onlyGeneralOrNone) {
       this.setData({
         scoreFilterDisabled: true,
         scoreFilterText: '通用版本'
@@ -215,16 +220,29 @@ Page({
     const { rawList, scoreFilter, scoreFilterList } = this.data
     if (!rawList || rawList.length === 0) return
 
-    // 检查当前 scoreFilter 是否在数据中存在（非 general）
-    const hasMatchingData = rawList.some(item => String(item.difficulty) === scoreFilter)
+    // 检查数据中是否有 difficulty 字段
+    const hasAnyDifficulty = rawList.some(item => item.difficulty !== undefined && item.difficulty !== null)
 
-    // 如果没有匹配的数据，尝试使用第一个有效的 difficulty
-    if (!hasMatchingData) {
-      // 从数据中找到第一个非 general 的 difficulty
-      const firstNonGeneral = rawList.find(item => String(item.difficulty) !== 'general')
-      if (firstNonGeneral) {
-        const newFilter = String(firstNonGeneral.difficulty)
-        // 从 scoreFilterList 中找到对应的文字
+    // 如果数据中都没有 difficulty 字段，直接显示所有数据
+    if (!hasAnyDifficulty) {
+      this.filterAndSetList()
+      return
+    }
+
+    // 检查当前 scoreFilter 是否在数据中存在
+    const hasExactMatch = rawList.some(item => {
+      if (item.difficulty === undefined || item.difficulty === null) return false
+      return String(item.difficulty) === scoreFilter
+    })
+
+    // 如果没有精确匹配，尝试使用数据中第一个有效的 difficulty
+    if (!hasExactMatch) {
+      const firstWithDifficulty = rawList.find(item => {
+        if (item.difficulty === undefined || item.difficulty === null) return false
+        return String(item.difficulty) !== 'general'
+      })
+      if (firstWithDifficulty) {
+        const newFilter = String(firstWithDifficulty.difficulty)
         let newText = newFilter + '+版本'
         if (scoreFilterList && scoreFilterList.length > 0) {
           const matched = scoreFilterList.find(item => String(item.value) === newFilter)
