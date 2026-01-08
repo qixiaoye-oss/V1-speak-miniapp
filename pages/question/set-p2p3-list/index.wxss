@@ -127,6 +127,8 @@ mode-switch {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
+  position: relative;
+  left: -5px;
 }
 
 .chapter__header-title {
