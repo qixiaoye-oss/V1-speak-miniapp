@@ -51,7 +51,7 @@
     <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="speaking">
       <view class="miniprogram-link-item">
         <image class="miniprogram-link-item__icon" src="/images/v2/link_bt.png"></image>
-        <text class="miniprogram-link-item__text">口语开源题库</text>
+        <text class="miniprogram-link-item__text">机经开源题库</text>
       </view>
     </tap-action>
     <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="listening">
