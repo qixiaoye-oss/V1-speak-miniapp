@@ -142,6 +142,42 @@ _splitToColumns(list) {
 </view>
 ```
 
+### 跳转逻辑
+```javascript
+onMiniappLinkTap(e) {
+  const type = e.currentTarget.dataset.type
+  // 小程序 appId 映射（在 JS 中配置）
+  const appIdMap = {
+    jijing: 'wxXXXXXXXX',   // 机经开源题库
+    tingli: 'wxXXXXXXXX'    // 听力专项训练
+  }
+  const appId = appIdMap[type]
+  if (!appId) return
+
+  wx.navigateToMiniProgram({
+    appId,
+    envVersion: 'release',  // develop | trial | release
+    fail(err) {
+      console.error('小程序跳转失败:', err)
+    }
+  })
+}
+```
+
+### 跳转配置说明
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `appId` | string | 目标小程序的 AppID |
+| `path` | string | 目标小程序内的页面路径（可选） |
+| `extraData` | object | 传递给目标小程序的数据（可选，不超过 10KB） |
+| `envVersion` | string | 环境版本：`develop`/`trial`/`release` |
+
+**注意事项**：
+- 必须由用户点击触发，不能自动调用
+- 跳转前会弹窗询问用户确认
+- 无需在配置中预声明目标小程序
+
 ### 样式
 ```css
 .miniapp-links {
@@ -377,7 +413,7 @@ _splitToColumns(list) {
 | `toPopularSciencePage` | `home-card--science` | 进入科普详情 |
 | `toPopularScienceListPage` | `.home-view-all` | 进入科普列表 |
 | `onNoticeTap` | `home-main-item__notice` | 点击说明徽章 |
-| `onMiniappLinkTap` | `.miniapp-link` | 小程序跳转（待实现） |
+| `onMiniappLinkTap` | `.miniapp-link` | 跳转其他小程序（wx.navigateToMiniProgram） |
 
 ---
 
@@ -413,6 +449,6 @@ _splitToColumns(list) {
 
 ---
 
-*文档版本：v2.0*
+*文档版本：v2.1.0*
 *更新日期：2026-01-08*
 *适用项目：V1-speak-miniapp*
