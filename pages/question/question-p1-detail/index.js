@@ -11,8 +11,9 @@ Page({
   data: {
     showPopup: false,  // 打卡窗口
     versionIndex: 0,
-    scoreFilter: '',           // 当前筛选值：'6+' | '7+' | ''
-    scoreFilterText: '分数筛选' // 按钮显示文字
+    scoreFilter: '6',           // 当前筛选值，默认6分版
+    scoreFilterText: '6分版',   // 按钮显示文字
+    rawList: [],                // 原始答案列表（未筛选）
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -39,8 +40,13 @@ Page({
     }
   },
   onLoad(options) {
+    // 读取用户默认难度设置
+    const difficultySpeak = wx.getStorageSync('difficultySpeak') || '6'
+    const difficultyTextMap = { '6': '6分版', '7': '7分版', '8': '8分版' }
     this.setData({
-      queryParam: options
+      queryParam: options,
+      scoreFilter: difficultySpeak,
+      scoreFilterText: difficultyTextMap[difficultySpeak] || '6分版'
     })
     this.initSentenceAudio()
   },
@@ -51,18 +57,34 @@ Page({
   // ===========业务操作 Start===========
   // 分数筛选按钮点击
   onScoreFilterTap() {
+    const _this = this
     wx.showActionSheet({
-      itemList: ['6+版本', '7+版本'],
-      success: (res) => {
-        const options = ['6+', '7+']
-        const texts = ['6+版本', '7+版本']
-        this.setData({
-          scoreFilter: options[res.tapIndex],
+      itemList: ['6分版', '7分版', '8分版'],
+      success(res) {
+        const options = ['6', '7', '8']
+        const texts = ['6分版', '7分版', '8分版']
+        const scoreFilter = options[res.tapIndex]
+        _this.setData({
+          scoreFilter,
           scoreFilterText: texts[res.tapIndex]
         })
-        // TODO: 后端API对接后，根据 scoreFilter 重新请求数据
+        // 根据新筛选值重新过滤数据
+        _this.filterAndSetList()
       }
     })
+  },
+  // 根据 scoreFilter 过滤答案列表
+  filterAndSetList() {
+    const { rawList, scoreFilter } = this.data
+    if (!rawList || rawList.length === 0) return
+
+    // 过滤：保留匹配版本 + 通用版本
+    const filteredList = rawList.filter(item => {
+      if (item.difficulty === 'general') return true
+      return item.difficulty === scoreFilter
+    })
+
+    this.setData({ list: filteredList, versionIndex: 0 })
   },
   // 播放题目音频（扩展 behavior 的 playMainAudio）
   playMainAudio() {
@@ -171,8 +193,14 @@ Page({
       ...this.data.queryParam
     }, hasToast, 'GET', false)  // autoSetData = false，手动处理数据
       .then(res => {
+        // 保存原始列表用于筛选
+        if (res.list) {
+          this.setData({ rawList: res.list })
+        }
         // 使用 diff 更新，只更新变化的字段
         diffSetData(this, res)
+        // 根据当前筛选值过滤数据
+        this.filterAndSetList()
 
         // 自动定位到置顶版本
         const preferredIndex = this.findPreferredVersionIndex()

@@ -12,8 +12,9 @@ Page({
     showPopup: false,
     seriesIndex: 0,
     versionIndex: 0,
-    scoreFilter: '',           // 当前筛选值：'6+' | '7+' | ''
-    scoreFilterText: '分数筛选' // 按钮显示文字
+    scoreFilter: '6',           // 当前筛选值，默认6分版
+    scoreFilterText: '6分版',   // 按钮显示文字
+    rawList: [],                // 原始答案列表（未筛选）
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -40,8 +41,13 @@ Page({
     }
   },
   onLoad(options) {
+    // 读取用户默认难度设置
+    const difficultySpeak = wx.getStorageSync('difficultySpeak') || '6'
+    const difficultyTextMap = { '6': '6分版', '7': '7分版', '8': '8分版' }
     this.setData({
-      queryParam: options
+      queryParam: options,
+      scoreFilter: difficultySpeak,
+      scoreFilterText: difficultyTextMap[difficultySpeak] || '6分版'
     })
     this.initSentenceAudio()
   },
@@ -53,18 +59,34 @@ Page({
   // ===========业务操作 Start===========
   // 分数筛选按钮点击
   onScoreFilterTap() {
+    const _this = this
     wx.showActionSheet({
-      itemList: ['6+版本', '7+版本'],
-      success: (res) => {
-        const options = ['6+', '7+']
-        const texts = ['6+版本', '7+版本']
-        this.setData({
-          scoreFilter: options[res.tapIndex],
+      itemList: ['6分版', '7分版', '8分版'],
+      success(res) {
+        const options = ['6', '7', '8']
+        const texts = ['6分版', '7分版', '8分版']
+        const scoreFilter = options[res.tapIndex]
+        _this.setData({
+          scoreFilter,
           scoreFilterText: texts[res.tapIndex]
         })
-        // TODO: 后端API对接后，根据 scoreFilter 重新请求数据
+        // 根据新筛选值重新过滤数据
+        _this.filterAndSetList()
       }
     })
+  },
+  // 根据 scoreFilter 过滤答案列表
+  filterAndSetList() {
+    const { rawList, scoreFilter } = this.data
+    if (!rawList || rawList.length === 0) return
+
+    // 过滤：保留匹配版本 + 通用版本
+    const filteredList = rawList.filter(item => {
+      if (item.difficulty === 'general') return true
+      return item.difficulty === scoreFilter
+    })
+
+    this.setData({ list: filteredList, versionIndex: 0 })
   },
   // 播放/停止指定 block 的所有句子
   onFooterPlay(e) {
@@ -350,7 +372,13 @@ Page({
     const hasToast = silent ? true : false
     api.request(this, '/question/v3/detail/story', param, hasToast, 'GET', false)
       .then((res) => {
+        // 保存原始列表用于筛选
+        if (res.list) {
+          this.setData({ rawList: res.list })
+        }
         diffSetData(this, res)
+        // 根据当前筛选值过滤数据
+        this.filterAndSetList()
       })
   },
   popupConfirm(e) {
