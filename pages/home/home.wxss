@@ -53,6 +53,12 @@
   border: 2px dotted var(--main-blue-color);
 }
 
+/* 确保 tap-action 组件在 grid 容器中正确作为 grid item */
+.home-main-item--science .home-main-item__content--grid > tap-action {
+  display: block;
+  min-width: 0;
+}
+
 .home-card--science {
   background: #ffffff !important;
   border-color: var(--main-blue-color) !important;
