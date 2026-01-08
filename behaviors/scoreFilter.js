@@ -86,16 +86,26 @@ module.exports = Behavior({
      * difficulty 在句子层（第三层）
      */
     filterAndSetList() {
-      const { rawList, scoreFilter } = this.data
+      const { rawList, scoreFilter, list: currentList } = this.data
       if (!rawList || rawList.length === 0) return
 
-      // 筛选逻辑：对每个版本内的分组内的句子进行筛选
+      // 1. 保存当前置顶状态（通过 id 映射）
+      const preferredMap = {}
+      if (currentList && currentList.length > 0) {
+        currentList.forEach(item => {
+          if (item.id) {
+            preferredMap[item.id] = item.isPreferred
+          }
+        })
+      }
+
+      // 2. 筛选逻辑：对每个版本内的分组内的句子进行筛选
       const filteredList = rawList.map(version => {
-        if (!version.list || version.list.length === 0) return version
+        if (!version.list || version.list.length === 0) return { ...version }
 
         // 对每个分组，筛选其中的句子
         const filteredGroups = version.list.map(group => {
-          if (!group.list || group.list.length === 0) return group
+          if (!group.list || group.list.length === 0) return { ...group }
 
           // 过滤句子：保留匹配版本 + 通用版本 + 无difficulty字段的句子
           const filteredSentences = group.list.filter(sentence => {
@@ -110,6 +120,13 @@ module.exports = Behavior({
 
         return { ...version, list: filteredGroups }
       }).filter(version => version.list && version.list.length > 0) // 移除空版本
+
+      // 3. 恢复置顶状态
+      filteredList.forEach(item => {
+        if (item.id && preferredMap[item.id] !== undefined) {
+          item.isPreferred = preferredMap[item.id]
+        }
+      })
 
       // 保持 versionIndex 不变，只更新 list
       this.setData({ list: filteredList })
