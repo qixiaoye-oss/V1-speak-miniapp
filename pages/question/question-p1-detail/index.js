@@ -210,6 +210,38 @@ Page({
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
+  // 校验 scoreFilter 是否有效，无效则修正，然后过滤数据
+  validateAndFilter() {
+    const { rawList, scoreFilter, scoreFilterList } = this.data
+    if (!rawList || rawList.length === 0) return
+
+    // 检查当前 scoreFilter 是否在数据中存在（非 general）
+    const hasMatchingData = rawList.some(item => String(item.difficulty) === scoreFilter)
+
+    // 如果没有匹配的数据，尝试使用第一个有效的 difficulty
+    if (!hasMatchingData) {
+      // 从数据中找到第一个非 general 的 difficulty
+      const firstNonGeneral = rawList.find(item => String(item.difficulty) !== 'general')
+      if (firstNonGeneral) {
+        const newFilter = String(firstNonGeneral.difficulty)
+        // 从 scoreFilterList 中找到对应的文字
+        let newText = newFilter + '+版本'
+        if (scoreFilterList && scoreFilterList.length > 0) {
+          const matched = scoreFilterList.find(item => String(item.value) === newFilter)
+          if (matched) {
+            newText = matched.text
+          }
+        }
+        this.setData({
+          scoreFilter: newFilter,
+          scoreFilterText: newText
+        })
+      }
+    }
+
+    // 执行过滤
+    this.filterAndSetList()
+  },
   // 获取难度列表
   getDifficultyList() {
     const _this = this
@@ -261,8 +293,8 @@ Page({
         diffSetData(this, res)
         // 检测是否只有通用版本（决定是否禁用筛选按钮）
         this.checkScoreFilterDisabled()
-        // 根据当前筛选值过滤数据
-        this.filterAndSetList()
+        // 校验并修正 scoreFilter，然后过滤数据
+        this.validateAndFilter()
 
         // 自动定位到置顶版本
         const preferredIndex = this.findPreferredVersionIndex()
