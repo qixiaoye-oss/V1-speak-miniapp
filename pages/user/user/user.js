@@ -104,6 +104,16 @@ Page({
         const current = res.dictItems.find(item => String(item.value) === String(difficulty))
         if (current) {
           _this.setData({ difficultyText: current.text })
+        } else {
+          // 当前难度值不在列表中，使用第一个非 general 选项
+          const firstValid = res.dictItems.find(item => item.value !== 'general')
+          if (firstValid) {
+            _this.setData({
+              difficulty: String(firstValid.value),
+              difficultyText: firstValid.text
+            })
+            wx.setStorageSync('difficultySpeak', firstValid.value)
+          }
         }
       }
     })

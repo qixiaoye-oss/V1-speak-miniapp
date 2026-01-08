@@ -218,6 +218,19 @@ Page({
         const current = res.dictItems.find(item => String(item.value) === scoreFilter)
         if (current) {
           _this.setData({ scoreFilterText: current.text })
+        } else {
+          // 当前筛选值不在列表中，使用第一个非 general 选项
+          const firstValid = res.dictItems.find(item => item.value !== 'general')
+          if (firstValid) {
+            _this.setData({
+              scoreFilter: String(firstValid.value),
+              scoreFilterText: firstValid.text
+            })
+            // 如果数据已加载，重新过滤
+            if (_this.data.rawList && _this.data.rawList.length > 0) {
+              _this.filterAndSetList()
+            }
+          }
         }
       }
     })
