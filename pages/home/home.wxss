@@ -62,7 +62,7 @@
 .miniprogram-links {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
+  margin-block: 15px;
 }
 
 .miniprogram-links > tap-action {

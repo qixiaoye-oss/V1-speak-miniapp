@@ -43,23 +43,24 @@
           <image src="/images/v2/next_bt.png"></image>
         </tap-action>
       </view>
-      <!-- 小程序跳转区域 -->
-      <view class="miniprogram-links">
-        <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="speaking">
-          <view class="miniprogram-link-item">
-            <image class="miniprogram-link-item__icon" src="/images/v2/link_bt.png"></image>
-            <text class="miniprogram-link-item__text">口语开源题库</text>
-          </view>
-        </tap-action>
-        <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="listening">
-          <view class="miniprogram-link-item">
-            <image class="miniprogram-link-item__icon" src="/images/v2/link_bt.png"></image>
-            <text class="miniprogram-link-item__text">听力专项训练</text>
-          </view>
-        </tap-action>
-      </view>
     </view>
   </head-banner>
+
+  <!-- 小程序跳转区域 -->
+  <view class="miniprogram-links" wx:if="{{_isDataReady}}">
+    <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="speaking">
+      <view class="miniprogram-link-item">
+        <image class="miniprogram-link-item__icon" src="/images/v2/link_bt.png"></image>
+        <text class="miniprogram-link-item__text">口语开源题库</text>
+      </view>
+    </tap-action>
+    <tap-action type="card" bind:tap="onMiniprogramLinkTap" data-type="listening">
+      <view class="miniprogram-link-item">
+        <image class="miniprogram-link-item__icon" src="/images/v2/link_bt.png"></image>
+        <text class="miniprogram-link-item__text">听力专项训练</text>
+      </view>
+    </tap-action>
+  </view>
 
   <!-- 主体内容分组 -->
   <block wx:for="{{list}}" wx:key="groupIndex" wx:for-item="group" wx:for-index="groupIndex" wx:if="{{_isDataReady && group.list.length > 0}}">
