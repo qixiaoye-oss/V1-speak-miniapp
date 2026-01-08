@@ -22,7 +22,6 @@
           <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
             <view class="home-card home-card--notice home-card--science">
               <view class="home-card__content">
-                <view class="home-card__category" style="color: var(--main-blue-color);">{{notice.groupTitle}}</view>
                 <view class="home-card__body">
                   <text class="home-card__body-title">{{notice.title}}</text>
                   <text class="home-card__body-separator"> · </text>
