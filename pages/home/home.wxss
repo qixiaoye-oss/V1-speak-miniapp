@@ -53,24 +53,38 @@
   border: 2px dotted var(--main-blue-color);
 }
 
+/* 瀑布流布局 */
+.home-main-item__content--waterfall {
+  display: flex;
+  gap: 10px;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
 .home-card--science {
   background: #ffffff !important;
   border-color: var(--main-blue-color) !important;
 }
 
-/* 小程序跳转导航卡片 */
-.nav-cards {
+/* 小程序跳转链接 */
+.miniapp-links {
   display: flex;
   gap: 10px;
   width: 100%;
 }
 
-.nav-cards > tap-action {
+.miniapp-links > tap-action {
   flex: 1;
   min-width: 0;
 }
 
-.nav-card {
+.miniapp-link {
   padding: 15px;
   font-size: 16px;
   font-weight: bold;

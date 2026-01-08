@@ -72,11 +72,54 @@ Page({
       app.globalData.homeDataCache = null  // 清除缓存
     }
 
+    // 处理科普数据分列（瀑布流布局）
+    if (updateData.popularScience && updateData.popularScience.list) {
+      const columns = this._splitToColumns(updateData.popularScience.list)
+      updateData.popularScienceColumns = columns
+    }
+
+    // 处理主体分组数据分列（瀑布流布局）
+    if (updateData.list) {
+      updateData.list = this._processGroupColumns(updateData.list)
+    }
+
     if (Object.keys(updateData).length > 0) {
       this.setData(updateData)
     }
     this.setDataReady()
     this.markLoaded()
+  },
+
+  /**
+   * 将列表数据分成左右两列（用于瀑布流布局）
+   */
+  _splitToColumns(list) {
+    const leftColumn = []
+    const rightColumn = []
+    list.forEach((item, index) => {
+      if (index % 2 === 0) {
+        leftColumn.push(item)
+      } else {
+        rightColumn.push(item)
+      }
+    })
+    return { leftColumn, rightColumn }
+  },
+
+  /**
+   * 处理主体分组的瀑布流分列
+   * 为 layoutMode === 'QUAD_GRID' 的分组生成 columns 数据
+   */
+  _processGroupColumns(list) {
+    return list.map(group => {
+      if (group.layoutMode === 'QUAD_GRID' && group.list && group.list.length > 0) {
+        return {
+          ...group,
+          columns: this._splitToColumns(group.list)
+        }
+      }
+      return group
+    })
   },
 
   /**
@@ -92,10 +135,22 @@ Page({
 
     Promise.all(promises)
       .then(([scienceData, homeData]) => {
+        // 处理科普数据分列（瀑布流布局）
+        let popularScienceColumns = null
+        if (scienceData.popularScience && scienceData.popularScience.list) {
+          popularScienceColumns = this._splitToColumns(scienceData.popularScience.list)
+        }
+
+        // 处理主体分组数据分列（瀑布流布局）
+        if (homeData.list) {
+          homeData.list = this._processGroupColumns(homeData.list)
+        }
+
         // 合并数据，只调用一次 setData
         this.setData({
           ...scienceData,
-          ...homeData
+          ...homeData,
+          ...(popularScienceColumns ? { popularScienceColumns } : {})
         })
         this.setDataReady()
         this.markLoaded()
@@ -191,11 +246,26 @@ Page({
       url: `/pages/science/detail/index?id=${id}`,
     })
   },
-  // 导航卡片点击（暂未实现跳转）
-  onNavCardTap(e) {
+  // 小程序跳转链接点击
+  onMiniappLinkTap(e) {
     const type = e.currentTarget.dataset.type
-    console.log('导航卡片点击:', type)
-    // TODO: 实现小程序跳转
+    // 小程序 appId 映射
+    const appIdMap = {
+      jijing: 'wx236ffece314ca802',   // 机经开源题库
+      tingli: 'wx9d02de9098ab4be3'    // 听力专项训练
+    }
+    const appId = appIdMap[type]
+    if (!appId) {
+      console.warn('未知的小程序类型:', type)
+      return
+    }
+    wx.navigateToMiniProgram({
+      appId,
+      envVersion: 'release',
+      fail(err) {
+        console.error('小程序跳转失败:', err)
+      }
+    })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========

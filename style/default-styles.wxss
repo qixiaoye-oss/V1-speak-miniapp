@@ -119,30 +119,20 @@
   margin-bottom: 10px;
 }
 
-.home-card--notice .home-card__body {
-  font-size: 14px;
-  font-weight: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative;
-  word-wrap: break-word;
-  color: rgba(0, 0, 0, 0.3);
-}
-
 .home-card--notice .home-card__body-title {
+  font-size: 15px;
+  font-weight: bold;
   color: #000000;
-  font-weight: normal;
-}
-
-.home-card--notice .home-card__body-separator {
-  color: rgba(0, 0, 0, 0.3);
+  word-wrap: break-word;
 }
 
 .home-card--notice .home-card__body-desc {
+  margin-top: 5px;
+  font-size: 14px;
   color: rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .home-card--notice .home-card__meta {

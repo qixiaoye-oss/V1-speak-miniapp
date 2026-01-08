@@ -17,21 +17,35 @@
     <!-- 科普内容区域 -->
     <view class="home-main-item home-main-item--science" wx:if="{{popularScience.list.length > 0}}">
       <view class="home-main-item__title" style="color:var(--main-blue-color)">{{popularScience.title}}</view>
-      <view class="home-main-item__content--grid">
-        <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
-          <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
-            <view class="home-card home-card--notice home-card--science">
-              <view class="home-card__content">
-                <view class="home-card__body">
-                  <text class="home-card__body-title">{{notice.title}}</text>
-                  <text class="home-card__body-separator"> · </text>
-                  <text class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</text>
+      <view class="home-main-item__content--waterfall">
+        <!-- 左列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{popularScienceColumns.leftColumn}}" wx:key="id" wx:for-item="notice">
+            <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+              <view class="home-card home-card--notice home-card--science">
+                <view class="home-card__content">
+                  <view class="home-card__body-title">{{notice.title}}</view>
+                  <view class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</view>
+                  <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
                 </view>
-                <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
               </view>
-            </view>
-          </tap-action>
-        </block>
+            </tap-action>
+          </block>
+        </view>
+        <!-- 右列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{popularScienceColumns.rightColumn}}" wx:key="id" wx:for-item="notice">
+            <tap-action type="card" bind:tap="toPopularSciencePage" data-id="{{notice.id}}">
+              <view class="home-card home-card--notice home-card--science">
+                <view class="home-card__content">
+                  <view class="home-card__body-title">{{notice.title}}</view>
+                  <view class="home-card__body-desc">{{notice.description || '雅思口语备考技巧与策略分享，帮助你更高效地提升口语水平'}}</view>
+                  <view class="home-card__meta" style="color: var(--main-blue-color);">查看详情</view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
       </view>
       <view class="home-view-all">
         <tap-action icon="next" bind:tap="toPopularScienceListPage">
@@ -42,13 +56,13 @@
     </view>
   </head-banner>
 
-  <!-- 小程序跳转导航 -->
-  <view class="nav-cards" wx:if="{{_isDataReady}}">
-    <tap-action type="card" bind:tap="onNavCardTap" data-type="jijing">
-      <view class="nav-card">机经开源题库</view>
+  <!-- 小程序跳转链接 -->
+  <view class="miniapp-links" wx:if="{{_isDataReady}}">
+    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="jijing">
+      <view class="miniapp-link">机经开源题库</view>
     </tap-action>
-    <tap-action type="card" bind:tap="onNavCardTap" data-type="tingli">
-      <view class="nav-card">听力专项训练</view>
+    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="tingli">
+      <view class="miniapp-link">听力专项训练</view>
     </tap-action>
   </view>
 
@@ -63,8 +77,51 @@
           <view class="home-main-item__notice-text" style="color: {{group.notice.colorRgb}};">{{group.notice.title}}</view>
         </view>
       </tap-action>
-      <!-- 卡片容器 -->
-      <view class="{{group.layoutMode === 'QUAD_GRID' ? 'home-main-item__content--grid' : 'home-main-item__content'}}">
+      <!-- 卡片容器 - 瀑布流布局（QUAD_GRID模式） -->
+      <view class="home-main-item__content--waterfall" wx:if="{{group.layoutMode === 'QUAD_GRID' && group.columns}}">
+        <!-- 左列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{group.columns.leftColumn}}" wx:key="id" wx:for-item="subject">
+            <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
+              <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
+                <view class="home-card__content">
+                  <view class="home-card__header">
+                    <image class="home-card__icon" wx:if="{{subject.iconUrl}}" src="{{subject.iconUrl}}" />
+                    <view class="home-card__title">{{subject.title}}</view>
+                  </view>
+                  <view class="home-card__footer">
+                    <view class="tag tag__multi--blue" wx:if="{{subject.label}}">{{subject.label === '视频版' ? '大陆在考版' : (subject.label === '面对面版' ? '个别地区版' : subject.label)}}</view>
+                    <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">{{subject.childTotal}}</view>
+                    <view class="tag tag--dynamic-solid" style="--tag-color:{{group.colorRgb}}" wx:if="{{subject.description}}">{{subject.description}}</view>
+                  </view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
+        <!-- 右列 -->
+        <view class="waterfall-column">
+          <block wx:for="{{group.columns.rightColumn}}" wx:key="id" wx:for-item="subject">
+            <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
+              <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
+                <view class="home-card__content">
+                  <view class="home-card__header">
+                    <image class="home-card__icon" wx:if="{{subject.iconUrl}}" src="{{subject.iconUrl}}" />
+                    <view class="home-card__title">{{subject.title}}</view>
+                  </view>
+                  <view class="home-card__footer">
+                    <view class="tag tag__multi--blue" wx:if="{{subject.label}}">{{subject.label === '视频版' ? '大陆在考版' : (subject.label === '面对面版' ? '个别地区版' : subject.label)}}</view>
+                    <view class="tag tag--dynamic-outline" style="--tag-color:{{group.colorRgb}}">{{subject.childTotal}}</view>
+                    <view class="tag tag--dynamic-solid" style="--tag-color:{{group.colorRgb}}" wx:if="{{subject.description}}">{{subject.description}}</view>
+                  </view>
+                </view>
+              </view>
+            </tap-action>
+          </block>
+        </view>
+      </view>
+      <!-- 卡片容器 - 普通列表布局 -->
+      <view class="home-main-item__content" wx:else>
         <block wx:for="{{group.list}}" wx:key="subjectIndex" wx:for-item="subject" wx:for-index="subjectIndex">
           <tap-action type="card" bind:tap="toChildPage" data-id="{{subject.id}}" data-type="{{subject.type}}" data-is-inside="{{group.isInside}}">
             <view class="home-card home-card--subject" style="background:{{group.colorRgba}};border-color:{{group.colorRgb}};">
