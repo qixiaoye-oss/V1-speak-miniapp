@@ -95,11 +95,16 @@ Page({
   },
   // 获取难度列表
   getDifficultyList() {
+    const _this = this
     api.request(this, '/system/list/dict/classify_scores', {}, true).then(res => {
       if (res && res.dictItems) {
-        this.setData({
-          difficultyList: res.dictItems
-        })
+        _this.setData({ difficultyList: res.dictItems })
+        // 根据当前难度值更新显示文字
+        const { difficulty } = _this.data
+        const current = res.dictItems.find(item => String(item.value) === String(difficulty))
+        if (current) {
+          _this.setData({ difficultyText: current.text })
+        }
       }
     })
   },
@@ -111,13 +116,20 @@ Page({
       const pronunciation = data.user?.pronunciation || 'uk'
       // 从返回数据中读取难度偏好
       const difficultySpeak = data.user?.difficultySpeak || '6'
-      // 根据难度值获取显示文本
-      const difficultyTextMap = { '6': '6分版', '7': '7分版', '8': '8分版', 'general': '通用' }
+      // 根据 difficultyList 获取显示文本（如果已加载）
+      const { difficultyList } = _this.data
+      let difficultyText = _this.data.difficultyText
+      if (difficultyList && difficultyList.length > 0) {
+        const current = difficultyList.find(item => String(item.value) === String(difficultySpeak))
+        if (current) {
+          difficultyText = current.text
+        }
+      }
       _this.setData({
         accent: pronunciation,
         accentText: pronunciation === 'us' ? '美音' : '英音',
         difficulty: difficultySpeak,
-        difficultyText: difficultyTextMap[difficultySpeak] || '6分版'
+        difficultyText
       })
       // 同步到本地缓存
       wx.setStorageSync('difficultySpeak', difficultySpeak)
