@@ -53,6 +53,18 @@
   display: flex;
 }
 
+.chapter__header--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chapter__header-answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .chapter__header-title {
   padding: 5px;
   border-radius: 3px;

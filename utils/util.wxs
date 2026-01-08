@@ -92,6 +92,20 @@ function accuracyStyle(value1, value2) {
   return Number(value1) > Number(value2)
 }
 
+/**
+ * 将 rgba 颜色的透明度转换为 1（全不透明）
+ * 例如: rgba(80,146,255,0.15) -> rgba(80,146,255,1)
+ */
+function toSolidColor(rgbaColor) {
+  if (isEmpty(rgbaColor)) return ''
+  // 匹配 rgba(r,g,b,a) 格式
+  var match = rgbaColor.match(getRegExp('rgba?\\s*\\(\\s*([\\d.]+)\\s*,\\s*([\\d.]+)\\s*,\\s*([\\d.]+)\\s*(?:,\\s*[\\d.]+)?\\s*\\)', 'i'))
+  if (match) {
+    return 'rgba(' + match[1] + ',' + match[2] + ',' + match[3] + ',1)'
+  }
+  return rgbaColor
+}
+
 module.exports = {
   formatDate: formatDate,
   isCheck: isCheck,
@@ -99,5 +113,6 @@ module.exports = {
   formatNull: formatNull,
   formatNumber: formatNumber,
   isEmpty: isEmpty,
-  accuracyStyle: accuracyStyle
+  accuracyStyle: accuracyStyle,
+  toSolidColor: toSolidColor
 }

@@ -8,10 +8,19 @@
 
 <view class="chapter-cell" wx:if="{{_isDataReady}}">
   <view class="chapter" wx:for="{{list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toChildPage" data-id="{{chapter.id}}">
-    <view class="chapter__header">
+    <view class="chapter__header chapter__header--vertical">
       <view class="chapter__header-title" style="background: {{backgroundColorHex}};">
         <image class="chapter__title-icon" wx:if="{{iconUrl}}" src="{{iconUrl}}" />
         <view class="chapter__title-text">{{chapter.content}}</view>
+      </view>
+      <view class="chapter__header-answers" wx:if="{{chapter.answers && chapter.answers.length > 0}}">
+        <view
+          class="tag tag--dynamic-translucent"
+          wx:for="{{chapter.answers}}"
+          wx:for-item="answer"
+          wx:key="index"
+          style="--tag-color-bg: {{backgroundColorHex}}; --tag-color: {{color}}"
+        >{{answer}}</view>
       </view>
     </view>
     <view class="chapter__intervals"></view>

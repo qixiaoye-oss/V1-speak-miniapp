@@ -1,3 +1,4 @@
+<wxs src="/utils/util.wxs" module="util" />
 <import src="/templates/page-loading.wxml" />
 <import src="/templates/load-error.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
@@ -26,15 +27,26 @@
     <!-- 列表显示模式 -->
     <view class="chapter-cell" wx:if="{{showMode === 'full'}}">
       <view class="chapter" wx:for="{{group.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="chapter" hover-class="tap-active" bind:tap="toUnit" data-item="{{chapter}}" wx:if="{{!chapter.hidden}}">
-        <view class="chapter__header">
-          <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
-            <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
-            <view class="chapter__title-text">{{chapter.title}}</view>
+        <view class="chapter__header chapter__header--vertical">
+          <view class="chapter__header-top">
+            <view class="chapter__header-title" style="background: {{chapter.backgroundColor}};">
+              <image class="chapter__title-icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+              <view class="chapter__title-text">{{chapter.title}}</view>
+            </view>
+            <view class="chapter__tag">
+              <view class="tag tag--red" wx:if="{{chapter.description}}">{{chapter.description}}</view>
+              <view class="tag tag--orange" wx:if="{{chapter.isChargeable == 1}}">权限</view>
+              <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
+            </view>
           </view>
-          <view class="chapter__tag">
-            <view class="tag tag--red" wx:if="{{chapter.description}}">{{chapter.description}}</view>
-            <view class="tag tag--orange" wx:if="{{chapter.isChargeable == 1}}">权限</view>
-            <view class="tag tag--green" wx:if="{{chapter.isChargeable == 0}}">体验</view>
+          <view class="chapter__header-answers" wx:if="{{chapter.answers && chapter.answers.length > 0}}">
+            <view
+              class="tag tag--dynamic-translucent"
+              wx:for="{{chapter.answers}}"
+              wx:for-item="answer"
+              wx:key="index"
+              style="--tag-color-bg: {{chapter.backgroundColor}}; --tag-color: {{util.toSolidColor(chapter.backgroundColor)}}"
+            >{{answer}}</view>
           </view>
         </view>
         <view class="chapter__intervals"></view>
