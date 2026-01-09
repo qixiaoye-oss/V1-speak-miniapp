@@ -139,14 +139,6 @@
   margin-top: 10px;
   font-size: 12px;
   line-height: 1.4;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.home-card--notice .home-card__meta image {
-  width: 14px;
-  height: 14px;
 }
 
 /* 查看所有操作区域 */
