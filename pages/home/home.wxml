@@ -13,7 +13,7 @@
   <skeleton type="card" loading="{{loading}}" rows="{{6}}" />
 
   <!-- Head Banner + 科普区域（带渐变背景） -->
-  <head-banner wx:if="{{_isDataReady}}" title="考雅口语Open题库" subtitle="九分学长出品｜开源免费">
+  <head-banner wx:if="{{_isDataReady}}" title="{{miniappInfo.title}}" subtitle="{{miniappInfo.subtitle}}">
     <!-- 科普内容区域 -->
     <view class="home-main-item home-main-item--science" wx:if="{{popularScience.list.length > 0}}">
       <view class="home-main-item__title" style="color:var(--main-blue-color)">{{popularScience.title}}</view>
@@ -57,12 +57,9 @@
   </head-banner>
 
   <!-- 小程序跳转链接 -->
-  <view class="miniapp-links" wx:if="{{_isDataReady}}">
-    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="jijing">
-      <view class="miniapp-link">机经开源题库</view>
-    </tap-action>
-    <tap-action type="card" bind:tap="onMiniappLinkTap" data-type="tingli">
-      <view class="miniapp-link">听力专项训练</view>
+  <view class="miniapp-links" wx:if="{{_isDataReady && miniappAssociation.length > 0}}">
+    <tap-action wx:for="{{miniappAssociation}}" wx:key="appId" type="card" bind:tap="onMiniappLinkTap" data-appid="{{item.appId}}">
+      <view class="miniapp-link">{{item.title}}</view>
     </tap-action>
   </view>
 

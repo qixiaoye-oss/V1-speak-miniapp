@@ -19,7 +19,10 @@ Page({
       "P2": "/pages/question/set-p2p3-list/index",
       "POPULAR_SCIENCE": "/pages/science/list/index"
     },
-    loadingText: LOADING_TEXTS.connecting
+    loadingText: LOADING_TEXTS.connecting,
+    // API 返回的 settings 数据
+    miniappInfo: null,        // header 信息 { title, subtitle }
+    miniappAssociation: []    // 小程序跳转链接列表
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -70,6 +73,11 @@ Page({
     if (app.globalData.homeDataCache) {
       Object.assign(updateData, app.globalData.homeDataCache)
       app.globalData.homeDataCache = null  // 清除缓存
+    }
+
+    // 处理 settings 数据（header信息和小程序跳转链接）
+    if (updateData.settings) {
+      Object.assign(updateData, this._processSettings(updateData.settings))
     }
 
     // 处理科普数据分列（瀑布流布局）
@@ -123,6 +131,33 @@ Page({
   },
 
   /**
+   * 处理 settings 数据
+   * 提取 header 信息和小程序跳转链接
+   */
+  _processSettings(settings) {
+    const result = {}
+
+    // 处理 header 信息（miniapp_info）
+    if (settings.miniapp_info && settings.miniapp_info.length > 0) {
+      const info = settings.miniapp_info[0]
+      result.miniappInfo = {
+        title: info.title,
+        subtitle: info.description
+      }
+    }
+
+    // 处理小程序跳转链接（miniapp_association）
+    // 过滤掉没有 title 或 appId 的项
+    if (settings.miniapp_association && settings.miniapp_association.length > 0) {
+      result.miniappAssociation = settings.miniapp_association.filter(
+        item => item.title && item.appId
+      )
+    }
+
+    return result
+  },
+
+  /**
    * 并行加载所有数据
    */
   _loadAllData() {
@@ -135,6 +170,12 @@ Page({
 
     Promise.all(promises)
       .then(([scienceData, homeData]) => {
+        // 处理 settings 数据（header信息和小程序跳转链接）
+        let settingsData = {}
+        if (scienceData.settings) {
+          settingsData = this._processSettings(scienceData.settings)
+        }
+
         // 处理科普数据分列（瀑布流布局）
         let popularScienceColumns = null
         if (scienceData.popularScience && scienceData.popularScience.list) {
@@ -150,6 +191,7 @@ Page({
         this.setData({
           ...scienceData,
           ...homeData,
+          ...settingsData,
           ...(popularScienceColumns ? { popularScienceColumns } : {})
         })
         this.setDataReady()
@@ -248,15 +290,9 @@ Page({
   },
   // 小程序跳转链接点击
   onMiniappLinkTap(e) {
-    const type = e.currentTarget.dataset.type
-    // 小程序 appId 映射
-    const appIdMap = {
-      jijing: 'wx236ffece314ca802',   // 机经开源题库
-      tingli: 'wx9d02de9098ab4be3'    // 听力专项训练
-    }
-    const appId = appIdMap[type]
+    const appId = e.currentTarget.dataset.appid
     if (!appId) {
-      console.warn('未知的小程序类型:', type)
+      console.warn('小程序 appId 不存在')
       return
     }
     wx.navigateToMiniProgram({
